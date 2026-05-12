@@ -11,6 +11,7 @@
         'data/tripma_sequences.xml',
         'views/templates.xml',
         'views/production_templates.xml',
+        'views/external_order_templates.xml',
         'views/menus.xml',
     ],
     'application': True,
