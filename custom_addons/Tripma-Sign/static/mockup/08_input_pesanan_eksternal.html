@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Input Pesanan Eksternal - Tripma Sign Admin</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .main-content { padding:28px 32px; background:var(--bg); }
+    .page-title-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+    .page-title-bar h1 { font-size:1.2rem; font-weight:700; color:var(--navy); margin-bottom:2px; }
+    .page-title-bar p { font-size:0.8rem; color:var(--text-muted); }
+    .content-layout { display:grid; grid-template-columns:1fr 320px; gap:20px; }
+    .form-section { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px; margin-bottom:16px; box-shadow:var(--shadow-sm); }
+    .form-section-header { display:flex; align-items:center; gap:10px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .section-num { width:24px; height:24px; border-radius:6px; background:var(--navy); color:white; font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .section-title { font-size:0.875rem; font-weight:700; color:var(--navy); flex:1; }
+    .channel-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+    .channel-card { border:1.5px solid var(--border); border-radius:var(--radius); padding:14px; text-align:center; cursor:pointer; transition:all 0.15s; background:var(--white); }
+    .channel-card:hover { border-color:var(--navy); }
+    .channel-card.selected { border-color:var(--navy); background:#e8eef5; }
+    .channel-icon { font-size:1.4rem; margin-bottom:6px; }
+    .channel-name { font-size:0.78rem; font-weight:600; color:var(--text); }
+    .channel-card.selected .channel-name { color:var(--navy); }
+    .sidebar-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; margin-bottom:16px; box-shadow:var(--shadow-sm); position:sticky; top:20px; }
+    .sidebar-card-title { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .summary-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.82rem; }
+    .summary-row .lbl { color:var(--text-muted); }
+    .summary-row .val { color:var(--text); font-weight:500; }
+    .summary-total { display:flex; justify-content:space-between; font-weight:700; margin:14px 0; padding-top:12px; border-top:1px solid var(--border); }
+    .summary-total .lbl { color:var(--text); }
+    .summary-total .val { color:var(--navy); font-size:1rem; }
+    .disclaimer { font-size:0.72rem; color:var(--text-muted); text-align:center; line-height:1.5; margin-top:10px; }
+    .recent-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
+    .recent-header { padding:14px 18px; border-bottom:1px solid var(--border); font-size:0.82rem; font-weight:700; color:var(--navy); }
+    .recent-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid var(--border); transition:background 0.15s; }
+    .recent-item:last-child { border-bottom:none; }
+    .recent-item:hover { background:var(--bg); }
+    .recent-icon { width:32px; height:32px; border-radius:8px; background:#e8eef5; display:flex; align-items:center; justify-content:center; font-size:0.9rem; flex-shrink:0; }
+    .recent-name { font-size:0.82rem; font-weight:600; color:var(--text); }
+    .recent-detail { font-size:0.72rem; color:var(--text-muted); margin-top:2px; }
+    .recent-price { margin-left:auto; font-size:0.82rem; font-weight:600; color:var(--navy); }
+  </style>
+</head>
+<body>
+<div style="display:grid;grid-template-columns:240px 1fr;min-height:100vh">
+  <aside class="ts-sidebar">
+    <div style="padding:18px 20px 18px;border-bottom:1px solid var(--border);margin-bottom:8px">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px">Panel Administrator</div>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Utama</div>
+      <a href="07_admin_dashboard.html" class="ts-sidebar-item"><span class="icon">📊</span>Dashboard</a>
+      <a href="#" class="ts-sidebar-item active"><span class="icon">📥</span>Input Pesanan Eksternal</a>
+      <a href="09_kelola_katalog.html" class="ts-sidebar-item"><span class="icon">🏷️</span>Kelola Katalog</a>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Manajemen</div>
+      <a href="#" class="ts-sidebar-item"><span class="icon">📋</span>Semua Pesanan<span class="ts-sidebar-badge">12</span></a>
+      <a href="#" class="ts-sidebar-item"><span class="icon">💳</span>Invoice &amp; Tagihan</a>
+      <a href="#" class="ts-sidebar-item"><span class="icon">👥</span>Data Pelanggan</a>
+    </div>
+    <div class="ts-sidebar-user">
+      <div class="ts-avatar">AD</div>
+      <div><div class="ts-user-name">Administrator</div><div class="ts-user-role">Admin</div></div>
+    </div>
+  </aside>
+
+  <div style="display:flex;flex-direction:column">
+    <div style="background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px">
+      <div class="ts-breadcrumb"><a href="07_admin_dashboard.html">Dashboard</a> / Input Pesanan Eksternal</div>
+      <div style="font-size:1.1rem;font-weight:700;color:var(--navy);margin-top:3px">Input Pesanan Eksternal</div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-layout">
+        <div>
+          <!-- KANAL -->
+          <div class="form-section">
+            <div class="form-section-header"><div class="section-num">1</div><div class="section-title">Kanal Asal Pesanan</div><span class="ts-badge ts-badge-navy">Wajib</span></div>
+            <div class="channel-grid">
+              <div class="channel-card selected" onclick="selectChannel(this)"><div class="channel-icon">💬</div><div class="channel-name">WhatsApp</div></div>
+              <div class="channel-card" onclick="selectChannel(this)"><div class="channel-icon">🏪</div><div class="channel-name">Walk-in (Offline)</div></div>
+              <div class="channel-card" onclick="selectChannel(this)"><div class="channel-icon">📞</div><div class="channel-name">Telepon</div></div>
+            </div>
+          </div>
+
+          <!-- PELANGGAN -->
+          <div class="form-section">
+            <div class="form-section-header"><div class="section-num">2</div><div class="section-title">Identitas Pelanggan</div><span class="ts-badge ts-badge-navy">Wajib</span></div>
+            <div class="ts-form-row">
+              <div class="ts-form-group"><label class="ts-label">Nama Pelanggan <span class="req">*</span></label><input type="text" class="ts-input" placeholder="Nama lengkap / nama usaha"></div>
+              <div class="ts-form-group"><label class="ts-label">No. WhatsApp / Telepon <span class="req">*</span></label><input type="tel" class="ts-input" placeholder="08xxxxxxxxxx"></div>
+            </div>
+            <div class="ts-form-row">
+              <div class="ts-form-group"><label class="ts-label">Email</label><input type="email" class="ts-input" placeholder="Opsional"></div>
+              <div class="ts-form-group"><label class="ts-label">Nama Usaha / Instansi</label><input type="text" class="ts-input" placeholder="Opsional"></div>
+            </div>
+            <div class="ts-form-group"><label class="ts-label">Alamat Pengiriman <span class="req">*</span></label><textarea class="ts-input ts-textarea" placeholder="Jalan, nomor, kelurahan, kecamatan, kota..."></textarea></div>
+          </div>
+
+          <!-- SPESIFIKASI -->
+          <div class="form-section">
+            <div class="form-section-header"><div class="section-num">3</div><div class="section-title">Spesifikasi Pesanan</div><span class="ts-badge ts-badge-navy">Wajib</span></div>
+            <div class="ts-form-row">
+              <div class="ts-form-group"><label class="ts-label">Produk <span class="req">*</span></label><select class="ts-input ts-select"><option value="">-- Pilih Produk --</option><option selected>Neon Sign Custom LED</option><option>Acrylic 3D Letter</option><option>Banner Flexi</option><option>Stiker Cutting Vinyl</option><option>Papan Nama ACP</option></select></div>
+              <div class="ts-form-group"><label class="ts-label">Bahan <span class="req">*</span></label><select class="ts-input ts-select"><option>LED Strip Flex Neon</option><option>LED Strip Rigid</option></select></div>
+            </div>
+            <div class="ts-form-row" style="grid-template-columns:1fr 1fr 1fr">
+              <div class="ts-form-group"><label class="ts-label">Lebar (cm) <span class="req">*</span></label><input type="number" class="ts-input" placeholder="60"></div>
+              <div class="ts-form-group"><label class="ts-label">Tinggi (cm) <span class="req">*</span></label><input type="number" class="ts-input" placeholder="40"></div>
+              <div class="ts-form-group"><label class="ts-label">Jumlah (unit) <span class="req">*</span></label><input type="number" class="ts-input" value="1" min="1"></div>
+            </div>
+            <div class="ts-form-group"><label class="ts-label">Catatan / Instruksi Khusus</label><textarea class="ts-input ts-textarea" placeholder="Warna, finishing, permintaan khusus dari pelanggan..."></textarea></div>
+          </div>
+
+          <!-- HARGA -->
+          <div class="form-section">
+            <div class="form-section-header"><div class="section-num">4</div><div class="section-title">Harga &amp; Jadwal</div><span class="ts-badge ts-badge-gray">Opsional</span></div>
+            <div class="ts-form-row">
+              <div class="ts-form-group"><label class="ts-label">Harga Disepakati (Rp)</label><input type="number" class="ts-input" value="450000"><div style="font-size:0.72rem;color:var(--text-muted);margin-top:3px">Kosongkan untuk menggunakan harga standar</div></div>
+              <div class="ts-form-group"><label class="ts-label">DP / Uang Muka (Rp)</label><input type="number" class="ts-input" placeholder="0"></div>
+            </div>
+            <div class="ts-form-row">
+              <div class="ts-form-group"><label class="ts-label">Tanggal Dipesan</label><input type="date" class="ts-input" value="2025-04-24"></div>
+              <div class="ts-form-group"><label class="ts-label">Target Selesai</label><input type="date" class="ts-input"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+          <div class="sidebar-card">
+            <div class="sidebar-card-title">Ringkasan Pesanan</div>
+            <div class="summary-row"><span class="lbl">Kanal</span><span class="val">💬 WhatsApp</span></div>
+            <div class="summary-row"><span class="lbl">Produk</span><span class="val">Neon Sign LED</span></div>
+            <div class="summary-row"><span class="lbl">Ukuran</span><span class="val">— × — cm</span></div>
+            <div class="summary-row"><span class="lbl">Jumlah</span><span class="val">1 unit</span></div>
+            <div class="summary-total"><span class="lbl">Total Pesanan</span><span class="val">Rp 450.000</span></div>
+            <button class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" style="margin-bottom:8px">💾 Simpan Pesanan</button>
+            <button class="ts-btn ts-btn-secondary ts-btn-block">Batal</button>
+            <p class="disclaimer">Nomor order dan antrian produksi dibuat otomatis setelah disimpan.</p>
+          </div>
+
+          <div class="recent-card">
+            <div class="recent-header">Input Eksternal Terbaru</div>
+            <div class="recent-item"><div class="recent-icon">💬</div><div><div class="recent-name">CV Maju Jaya</div><div class="recent-detail">Banner · WhatsApp · 22 Apr</div></div><div class="recent-price">Rp 105.000</div></div>
+            <div class="recent-item"><div class="recent-icon">🏪</div><div><div class="recent-name">Toko Aneka Rasa</div><div class="recent-detail">Papan Nama · Walk-in · 21 Apr</div></div><div class="recent-price">Rp 370.000</div></div>
+            <div class="recent-item"><div class="recent-icon">💬</div><div><div class="recent-name">Budi Prasetyo</div><div class="recent-detail">Neon Sign · WhatsApp · 20 Apr</div></div><div class="recent-price">Rp 450.000</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+<script>
+  function selectChannel(el) {
+    document.querySelectorAll('.channel-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>

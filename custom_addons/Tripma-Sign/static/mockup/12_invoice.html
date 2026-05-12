@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Konfirmasi Pesanan & Invoice - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .page-wrap { max-width:800px; margin:40px auto; padding:0 32px 60px; }
+
+    /* Success Banner */
+    .success-banner { background:var(--navy); border-radius:var(--radius-lg); padding:36px 40px; margin-bottom:28px; display:flex; align-items:center; gap:24px; }
+    .success-icon { width:64px; height:64px; border-radius:50%; background:rgba(200,148,10,0.2); border:2px solid var(--gold-light); display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0; }
+    .success-title { font-size:1.4rem; font-weight:800; color:white; margin-bottom:4px; }
+    .success-sub { font-size:0.875rem; color:rgba(255,255,255,0.65); line-height:1.6; }
+    .success-order { background:rgba(200,148,10,0.15); border:1px solid rgba(200,148,10,0.3); border-radius:var(--radius); padding:12px 20px; margin-top:16px; display:inline-flex; align-items:center; gap:10px; }
+    .success-order-label { font-size:0.72rem; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; }
+    .success-order-no { font-size:1.2rem; font-weight:800; color:var(--gold-light); letter-spacing:1px; }
+
+    /* Invoice Card */
+    .invoice-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); margin-bottom:20px; }
+    .invoice-header { padding:24px 28px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; }
+    .invoice-brand { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.2rem; font-weight:800; color:var(--navy); }
+    .invoice-brand em { color:var(--gold); font-style:normal; }
+    .invoice-meta { text-align:right; }
+    .invoice-meta-title { font-size:1rem; font-weight:700; color:var(--navy); }
+    .invoice-meta-no { font-size:0.78rem; color:var(--text-muted); margin-top:2px; }
+    .invoice-meta-date { font-size:0.78rem; color:var(--text-muted); }
+
+    /* Parties */
+    .invoice-parties { display:grid; grid-template-columns:1fr 1fr; gap:0; border-bottom:1px solid var(--border); }
+    .party-block { padding:20px 28px; }
+    .party-block:first-child { border-right:1px solid var(--border); }
+    .party-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:8px; }
+    .party-name { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:3px; }
+    .party-detail { font-size:0.8rem; color:var(--text-muted); line-height:1.6; }
+
+    /* Items Table */
+    .invoice-body { padding:0; }
+    .invoice-table { width:100%; border-collapse:collapse; }
+    .invoice-table th { padding:12px 28px; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); background:var(--bg); border-bottom:1px solid var(--border); text-align:left; }
+    .invoice-table th:last-child { text-align:right; }
+    .invoice-table td { padding:16px 28px; font-size:0.875rem; color:var(--text); border-bottom:1px solid var(--border); vertical-align:top; }
+    .invoice-table td:last-child { text-align:right; font-weight:600; color:var(--navy); }
+    .item-name { font-weight:600; color:var(--navy); margin-bottom:3px; }
+    .item-desc { font-size:0.78rem; color:var(--text-muted); line-height:1.5; }
+
+    /* Totals */
+    .invoice-totals { padding:20px 28px; border-top:1px solid var(--border); }
+    .total-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.875rem; }
+    .total-row .lbl { color:var(--text-muted); }
+    .total-row .val { color:var(--text); font-weight:500; }
+    .total-grand { display:flex; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:2px solid var(--navy); }
+    .total-grand .lbl { font-size:1rem; font-weight:700; color:var(--navy); }
+    .total-grand .val { font-size:1.1rem; font-weight:800; color:var(--navy); }
+
+    /* Payment */
+    .payment-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px 28px; margin-bottom:20px; box-shadow:var(--shadow-sm); }
+    .payment-title { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .payment-status { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+    .bank-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .bank-item { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:14px; }
+    .bank-name { font-size:0.72rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; }
+    .bank-no { font-size:1rem; font-weight:700; color:var(--navy); letter-spacing:1px; }
+    .bank-acc { font-size:0.78rem; color:var(--text-muted); margin-top:2px; }
+
+    /* Actions */
+    .action-row { display:flex; gap:12px; margin-top:24px; }
+
+    /* Next Steps */
+    .steps-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px 28px; box-shadow:var(--shadow-sm); }
+    .steps-title { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:16px; }
+    .next-step { display:flex; align-items:flex-start; gap:14px; margin-bottom:14px; }
+    .next-step:last-child { margin-bottom:0; }
+    .ns-num { width:28px; height:28px; border-radius:50%; background:var(--navy); color:white; font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .ns-title { font-size:0.875rem; font-weight:600; color:var(--text); }
+    .ns-desc { font-size:0.78rem; color:var(--text-muted); margin-top:2px; line-height:1.5; }
+  </style>
+</head>
+<body>
+<nav class="ts-nav">
+  <a href="01_landing.html" class="ts-logo">Tripma<em>Sign</em></a>
+  <div class="ts-nav-links">
+    <a href="01_landing.html">Home</a>
+    <a href="02_katalog.html">Katalog</a>
+    <a href="03_form_order.html">Order Now</a>
+    <a href="04_lacak_pesanan.html">Track Order</a>
+  </div>
+  <div class="ts-nav-actions">
+    <a href="01_landing.html" class="ts-btn ts-btn-secondary ts-btn-sm">Logout</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- SUCCESS BANNER -->
+  <div class="success-banner">
+    <div class="success-icon">✅</div>
+    <div style="flex:1">
+      <div class="success-title">Pesanan Berhasil Dibuat!</div>
+      <div class="success-sub">Sistem telah men-generate nomor order dan invoice secara otomatis. Invoice dapat diunduh sebagai dokumen PDF di bawah ini.</div>
+      <div class="success-order">
+        <div>
+          <div class="success-order-label">Nomor Order Resmi</div>
+          <div class="success-order-no">TS-2025-0049</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVOICE CARD -->
+  <div class="invoice-card">
+    <div class="invoice-header">
+      <div>
+        <div class="invoice-brand">Tripma<em>Sign</em></div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Solusi Signage Profesional</div>
+      </div>
+      <div class="invoice-meta">
+        <div class="invoice-meta-title">INVOICE</div>
+        <div class="invoice-meta-no">INV/2025/04/0049</div>
+        <div class="invoice-meta-date">Diterbitkan: 24 April 2025</div>
+        <div class="invoice-meta-date">Jatuh Tempo: 27 April 2025</div>
+      </div>
+    </div>
+
+    <div class="invoice-parties">
+      <div class="party-block">
+        <div class="party-label">Dari (Penyedia Jasa)</div>
+        <div class="party-name">Tripma Sign</div>
+        <div class="party-detail">
+          Jl. Signage Raya No. 12<br>
+          Bandung, Jawa Barat 40123<br>
+          tripmasign@email.com
+        </div>
+      </div>
+      <div class="party-block">
+        <div class="party-label">Kepada (Pelanggan)</div>
+        <div class="party-name">Rina Susanti</div>
+        <div class="party-detail">
+          Jl. Merdeka No. 45, RT 03/07<br>
+          Cicendo, Bandung 40173<br>
+          rina.susanti@email.com
+        </div>
+      </div>
+    </div>
+
+    <div class="invoice-body">
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th>Deskripsi Produk</th>
+            <th style="width:80px;text-align:center">Qty</th>
+            <th style="width:130px;text-align:right">Harga Satuan</th>
+            <th style="width:130px">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="item-name">Neon Sign Custom LED</div>
+              <div class="item-desc">Bahan: LED Strip Flex Neon — Ukuran: 60 × 40 cm<br>Warna: Warm White — Backing: Akrilik Bening</div>
+            </td>
+            <td style="text-align:center">1 unit</td>
+            <td style="text-align:right">Rp 450.000</td>
+            <td>Rp 450.000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="item-name">Biaya Pengiriman</div>
+              <div class="item-desc">Jl. Merdeka No. 45, Bandung — Estimasi 1–2 hari</div>
+            </td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:right">Rp 25.000</td>
+            <td>Rp 25.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invoice-totals">
+      <div class="total-row"><span class="lbl">Subtotal Produk</span><span class="val">Rp 450.000</span></div>
+      <div class="total-row"><span class="lbl">Biaya Pengiriman</span><span class="val">Rp 25.000</span></div>
+      <div class="total-row"><span class="lbl">Diskon</span><span class="val">— Rp 0</span></div>
+      <div class="total-grand"><span class="lbl">Total Tagihan</span><span class="val">Rp 475.000</span></div>
+    </div>
+  </div>
+
+  <!-- PAYMENT INFO -->
+  <div class="payment-card">
+    <div class="payment-title">Informasi Pembayaran</div>
+    <div class="payment-status">
+      <span class="ts-badge ts-badge-gold">⏳ Menunggu Pembayaran</span>
+      <span style="font-size:0.8rem;color:var(--text-muted)">Batas pembayaran: <strong>27 April 2025</strong></span>
+    </div>
+    <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px">Transfer ke salah satu rekening berikut, lalu konfirmasi ke Admin via WhatsApp.</div>
+    <div class="bank-grid">
+      <div class="bank-item">
+        <div class="bank-name">BCA</div>
+        <div class="bank-no">1234 5678 90</div>
+        <div class="bank-acc">a/n Tripma Sign</div>
+      </div>
+      <div class="bank-item">
+        <div class="bank-name">Mandiri</div>
+        <div class="bank-no">0987 6543 21</div>
+        <div class="bank-acc">a/n Tripma Sign</div>
+      </div>
+    </div>
+    <div style="background:var(--gold-bg);border:1px solid rgba(200,148,10,0.2);border-radius:var(--radius);padding:11px 14px;margin-top:14px;font-size:0.8rem;color:var(--text-muted)">
+      💡 Sertakan <strong style="color:var(--navy)">Nomor Order TS-2025-0049</strong> sebagai keterangan transfer untuk mempermudah konfirmasi.
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="steps-card" style="margin-bottom:24px">
+    <div class="steps-title">Langkah Selanjutnya</div>
+    <div class="next-step">
+      <div class="ns-num">1</div>
+      <div><div class="ns-title">Lakukan Pembayaran</div><div class="ns-desc">Transfer sesuai total tagihan ke rekening di atas sebelum 27 April 2025.</div></div>
+    </div>
+    <div class="next-step">
+      <div class="ns-num">2</div>
+      <div><div class="ns-title">Admin Mengkonfirmasi Pesanan</div><div class="ns-desc">Setelah pembayaran masuk, Admin akan mengkonfirmasi dan meneruskan pesanan ke Tim Produksi.</div></div>
+    </div>
+    <div class="next-step">
+      <div class="ns-num">3</div>
+      <div><div class="ns-title">Pantau Status Produksi</div><div class="ns-desc">Gunakan halaman Track Order untuk memantau setiap tahap pengerjaan signage Anda secara real-time.</div></div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="action-row">
+    <a href="04_lacak_pesanan.html" class="ts-btn ts-btn-primary ts-btn-lg">🔍 Track Order Saya</a>
+    <button onclick="window.print()" class="ts-btn ts-btn-secondary ts-btn-lg">⬇️ Download Invoice (PDF)</button>
+    <a href="01_landing.html" class="ts-btn ts-btn-secondary">Kembali ke Home</a>
+  </div>
+
+</div>
+
+<footer class="ts-footer">
+  <div class="ts-footer-logo">Tripma<em>Sign</em></div>
+  <div class="ts-footer-text">© 2025 Tripma Sign</div>
+</footer>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

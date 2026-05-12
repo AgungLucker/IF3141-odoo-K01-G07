@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Admin - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .main-content { padding:28px 32px; background:var(--bg); }
+    .content-grid { display:grid; grid-template-columns:1fr 320px; gap:20px; }
+    .section-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:18px; box-shadow:var(--shadow-sm); }
+    .card-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .card-title { font-size:0.875rem; font-weight:700; color:var(--navy); }
+    .card-action { font-size:0.78rem; color:var(--blue); text-decoration:none; }
+    .table-wrap { overflow-x:auto; }
+    .sidebar-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:18px; box-shadow:var(--shadow-sm); }
+    .activity-item { display:flex; align-items:flex-start; gap:12px; padding:13px 18px; border-bottom:1px solid var(--border); }
+    .activity-item:last-child { border-bottom:none; }
+    .act-dot { width:8px; height:8px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+    .act-navy { background:var(--navy); }
+    .act-gold { background:var(--gold); }
+    .act-green { background:var(--green); }
+    .act-blue { background:var(--blue); }
+    .act-text { font-size:0.8rem; color:var(--text); flex:1; line-height:1.4; }
+    .act-time { font-size:0.7rem; color:var(--text-muted); margin-top:2px; }
+    .quick-links { padding:16px; display:flex; flex-direction:column; gap:8px; }
+    .quick-link { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:var(--radius); border:1px solid var(--border); text-decoration:none; transition:all 0.15s; }
+    .quick-link:hover { border-color:var(--navy); background:var(--bg); }
+    .ql-icon { width:34px; height:34px; border-radius:8px; background:#e8eef5; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .ql-text-title { font-size:0.83rem; font-weight:600; color:var(--navy); }
+    .ql-text-sub { font-size:0.72rem; color:var(--text-muted); }
+    .ts-sidebar-badge-gold { background:var(--amber-bg); color:var(--amber); }
+  </style>
+</head>
+<body>
+<div style="display:grid;grid-template-columns:240px 1fr;min-height:100vh">
+  <aside class="ts-sidebar">
+    <div style="padding:18px 20px 18px;border-bottom:1px solid var(--border);margin-bottom:8px">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px">Panel Administrator</div>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Utama</div>
+      <a href="#" class="ts-sidebar-item active"><span class="icon">📊</span>Dashboard</a>
+      <a href="08_input_pesanan_eksternal.html" class="ts-sidebar-item"><span class="icon">📥</span>Input Pesanan Eksternal<span class="ts-sidebar-badge">3</span></a>
+      <a href="09_kelola_katalog.html" class="ts-sidebar-item"><span class="icon">🏷️</span>Kelola Katalog</a>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Manajemen</div>
+      <a href="#" class="ts-sidebar-item"><span class="icon">📋</span>Semua Pesanan<span class="ts-sidebar-badge">12</span></a>
+      <a href="#" class="ts-sidebar-item"><span class="icon">💳</span>Invoice &amp; Tagihan</a>
+      <a href="#" class="ts-sidebar-item"><span class="icon">👥</span>Data Pelanggan</a>
+    </div>
+    <div class="ts-sidebar-user">
+      <div class="ts-avatar">AD</div>
+      <div><div class="ts-user-name">Administrator</div><div class="ts-user-role">Admin</div></div>
+    </div>
+  </aside>
+
+  <div style="display:flex;flex-direction:column">
+    <div style="background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--navy)">Dashboard</div>
+        <div style="font-size:0.78rem;color:var(--text-muted)">Rabu, 23 April 2025</div>
+      </div>
+      <a href="08_input_pesanan_eksternal.html" class="ts-btn ts-btn-primary ts-btn-sm">+ Input Pesanan Eksternal</a>
+    </div>
+
+    <div class="main-content">
+      <div class="ts-stat-grid">
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">5</div><div class="ts-stat-label">Pesanan Masuk Hari Ini</div></div><div class="ts-stat-icon ts-stat-icon-navy">📥</div></div><span class="ts-badge ts-badge-blue">Perlu diproses</span></div>
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">12</div><div class="ts-stat-label">Sedang Diproduksi</div></div><div class="ts-stat-icon ts-stat-icon-gold">⚙️</div></div><span class="ts-badge ts-badge-gold">Dalam antrian</span></div>
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">3</div><div class="ts-stat-label">Siap Dikirim</div></div><div class="ts-stat-icon ts-stat-icon-green">📦</div></div><span class="ts-badge ts-badge-green">Menunggu pickup</span></div>
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">3</div><div class="ts-stat-label">Pesanan Eksternal Baru</div></div><div class="ts-stat-icon ts-stat-icon-blue">💬</div></div><span class="ts-badge ts-badge-blue">WA / Walk-in</span></div>
+      </div>
+
+      <div class="content-grid">
+        <div>
+          <div class="section-card">
+            <div class="card-header"><div class="card-title">Pesanan Terkini</div><a href="#" class="card-action">Lihat semua →</a></div>
+            <div class="table-wrap">
+              <table class="ts-table">
+                <thead><tr><th>No. Order</th><th>Pelanggan</th><th>Produk</th><th>Status</th><th>Total</th><th>Aksi</th></tr></thead>
+                <tbody>
+                  <tr><td class="ts-table-order">TS-2025-0048</td><td>Rina Susanti</td><td>Neon Sign LED</td><td><span class="ts-badge ts-badge-gold">Menunggu</span></td><td>Rp 450.000</td><td><a href="#" style="font-size:0.78rem;color:var(--blue)">Detail</a></td></tr>
+                  <tr><td class="ts-table-order">TS-2025-0047</td><td>CV Maju Jaya</td><td>Banner Flexi 3×1m</td><td><span class="ts-badge ts-badge-navy">Produksi</span></td><td>Rp 105.000</td><td><a href="#" style="font-size:0.78rem;color:var(--blue)">Detail</a></td></tr>
+                  <tr><td class="ts-table-order">TS-2025-0046</td><td>Ahmad Fauzi</td><td>Stiker Vinyl 2m²</td><td><span class="ts-badge ts-badge-navy">Produksi</span></td><td>Rp 30.000</td><td><a href="#" style="font-size:0.78rem;color:var(--blue)">Detail</a></td></tr>
+                  <tr><td class="ts-table-order">TS-2025-0045</td><td>Budi Prasetyo</td><td>Acrylic 3D Letter</td><td><span class="ts-badge ts-badge-blue">Finishing</span></td><td>Rp 280.000</td><td><a href="#" style="font-size:0.78rem;color:var(--blue)">Detail</a></td></tr>
+                  <tr><td class="ts-table-order">TS-2025-0044</td><td>PT Maju Bersama</td><td>Papan Nama ACP</td><td><span class="ts-badge ts-badge-green">Siap Kirim</span></td><td>Rp 370.000</td><td><a href="#" style="font-size:0.78rem;color:var(--blue)">Detail</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sidebar-card">
+            <div class="card-header"><div class="card-title">Aksi Cepat</div></div>
+            <div class="quick-links">
+              <a href="08_input_pesanan_eksternal.html" class="quick-link"><div class="ql-icon">📥</div><div><div class="ql-text-title">Input Pesanan Eksternal</div><div class="ql-text-sub">WhatsApp / Walk-in</div></div></a>
+              <a href="09_kelola_katalog.html" class="quick-link"><div class="ql-icon">🏷️</div><div><div class="ql-text-title">Kelola Katalog</div><div class="ql-text-sub">Tambah / edit produk</div></div></a>
+            </div>
+          </div>
+          <div class="sidebar-card">
+            <div class="card-header"><div class="card-title">Aktivitas Terbaru</div></div>
+            <div class="activity-item"><div class="act-dot act-green"></div><div><div class="act-text">Pesanan <strong>TS-2025-0044</strong> siap dikirim</div><div class="act-time">5 menit lalu</div></div></div>
+            <div class="activity-item"><div class="act-dot act-gold"></div><div><div class="act-text">Pesanan baru masuk dari <strong>Rina Susanti</strong></div><div class="act-time">22 menit lalu</div></div></div>
+            <div class="activity-item"><div class="act-dot act-blue"></div><div><div class="act-text">Pesanan eksternal WhatsApp dari <strong>Toko Aneka</strong></div><div class="act-time">1 jam lalu</div></div></div>
+            <div class="activity-item"><div class="act-dot act-navy"></div><div><div class="act-text">Produk <strong>Stiker Vinyl</strong> dinonaktifkan</div><div class="act-time">3 jam lalu</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

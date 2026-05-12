@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tripma Sign - Mockup Navigator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0f13;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container { max-width: 900px; width: 100%; padding: 40px 24px; }
+    .brand { text-align: center; margin-bottom: 48px; }
+    .brand-logo { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; }
+    .brand-logo span { color: #f97316; }
+    .brand-sub { color: #94a3b8; font-size: 0.95rem; margin-top: 8px; }
+    .badge { display: inline-block; background: #1e293b; border: 1px solid #334155; border-radius: 20px; padding: 4px 14px; font-size: 0.75rem; color: #64748b; margin-top: 12px; }
+    .section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #64748b; margin-bottom: 16px; margin-top: 40px; padding-left: 4px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card {
+      background: #161620;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent, #f97316);
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+      transform-origin: left;
+    }
+    .card:hover { border-color: #334155; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .card:hover::before { transform: scaleX(1); }
+    .card-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .card-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent, #f97316); margin-bottom: 6px; }
+    .card-title { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 6px; }
+    .card-desc { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+    .customer { --accent: #f97316; }
+    .admin { --accent: #6366f1; }
+    .production { --accent: #10b981; }
+    .auth { --accent: #ec4899; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <div class="brand-logo">Tripma<span>Sign</span></div>
+      <div class="brand-sub">Mockup UI — Milestone 4</div>
+    </div>
+
+    <div class="section-title">🛍️ Portal Customer (Website Publik)</div>
+    <div class="grid">
+      <a href="01_landing.html" class="card customer">
+        <div class="card-icon">🏠</div>
+        <div class="card-label">Layar 1</div>
+        <div class="card-title">Landing Page</div>
+        <div class="card-desc">Halaman utama website Tripma Sign, hero section, fitur unggulan</div>
+      </a>
+      <a href="02_katalog.html" class="card customer">
+        <div class="card-icon">🗂️</div>
+        <div class="card-label">Layar 2</div>
+        <div class="card-title">Katalog Produk</div>
+        <div class="card-desc">Daftar produk signage, filter kategori, harga</div>
+      </a>
+      <a href="03_form_order.html" class="card customer">
+        <div class="card-icon">📋</div>
+        <div class="card-label">Layar 3</div>
+        <div class="card-title">Form Pemesanan Mandiri</div>
+        <div class="card-desc">Input spesifikasi produk, unggah file desain, submit pesanan</div>
+      </a>
+      <a href="04_lacak_pesanan.html" class="card customer">
+        <div class="card-icon">🔍</div>
+        <div class="card-label">Layar 4</div>
+        <div class="card-title">Lacak Pesanan</div>
+        <div class="card-desc">Pantau status dan progres produksi pesanan secara real-time</div>
+      </a>
+    </div>
+
+    <div class="section-title">🔐 Autentikasi</div>
+    <div class="grid">
+      <a href="05_register.html" class="card auth">
+        <div class="card-icon">✍️</div>
+        <div class="card-label">Layar 5</div>
+        <div class="card-title">Registrasi Akun</div>
+        <div class="card-desc">Form pendaftaran akun pelanggan baru</div>
+      </a>
+      <a href="06_login.html" class="card auth">
+        <div class="card-icon">🔑</div>
+        <div class="card-label">Layar 6</div>
+        <div class="card-title">Login</div>
+        <div class="card-desc">Halaman masuk untuk customer, admin, dan staf produksi</div>
+      </a>
+    </div>
+
+    <div class="section-title">⚙️ Dashboard Admin</div>
+    <div class="grid">
+      <a href="07_admin_dashboard.html" class="card admin">
+        <div class="card-icon">📊</div>
+        <div class="card-label">Layar 7</div>
+        <div class="card-title">Dashboard Admin</div>
+        <div class="card-desc">Ringkasan pesanan masuk, statistik, notifikasi</div>
+      </a>
+      <a href="08_input_pesanan_eksternal.html" class="card admin">
+        <div class="card-icon">📥</div>
+        <div class="card-label">Layar 8</div>
+        <div class="card-title">Input Pesanan Eksternal</div>
+        <div class="card-desc">Form input pesanan dari WhatsApp / offline oleh Admin</div>
+      </a>
+      <a href="09_kelola_katalog.html" class="card admin">
+        <div class="card-icon">🏷️</div>
+        <div class="card-label">Layar 9</div>
+        <div class="card-title">Kelola Katalog</div>
+        <div class="card-desc">Tambah, edit, hapus produk, atur harga dan foto</div>
+      </a>
+    </div>
+
+    <div class="section-title">🏭 Dashboard Produksi</div>
+    <div class="grid">
+      <a href="10_produksi_dashboard.html" class="card production">
+        <div class="card-icon">🔧</div>
+        <div class="card-label">Layar 10</div>
+        <div class="card-title">Dashboard Produksi</div>
+        <div class="card-desc">Antrian pesanan, status pengerjaan, prioritas</div>
+      </a>
+      <a href="11_update_status.html" class="card production">
+        <div class="card-icon">🔄</div>
+        <div class="card-label">Layar 11</div>
+        <div class="card-title">Update Status Produksi</div>
+        <div class="card-desc">Perbarui tahapan status pengerjaan pesanan secara real-time</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

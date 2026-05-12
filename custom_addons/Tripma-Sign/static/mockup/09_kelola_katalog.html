@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kelola Katalog - Tripma Sign Admin</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .main-content { padding:28px 32px; background:var(--bg); min-height:calc(100vh - 57px); }
+    .toolbar { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+    .search-wrap { flex:1; position:relative; }
+    .search-wrap input { padding-left:36px; }
+    .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:0.85rem; }
+    .cat-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .chip { padding:6px 14px; border-radius:20px; font-size:0.78rem; font-weight:500; cursor:pointer; border:1.5px solid var(--border); background:var(--white); color:var(--text-muted); transition:all 0.15s; }
+    .chip.active { background:var(--navy); border-color:var(--navy); color:white; }
+    .chip:hover:not(.active) { border-color:var(--navy); color:var(--navy); }
+    .products-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .prod-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; transition:all 0.2s; box-shadow:var(--shadow-sm); }
+    .prod-card:hover { box-shadow:var(--shadow); }
+    .prod-img { height:140px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:2.8rem; position:relative; border-bottom:1px solid var(--border); }
+    .prod-status { position:absolute; top:10px; right:10px; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+    .status-active { background:#f0fdf4; color:var(--green); }
+    .status-inactive { background:var(--red-bg); color:var(--red); }
+    .prod-body { padding:16px; }
+    .prod-cat { font-size:0.68rem; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px; }
+    .prod-name { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:4px; }
+    .prod-price { font-size:0.85rem; color:var(--text-muted); margin-bottom:14px; }
+    .prod-actions { display:flex; gap:8px; }
+    .action-btn { flex:1; padding:7px 10px; border-radius:8px; font-size:0.75rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; border:none; transition:all 0.15s; }
+    .btn-edit { background:#e8eef5; color:var(--navy); }
+    .btn-edit:hover { background:#d0dce8; }
+    .btn-del { background:var(--red-bg); color:var(--red); }
+    .btn-del:hover { background:#fecaca; }
+    .btn-toggle-off { background:var(--amber-bg); color:var(--amber); }
+    .btn-toggle-on { background:var(--green-bg); color:var(--green); }
+    .add-card { background:transparent; border:2px dashed var(--border); border-radius:var(--radius-lg); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:260px; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+    .add-card:hover { border-color:var(--navy); background:#f0f4f8; }
+    .add-icon { font-size:1.8rem; color:var(--text-muted); margin-bottom:10px; }
+    .add-text { font-size:0.85rem; font-weight:600; color:var(--text-muted); }
+    .add-card:hover .add-icon, .add-card:hover .add-text { color:var(--navy); }
+  </style>
+</head>
+<body>
+<div style="display:grid;grid-template-columns:240px 1fr;min-height:100vh">
+  <aside class="ts-sidebar">
+    <div style="padding:18px 20px 18px;border-bottom:1px solid var(--border);margin-bottom:8px">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px">Panel Administrator</div>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Utama</div>
+      <a href="07_admin_dashboard.html" class="ts-sidebar-item"><span class="icon">📊</span>Dashboard</a>
+      <a href="08_input_pesanan_eksternal.html" class="ts-sidebar-item"><span class="icon">📥</span>Input Pesanan Eksternal<span class="ts-sidebar-badge">3</span></a>
+      <a href="#" class="ts-sidebar-item active"><span class="icon">🏷️</span>Kelola Katalog</a>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Manajemen</div>
+      <a href="#" class="ts-sidebar-item"><span class="icon">📋</span>Semua Pesanan<span class="ts-sidebar-badge">12</span></a>
+      <a href="#" class="ts-sidebar-item"><span class="icon">💳</span>Invoice &amp; Tagihan</a>
+      <a href="#" class="ts-sidebar-item"><span class="icon">👥</span>Data Pelanggan</a>
+    </div>
+    <div class="ts-sidebar-user">
+      <div class="ts-avatar">AD</div>
+      <div><div class="ts-user-name">Administrator</div><div class="ts-user-role">Admin</div></div>
+    </div>
+  </aside>
+
+  <div style="display:flex;flex-direction:column">
+    <div style="background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div class="ts-breadcrumb"><a href="07_admin_dashboard.html">Dashboard</a> / Kelola Katalog</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--navy);margin-top:3px">Kelola Katalog Produk</div>
+      </div>
+      <button class="ts-btn ts-btn-primary">+ Tambah Produk Baru</button>
+    </div>
+
+    <div class="main-content">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="ts-input" placeholder="Cari produk...">
+        </div>
+        <select class="ts-input ts-select" style="width:180px"><option>Semua Kategori</option><option>Neon Sign</option><option>Acrylic Sign</option><option>Banner</option><option>Stiker</option></select>
+        <select class="ts-input ts-select" style="width:150px"><option>Semua Status</option><option>Aktif</option><option>Nonaktif</option></select>
+      </div>
+      <div class="cat-chips">
+        <div class="chip active">Semua (24)</div>
+        <div class="chip">Neon Sign (12)</div>
+        <div class="chip">Acrylic Sign (6)</div>
+        <div class="chip">Banner (4)</div>
+        <div class="chip">Stiker (2)</div>
+      </div>
+      <div class="products-grid">
+        <div class="prod-card">
+          <div class="prod-img">💡<div class="prod-status status-active">● Aktif</div></div>
+          <div class="prod-body"><div class="prod-cat">Neon Sign</div><div class="prod-name">Neon Sign Custom LED</div><div class="prod-price">Rp 450.000 / unit</div>
+          <div class="prod-actions"><button class="action-btn btn-edit">✏️ Edit</button><button class="action-btn btn-toggle-off">⏸ Nonaktifkan</button><button class="action-btn btn-del">🗑</button></div></div>
+        </div>
+        <div class="prod-card">
+          <div class="prod-img">🔷<div class="prod-status status-active">● Aktif</div></div>
+          <div class="prod-body"><div class="prod-cat">Acrylic Sign</div><div class="prod-name">Plang Acrylic 3D Letter</div><div class="prod-price">Rp 280.000 / unit</div>
+          <div class="prod-actions"><button class="action-btn btn-edit">✏️ Edit</button><button class="action-btn btn-toggle-off">⏸ Nonaktifkan</button><button class="action-btn btn-del">🗑</button></div></div>
+        </div>
+        <div class="prod-card">
+          <div class="prod-img">✨<div class="prod-status status-active">● Aktif</div></div>
+          <div class="prod-body"><div class="prod-cat">Acrylic Sign</div><div class="prod-name">Logo Acrylic Backlit</div><div class="prod-price">Rp 320.000 / unit</div>
+          <div class="prod-actions"><button class="action-btn btn-edit">✏️ Edit</button><button class="action-btn btn-toggle-off">⏸ Nonaktifkan</button><button class="action-btn btn-del">🗑</button></div></div>
+        </div>
+        <div class="prod-card">
+          <div class="prod-img">🖼️<div class="prod-status status-active">● Aktif</div></div>
+          <div class="prod-body"><div class="prod-cat">Banner</div><div class="prod-name">Banner Flexi Premium</div><div class="prod-price">Rp 35.000 / m²</div>
+          <div class="prod-actions"><button class="action-btn btn-edit">✏️ Edit</button><button class="action-btn btn-toggle-off">⏸ Nonaktifkan</button><button class="action-btn btn-del">🗑</button></div></div>
+        </div>
+        <div class="prod-card">
+          <div class="prod-img">🔖<div class="prod-status status-inactive">● Nonaktif</div></div>
+          <div class="prod-body"><div class="prod-cat">Stiker</div><div class="prod-name">Stiker Cutting Vinyl</div><div class="prod-price">Rp 15.000 / m²</div>
+          <div class="prod-actions"><button class="action-btn btn-edit">✏️ Edit</button><button class="action-btn btn-toggle-on">▶ Aktifkan</button><button class="action-btn btn-del">🗑</button></div></div>
+        </div>
+        <a href="#" class="add-card">
+          <div class="add-icon">+</div>
+          <div class="add-text">Tambah Produk Baru</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lacak Pesanan - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .page-wrap { max-width:960px; margin:40px auto; padding:0 48px; }
+    .search-hero { text-align:center; margin-bottom:40px; }
+    .search-hero h1 { font-size:1.8rem; font-weight:800; color:var(--navy); margin-bottom:8px; }
+    .search-hero p { color:var(--text-muted); font-size:0.875rem; margin-bottom:24px; }
+    .search-row { display:flex; gap:10px; max-width:480px; margin:0 auto; }
+    .order-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin-bottom:20px; box-shadow:var(--shadow-sm); }
+    .order-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:22px; padding-bottom:18px; border-bottom:1px solid var(--border); }
+    .order-no-label { font-size:0.72rem; color:var(--text-muted); margin-bottom:3px; }
+    .order-title { font-size:1rem; font-weight:700; color:var(--navy); }
+    .order-date { font-size:0.78rem; color:var(--text-muted); margin-top:3px; }
+    .progress-title { font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:18px; }
+    .progress-steps { position:relative; margin-bottom:20px; }
+    .progress-track { position:absolute; top:17px; left:17px; right:17px; height:2px; background:var(--border); z-index:0; }
+    .progress-fill { height:100%; background:var(--navy); }
+    .steps-row { display:flex; justify-content:space-between; position:relative; z-index:1; }
+    .step-node { display:flex; flex-direction:column; align-items:center; gap:8px; flex:1; }
+    .step-circle { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.82rem; font-weight:700; }
+    .step-done { background:var(--navy); color:white; }
+    .step-active { background:var(--navy); color:white; box-shadow:0 0 0 5px rgba(30,58,95,0.15); }
+    .step-pending { background:var(--white); color:var(--text-muted); border:1.5px solid var(--border); }
+    .step-done-green { background:var(--green); color:white; }
+    .step-info { text-align:center; }
+    .sname { font-size:0.75rem; font-weight:600; color:var(--text); }
+    .stime { font-size:0.68rem; color:var(--text-muted); margin-top:2px; }
+    .order-specs { display:grid; grid-template-columns:repeat(4,1fr); background:var(--bg); border-radius:var(--radius); overflow:hidden; }
+    .spec-cell { padding:13px 16px; border-right:1px solid var(--border); }
+    .spec-cell:last-child { border-right:none; }
+    .spec-lbl { font-size:0.7rem; color:var(--text-muted); margin-bottom:3px; }
+    .spec-val { font-size:0.875rem; font-weight:600; color:var(--text); }
+  </style>
+</head>
+<body>
+<nav class="ts-nav">
+  <a href="01_landing.html" class="ts-logo">Tripma<em>Sign</em></a>
+  <div class="ts-nav-links">
+    <a href="01_landing.html">Home</a><a href="02_katalog.html">Katalog</a>
+    <a href="03_form_order.html">Order Now</a><a href="#" class="active">Track Order</a>
+  </div>
+  <div class="ts-nav-actions"><a href="01_landing.html" class="ts-btn ts-btn-secondary ts-btn-sm">Logout</a></div>
+</nav>
+
+<div class="page-wrap">
+  <div class="search-hero">
+    <h1>Track Order</h1>
+    <p>Masukkan nomor order untuk melihat status produksi pesanan spesifik</p>
+    <div class="search-row">
+      <input type="text" class="ts-input" placeholder="Contoh: TS-2025-0042" style="flex:1">
+      <button class="ts-btn ts-btn-primary">Cari</button>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="font-size:0.875rem;font-weight:700;color:var(--navy)">Riwayat Pesanan Anda</div>
+    <div style="font-size:0.78rem;color:var(--text-muted)">Login sebagai: <strong>rina.susanti@email.com</strong></div>
+  </div>
+
+  <div class="order-card">
+    <div class="order-header">
+      <div>
+        <div class="order-no-label">No. Order</div>
+        <div class="order-title">TS-2025-0042 — Neon Sign Custom LED</div>
+        <div class="order-date">Dipesan: 20 April 2025 · 14:32 WIB</div>
+      </div>
+      <span class="ts-badge ts-badge-gold">⚙️ Sedang Diproduksi</span>
+    </div>
+    <div class="progress-title">Progress Produksi</div>
+    <div class="progress-steps">
+      <div class="progress-track"><div class="progress-fill" style="width:55%"></div></div>
+      <div class="steps-row">
+        <div class="step-node"><div class="step-circle step-done">✓</div><div class="step-info"><div class="sname">Diterima</div><div class="stime">20 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-done">✓</div><div class="step-info"><div class="sname">Pembayaran</div><div class="stime">20 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-active">⚙</div><div class="step-info"><div class="sname">Produksi</div><div class="stime">21 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-pending">📦</div><div class="step-info"><div class="sname">Siap Kirim</div><div class="stime">Est. 25 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-pending">✈</div><div class="step-info"><div class="sname">Terkirim</div><div class="stime">—</div></div></div>
+      </div>
+    </div>
+    <div class="order-specs">
+      <div class="spec-cell"><div class="spec-lbl">Produk</div><div class="spec-val">Neon Sign LED</div></div>
+      <div class="spec-cell"><div class="spec-lbl">Ukuran</div><div class="spec-val">60 × 40 cm</div></div>
+      <div class="spec-cell"><div class="spec-lbl">Est. Selesai</div><div class="spec-val">25 April 2025</div></div>
+      <div class="spec-cell"><div class="spec-lbl">Total Bayar</div><div class="spec-val">Rp 450.000</div></div>
+    </div>
+  </div>
+
+  <div class="order-card" style="opacity:0.85">
+    <div class="order-header">
+      <div>
+        <div class="order-no-label">No. Order</div>
+        <div class="order-title">TS-2025-0031 — Plang Acrylic 3D Letter</div>
+        <div class="order-date">Dipesan: 10 April 2025 · 09:15 WIB</div>
+      </div>
+      <span class="ts-badge ts-badge-green">✅ Selesai &amp; Terkirim</span>
+    </div>
+    <div class="progress-title">Progress Produksi</div>
+    <div class="progress-steps">
+      <div class="progress-track"><div class="progress-fill" style="width:100%;background:#16a34a"></div></div>
+      <div class="steps-row">
+        <div class="step-node"><div class="step-circle step-done-green">✓</div><div class="step-info"><div class="sname">Diterima</div><div class="stime">10 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-done-green">✓</div><div class="step-info"><div class="sname">Pembayaran</div><div class="stime">10 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-done-green">✓</div><div class="step-info"><div class="sname">Produksi</div><div class="stime">11 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-done-green">✓</div><div class="step-info"><div class="sname">Siap Kirim</div><div class="stime">14 Apr</div></div></div>
+        <div class="step-node"><div class="step-circle step-done-green">✓</div><div class="step-info"><div class="sname">Terkirim</div><div class="stime">15 Apr</div></div></div>
+      </div>
+    </div>
+    <div class="order-specs">
+      <div class="spec-cell"><div class="spec-lbl">Produk</div><div class="spec-val">Acrylic 3D Letter</div></div>
+      <div class="spec-cell"><div class="spec-lbl">Ukuran</div><div class="spec-val">80 × 30 cm</div></div>
+      <div class="spec-cell"><div class="spec-lbl">Diselesaikan</div><div class="spec-val">14 April 2025</div></div>
+      <div class="spec-cell"><div class="spec-lbl">Total Bayar</div><div class="spec-val">Rp 280.000</div></div>
+    </div>
+  </div>
+</div>
+
+<footer class="ts-footer"><div class="ts-footer-logo">Tripma<em>Sign</em></div><div class="ts-footer-text">© 2025 Tripma Sign</div></footer>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

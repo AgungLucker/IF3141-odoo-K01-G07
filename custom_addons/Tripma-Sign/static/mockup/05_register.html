@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    body { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; }
+    .left-panel { background:var(--navy); padding:64px; display:flex; flex-direction:column; justify-content:center; }
+    .left-logo { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:800; color:white; margin-bottom:36px; }
+    .left-logo em { color:var(--gold-light); font-style:normal; }
+    .left-headline { font-size:1.6rem; font-weight:800; color:white; line-height:1.25; margin-bottom:14px; }
+    .left-sub { font-size:0.875rem; color:rgba(255,255,255,0.6); line-height:1.7; margin-bottom:40px; }
+    .feat-list { display:flex; flex-direction:column; gap:14px; }
+    .feat-item { display:flex; align-items:center; gap:12px; }
+    .feat-check { width:24px; height:24px; border-radius:6px; background:rgba(200,148,10,0.25); border:1px solid rgba(200,148,10,0.4); display:flex; align-items:center; justify-content:center; color:var(--gold-light); font-size:0.72rem; flex-shrink:0; }
+    .feat-text { font-size:0.85rem; color:rgba(255,255,255,0.7); }
+    .right-panel { background:var(--bg); display:flex; align-items:center; justify-content:center; padding:48px; }
+    .form-box { width:100%; max-width:420px; }
+    .form-box h2 { font-size:1.4rem; font-weight:800; color:var(--navy); margin-bottom:4px; }
+    .subtitle { font-size:0.85rem; color:var(--text-muted); margin-bottom:24px; }
+    .subtitle a { color:var(--navy); font-weight:600; text-decoration:none; }
+    .form-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow); }
+    .strength-bar { height:3px; background:var(--border); border-radius:3px; margin-top:6px; overflow:hidden; }
+    .strength-fill { height:100%; width:60%; background:var(--gold); border-radius:3px; }
+    .input-hint { font-size:0.72rem; color:var(--text-muted); margin-top:3px; }
+    .check-row { display:flex; align-items:flex-start; gap:9px; margin-bottom:20px; }
+    .check-row input { margin-top:2px; accent-color:var(--navy); }
+    .check-row label { font-size:0.8rem; color:var(--text-muted); }
+    .check-row label a { color:var(--navy); }
+    .divider-or { display:flex; align-items:center; gap:10px; color:var(--text-muted); font-size:0.78rem; margin:14px 0; }
+    .divider-or::before,.divider-or::after { content:""; flex:1; height:1px; background:var(--border); }
+  </style>
+</head>
+<body>
+  <div class="left-panel">
+    <div class="left-logo">Tripma<em>Sign</em></div>
+    <div class="left-headline">Mulai perjalanan signage Anda bersama kami</div>
+    <div class="left-sub">Buat akun gratis dan nikmati kemudahan memesan signage custom langsung dari browser Anda.</div>
+    <div class="feat-list">
+      <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Pesan kapan saja, dari mana saja</div></div>
+      <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Upload desain dan pantau produksi real-time</div></div>
+      <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Invoice otomatis setiap pesanan dikonfirmasi</div></div>
+      <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Riwayat pesanan tersimpan aman</div></div>
+    </div>
+  </div>
+  <div class="right-panel">
+    <div class="form-box">
+      <h2>Buat Akun Baru</h2>
+      <p class="subtitle">Sudah punya akun? <a href="06_login.html">Masuk di sini</a></p>
+      <div class="form-card">
+        <div class="ts-form-row">
+          <div class="ts-form-group"><label class="ts-label">Nama Depan <span class="req">*</span></label><input type="text" class="ts-input" placeholder="Budi"></div>
+          <div class="ts-form-group"><label class="ts-label">Nama Belakang <span class="req">*</span></label><input type="text" class="ts-input" placeholder="Santoso"></div>
+        </div>
+        <div class="ts-form-group"><label class="ts-label">Alamat Email <span class="req">*</span></label><input type="email" class="ts-input" placeholder="budi@contoh.com"></div>
+        <div class="ts-form-group"><label class="ts-label">No. Telepon / WhatsApp <span class="req">*</span></label><input type="tel" class="ts-input" placeholder="08xxxxxxxxxx"><div class="input-hint">Untuk notifikasi status pesanan via WhatsApp</div></div>
+        <div class="ts-form-group"><label class="ts-label">Kata Sandi <span class="req">*</span></label><input type="password" class="ts-input" placeholder="Minimal 8 karakter"><div class="strength-bar"><div class="strength-fill"></div></div><div class="input-hint">Kekuatan kata sandi: Sedang</div></div>
+        <div class="ts-form-group"><label class="ts-label">Konfirmasi Kata Sandi <span class="req">*</span></label><input type="password" class="ts-input" placeholder="Ulangi kata sandi"></div>
+        <div class="check-row"><input type="checkbox" id="agree" checked><label for="agree">Saya menyetujui <a href="#">Syarat &amp; Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> Tripma Sign</label></div>
+        <button class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" style="margin-bottom:14px">Daftar Sekarang</button>
+        <div class="divider-or">atau</div>
+        <button class="ts-btn ts-btn-secondary ts-btn-block">🌐 Daftar dengan Google</button>
+      </div>
+    </div>
+  </div>
+  <a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

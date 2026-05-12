@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tripma Sign - Solusi Signage Profesional</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    /* Hero */
+    .hero { background: var(--navy); color: white; padding: 80px 48px; position: relative; overflow: hidden; }
+    .hero::before { content:''; position:absolute; right:-100px; top:-100px; width:500px; height:500px; background:radial-gradient(circle, rgba(200,148,10,0.15) 0%, transparent 70%); }
+    .hero-inner { max-width: 680px; position: relative; }
+    .hero-tag { display:inline-flex; align-items:center; gap:8px; background:rgba(200,148,10,0.15); border:1px solid rgba(200,148,10,0.3); border-radius:20px; padding:5px 14px; font-size:0.78rem; font-weight:600; color:var(--gold-light); margin-bottom:24px; }
+    .hero h1 { font-size: clamp(2rem,4vw,2.8rem); font-weight:800; color:white; line-height:1.15; letter-spacing:-1px; margin-bottom:18px; }
+    .hero h1 em { color:var(--gold-light); font-style:normal; }
+    .hero p { font-size:1rem; color:rgba(255,255,255,0.7); line-height:1.7; margin-bottom:32px; max-width:520px; }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+    .hero-stats { display:flex; gap:48px; margin-top:56px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.1); }
+    .hero-stat-num { font-size:1.8rem; font-weight:800; color:white; }
+    .hero-stat-label { font-size:0.78rem; color:rgba(255,255,255,0.55); margin-top:2px; }
+
+    /* Features */
+    .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:1100px; margin:0 auto; }
+    .feature-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; transition:all 0.2s; }
+    .feature-card:hover { box-shadow:var(--shadow); border-color:var(--navy); }
+    .feature-icon { width:48px; height:48px; border-radius:12px; background:#e8eef5; display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin-bottom:18px; }
+    .feature-title { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .feature-desc { font-size:0.82rem; color:var(--text-muted); line-height:1.6; }
+
+    /* Products */
+    .products-section { background:var(--white); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .products-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; max-width:1100px; margin:0 auto; }
+    .product-card { border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; transition:all 0.2s; background:var(--white); }
+    .product-card:hover { box-shadow:var(--shadow); border-color:var(--navy-light); }
+    .product-img { height:160px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:3rem; position:relative; }
+    .product-badge-tag { position:absolute; top:10px; left:10px; background:var(--navy); color:white; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:6px; }
+    .product-info { padding:16px; }
+    .product-cat { font-size:0.7rem; color:var(--gold); font-weight:600; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px; }
+    .product-name { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .product-footer { display:flex; align-items:center; justify-content:space-between; }
+    .product-price { font-size:0.95rem; font-weight:700; color:var(--text); }
+    .product-price span { font-size:0.72rem; color:var(--text-muted); font-weight:400; }
+
+    /* Steps */
+    .steps-section { background:var(--bg); }
+    .steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; max-width:1000px; margin:0 auto; position:relative; }
+    .steps-grid::before { content:''; position:absolute; top:22px; left:15%; right:15%; height:1.5px; background:linear-gradient(90deg,var(--navy),rgba(30,58,95,0.1)); }
+    .step { text-align:center; position:relative; z-index:1; }
+    .step-num { width:44px; height:44px; border-radius:50%; background:var(--navy); color:white; font-size:1rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+    .step-title { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .step-desc { font-size:0.78rem; color:var(--text-muted); line-height:1.5; }
+
+    /* CTA */
+    .cta-section { background:var(--navy); text-align:center; padding:72px 48px; }
+    .cta-section h2 { font-size:2rem; font-weight:800; color:white; letter-spacing:-0.5px; margin-bottom:12px; }
+    .cta-section p { color:rgba(255,255,255,0.65); margin-bottom:32px; }
+  </style>
+</head>
+<body>
+
+<nav class="ts-nav">
+  <a href="#" class="ts-logo">Tripma<em>Sign</em></a>
+  <div class="ts-nav-links">
+    <a href="#" class="active">Home</a>
+    <a href="02_katalog.html">Katalog</a>
+    <a href="03_form_order.html">Order Now</a>
+    <a href="04_lacak_pesanan.html">Track Order</a>
+  </div>
+  <div class="ts-nav-actions">
+    <a href="06_login.html" class="ts-btn ts-btn-secondary ts-btn-sm">Login</a>
+    <a href="05_register.html" class="ts-btn ts-btn-primary ts-btn-sm">Register</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🪧 Platform Pemesanan Signage Online</div>
+    <h1>Signage Profesional,<br/><em>Mudah Dipesan Online</em></h1>
+    <p>Pesan neon sign, acrylic sign, banner, dan berbagai signage berkualitas tinggi. Upload desain Anda — kami kerjakan sesuai spesifikasi dan jadwalkan bersama.</p>
+    <div class="hero-actions">
+      <a href="03_form_order.html" class="ts-btn ts-btn-gold ts-btn-lg">Pesan Sekarang</a>
+      <a href="02_katalog.html" class="ts-btn ts-btn-secondary ts-btn-lg" style="color:white;border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.08)">Lihat Katalog</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-num">500+</div><div class="hero-stat-label">Pesanan Selesai</div></div>
+      <div><div class="hero-stat-num">98%</div><div class="hero-stat-label">Kepuasan Pelanggan</div></div>
+      <div><div class="hero-stat-num">10+</div><div class="hero-stat-label">Jenis Produk Signage</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="ts-section" style="background:var(--bg)">
+  <div style="text-align:center;margin-bottom:48px">
+    <div class="ts-section-tag">Mengapa Tripma Sign?</div>
+    <h2 class="ts-section-title">Satu Platform, Semua Kebutuhan Signage</h2>
+    <p class="ts-section-desc" style="margin:0 auto">Dari pemesanan hingga pengiriman, semua proses terpantau secara real-time</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">🎨</div><div class="feature-title">Upload File Desain</div><div class="feature-desc">Upload file AI, PSD, atau PDF desain Anda. Tim produksi langsung memproses tanpa bolak-balik revisi.</div></div>
+    <div class="feature-card"><div class="feature-icon">📡</div><div class="feature-title">Pantau Progres Real-Time</div><div class="feature-desc">Lacak setiap tahapan produksi pesanan Anda — dari antrian hingga siap dikirim.</div></div>
+    <div class="feature-card"><div class="feature-icon">📄</div><div class="feature-title">Invoice Otomatis</div><div class="feature-desc">Sistem menerbitkan nomor order resmi dan invoice secara otomatis setiap pesanan dikonfirmasi.</div></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><div class="feature-title">Akses Terproteksi</div><div class="feature-desc">Role-based access untuk Admin, Staf Produksi, dan pelanggan agar data pesanan tetap aman.</div></div>
+    <div class="feature-card"><div class="feature-icon">📦</div><div class="feature-title">Semua Channel Terpusat</div><div class="feature-desc">Pesanan dari website, WhatsApp, maupun walk-in dikelola dalam satu sistem yang terintegrasi.</div></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Proses Cepat & Efisien</div><div class="feature-desc">Antrian produksi terorganisir otomatis, meminimalkan waktu tunggu dan meningkatkan kapasitas.</div></div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="ts-section products-section">
+  <div style="text-align:center;margin-bottom:40px">
+    <div class="ts-section-tag">Produk Kami</div>
+    <h2 class="ts-section-title">Katalog Signage Unggulan</h2>
+  </div>
+  <div class="products-grid">
+    <div class="product-card"><div class="product-img">💡<div class="product-badge-tag">Terlaris</div></div><div class="product-info"><div class="product-cat">Neon Sign</div><div class="product-name">Neon Sign Custom LED</div><div class="product-footer"><div class="product-price">Rp 450.000 <span>/unit</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+    <div class="product-card"><div class="product-img">🔷</div><div class="product-info"><div class="product-cat">Acrylic Sign</div><div class="product-name">Plang Acrylic 3D Letter</div><div class="product-footer"><div class="product-price">Rp 280.000 <span>/unit</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+    <div class="product-card"><div class="product-img">🖼️</div><div class="product-info"><div class="product-cat">Banner</div><div class="product-name">Banner Flexi Premium</div><div class="product-footer"><div class="product-price">Rp 35.000 <span>/m²</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+    <div class="product-card" style="border:2px dashed var(--border-dark)"><div class="product-img" style="background:#f0f4f8;font-size:2.5rem">✏️</div><div class="product-info"><div class="product-cat" style="color:var(--navy)">Permintaan Khusus</div><div class="product-name">Signage Custom / Non-Katalog</div><div class="product-footer"><div class="product-price" style="font-size:0.78rem;color:var(--text-muted);font-weight:400">Harga sesuai diskusi</div><a href="03_form_order.html" class="ts-btn ts-btn-secondary ts-btn-sm">Ajukan</a></div></div></div>
+  </div>
+  <div style="text-align:center;margin-top:32px"><a href="02_katalog.html" class="ts-btn ts-btn-secondary">Lihat Semua Produk →</a></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="ts-section steps-section">
+  <div style="text-align:center;margin-bottom:48px">
+    <div class="ts-section-tag">Cara Pemesanan</div>
+    <h2 class="ts-section-title">Pesan dalam 4 Langkah Mudah</h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step"><div class="step-num">1</div><div class="step-title">Pilih Produk</div><div class="step-desc">Browse katalog atau ajukan permintaan signage custom yang tidak ada di katalog</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-title">Input Spesifikasi</div><div class="step-desc">Masukkan ukuran, bahan, dan unggah file desain — spesifikasi dapat didiskusikan bersama Admin</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-title">Konfirmasi & Bayar</div><div class="step-desc">Admin mengkonfirmasi harga dan detail pesanan, kemudian invoice diterbitkan otomatis</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-title">Pantau Produksi</div><div class="step-desc">Lacak setiap tahapan produksi secara real-time hingga pesanan siap dikirim</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Siap Memesan Signage Anda?</h2>
+  <p>Bergabung dengan ratusan pelanggan yang telah mempercayai Tripma Sign</p>
+  <a href="05_register.html" class="ts-btn ts-btn-gold ts-btn-lg">Mulai Sekarang — Gratis</a>
+</section>
+
+<footer class="ts-footer">
+  <div class="ts-footer-logo">Tripma<em>Sign</em></div>
+  <div class="ts-footer-text">© 2025 Tripma Sign</div>
+</footer>
+
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>
