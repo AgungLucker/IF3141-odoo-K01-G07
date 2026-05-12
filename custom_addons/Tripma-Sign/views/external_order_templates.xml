@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="external_order_form" model="ir.ui.view">
+    <field name="name">tripma.external.order.form</field>
+    <field name="type">qweb</field>
+    <field name="key">Tripma-Sign.external_order_form</field>
+    <field name="arch" type="xml">
+    <t t-name="Tripma-Sign.external_order_form">
+    <t t-call="website.layout">
+        <t t-set="head">
+            <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+            <style><![CDATA[
+                .external-wrap { background: var(--bg); min-height: calc(100vh - 57px); }
+                .external-head { background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 32px; }
+                .external-main { padding: 28px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; }
+                .form-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+                .form-title { font-size: .9rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+                .side-panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 16px; }
+                .side-title { font-size: .875rem; font-weight: 700; color: var(--navy); margin-bottom: 14px; }
+                .radio-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+                .radio-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; font-size: .82rem; font-weight: 600; color: var(--text); }
+                .radio-card input { margin-right: 6px; }
+                .success-box { background: var(--green-bg); border: 1px solid rgba(22,163,74,.25); color: var(--green); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; }
+                .error-box { background: var(--red-bg); border: 1px solid rgba(220,38,38,.25); color: var(--red); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; }
+                .recent-item { border-top: 1px solid var(--border); padding: 12px 0; }
+                .recent-item:first-of-type { border-top: none; }
+                .recent-no { font-size: .75rem; color: var(--navy); font-weight: 700; }
+                .recent-name { font-size: .82rem; color: var(--text); font-weight: 600; margin-top: 2px; }
+                .recent-meta { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+                @media (max-width: 900px) {
+                    .external-main { grid-template-columns: 1fr; padding: 20px; }
+                    .radio-row { grid-template-columns: 1fr; }
+                }
+            ]]></style>
+        </t>
+        <t t-set="additional_title">Input Pesanan Eksternal - Tripma Sign</t>
+
+        <div class="external-wrap">
+            <div class="external-head">
+                <div class="ts-breadcrumb">
+                    <a href="/odoo">Dashboard</a> / Input Pesanan Eksternal
+                </div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px;">
+                    Input Pesanan Eksternal
+                </div>
+                <div style="font-size: .78rem; color: var(--text-muted); margin-top: 2px;">
+                    Registrasi pesanan WhatsApp atau langsung ke nomor order resmi dan antrian produksi.
+                </div>
+            </div>
+
+            <div class="external-main">
+                <form action="/tripma/admin/external-order/submit" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <t t-if="created_order">
+                        <div class="success-box">
+                            Pesanan berhasil diterbitkan sebagai
+                            <strong t-esc="created_order.name"/>.
+                            Status awal: Antri Produksi.
+                            <a t-att-href="'/tripma/production/update/%d' % created_order.id" style="margin-left: 8px;">Lihat antrian</a>
+                        </div>
+                    </t>
+
+                    <t t-if="errors">
+                        <div class="error-box">
+                            <t t-foreach="errors" t-as="error">
+                                <div t-esc="error"/>
+                            </t>
+                        </div>
+                    </t>
+
+                    <div class="form-section">
+                        <div class="form-title">1. Kanal asal pesanan</div>
+                        <div class="radio-row">
+                            <t t-foreach="channels" t-as="channel">
+                                <label class="radio-card">
+                                    <input type="radio" name="source_channel" t-att-value="channel[0]"
+                                           t-att-checked="'checked' if values.get('source_channel', 'whatsapp') == channel[0] else None"/>
+                                    <t t-esc="channel[1]"/>
+                                </label>
+                            </t>
+                        </div>
+                        <div class="ts-form-group" style="margin-top: 14px;">
+                            <label class="ts-label">Referensi eksternal</label>
+                            <input class="ts-input" name="external_reference" placeholder="Contoh: chat WA 0812... / nota manual"
+                                   t-att-value="values.get('external_reference', '')"/>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-title">2. Identitas pelanggan</div>
+                        <div class="ts-form-row">
+                            <div class="ts-form-group">
+                                <label class="ts-label">Nama pelanggan <span class="req">*</span></label>
+                                <input class="ts-input" name="customer_name" required="required"
+                                       t-att-value="values.get('customer_name', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">No. WhatsApp / Telepon <span class="req">*</span></label>
+                                <input class="ts-input" name="customer_phone" required="required"
+                                       t-att-value="values.get('customer_phone', '')"/>
+                            </div>
+                        </div>
+                        <div class="ts-form-row">
+                            <div class="ts-form-group">
+                                <label class="ts-label">Email</label>
+                                <input class="ts-input" type="email" name="customer_email"
+                                       t-att-value="values.get('customer_email', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Nama usaha / instansi</label>
+                                <input class="ts-input" name="company_name" t-att-value="values.get('company_name', '')"/>
+                            </div>
+                        </div>
+                        <div class="ts-form-group">
+                            <label class="ts-label">Alamat pengiriman <span class="req">*</span></label>
+                            <textarea class="ts-input ts-textarea" name="customer_address" required="required"
+                                      t-esc="values.get('customer_address', '')"/>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-title">3. Spesifikasi pesanan</div>
+                        <div class="ts-form-row">
+                            <div class="ts-form-group">
+                                <label class="ts-label">Produk <span class="req">*</span></label>
+                                <input class="ts-input" name="product_name" required="required"
+                                       placeholder="Neon sign, acrylic letter, banner, dll."
+                                       t-att-value="values.get('product_name', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Bahan</label>
+                                <input class="ts-input" name="material" t-att-value="values.get('material', '')"/>
+                            </div>
+                        </div>
+                        <div class="ts-form-row" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div class="ts-form-group">
+                                <label class="ts-label">Lebar (cm)</label>
+                                <input class="ts-input" type="number" name="width_cm" min="0" t-att-value="values.get('width_cm', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Tinggi (cm)</label>
+                                <input class="ts-input" type="number" name="height_cm" min="0" t-att-value="values.get('height_cm', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Jumlah</label>
+                                <input class="ts-input" type="number" name="quantity" min="1" t-att-value="values.get('quantity', '1')"/>
+                            </div>
+                        </div>
+                        <div class="ts-form-group">
+                            <label class="ts-label">File desain</label>
+                            <input class="ts-input" type="file" name="design_file"/>
+                        </div>
+                        <div class="ts-form-group">
+                            <label class="ts-label">Instruksi khusus</label>
+                            <textarea class="ts-input ts-textarea" name="special_instructions"
+                                      t-esc="values.get('special_instructions', '')"/>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-title">4. Harga dan jadwal</div>
+                        <div class="ts-form-row">
+                            <div class="ts-form-group">
+                                <label class="ts-label">Total harga (Rp)</label>
+                                <input class="ts-input" name="billing_total" inputmode="decimal"
+                                       t-att-value="values.get('billing_total', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Tanggal order</label>
+                                <input class="ts-input" type="date" name="order_date" t-att-value="values.get('order_date', '')"/>
+                            </div>
+                        </div>
+                        <div class="ts-form-row">
+                            <div class="ts-form-group">
+                                <label class="ts-label">Target selesai</label>
+                                <input class="ts-input" type="date" name="target_date" t-att-value="values.get('target_date', '')"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Catatan kanal</label>
+                                <input class="ts-input" name="external_notes" placeholder="Ringkasan percakapan / kesepakatan"
+                                       t-att-value="values.get('external_notes', '')"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="ts-btn ts-btn-primary ts-btn-lg" type="submit">Simpan dan terbitkan nomor order</button>
+                    <a href="/odoo" class="ts-btn ts-btn-secondary ts-btn-lg" style="margin-left: 8px;">Batal</a>
+                </form>
+
+                <aside>
+                    <div class="side-panel">
+                        <div class="side-title">Output otomatis</div>
+                        <div style="font-size: .82rem; color: var(--text-muted); line-height: 1.6;">
+                            Setelah disimpan, sistem membuat nomor order resmi, menandai admin penginput,
+                            dan memasukkan pesanan ke antrian produksi.
+                        </div>
+                    </div>
+                    <div class="side-panel">
+                        <div class="side-title">Input eksternal terbaru</div>
+                        <t t-foreach="recent_orders" t-as="order">
+                            <div class="recent-item">
+                                <div class="recent-no" t-esc="order.name"/>
+                                <div class="recent-name" t-esc="order.customer_id.name"/>
+                                <div class="recent-meta">
+                                    <t t-esc="{'whatsapp': 'WhatsApp', 'offline': 'Langsung', 'phone': 'Telepon'}.get(order.source_channel, order.source_channel)"/>
+                                    - <t t-esc="order.order_date.strftime('%d %b %Y') if order.order_date else '-'"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not recent_orders">
+                            <div style="font-size: .8rem; color: var(--text-muted);">Belum ada input eksternal.</div>
+                        </t>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </t>
+    </t>
+    </field>
+</record>
+
+</odoo>
