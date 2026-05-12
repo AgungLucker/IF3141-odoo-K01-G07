@@ -38,8 +38,13 @@
         </t>
         <t t-set="additional_title">Dashboard Produksi - Tripma Sign</t>
 
-        <div style="background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px;">
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy);">Dashboard Produksi</div>
+        <div class="admin-shell">
+            <t t-set="active_menu" t-value="'production'"/>
+            <t t-call="Tripma-Sign.admin_sidebar"/>
+
+            <div class="admin-page">
+        <div class="admin-page-head">
+            <div class="admin-page-title">Dashboard Produksi</div>
             <div style="font-size: .78rem; color: var(--text-muted);">
                 Klik tombol <strong>Update</strong> pada kartu pesanan untuk memperbarui status.
             </div>
@@ -203,6 +208,8 @@
 
             </div><!-- /kanban-board -->
         </div><!-- /ts-main -->
+            </div><!-- /admin-page -->
+        </div><!-- /admin-shell -->
     </t>
     </t>
     </field>
@@ -280,13 +287,18 @@
         <t t-set="stage_icon_labels" t-value="{s[0]: s[1] + ' ' + s[2] for s in all_stages}"/>
         <t t-set="cur_stage" t-value="order.current_production_stage or ''"/>
 
+        <div class="admin-shell">
+            <t t-set="active_menu" t-value="'production'"/>
+            <t t-call="Tripma-Sign.admin_sidebar"/>
+
+            <div class="admin-page">
         <!-- Page header -->
-        <div style="background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px;">
+        <div class="admin-page-head">
             <div class="ts-breadcrumb">
                 <a href="/tripma/production">← Dashboard Produksi</a> /
                 <strong t-esc="order.name"/>
             </div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px;">
+            <div class="admin-page-title">
                 Update Status — Pesanan <t t-esc="order.name"/>
             </div>
             <div style="font-size: .75rem; color: var(--text-muted); margin-top: 2px;">
@@ -436,6 +448,8 @@
                 </div><!-- /content-layout -->
             </form>
         </div><!-- /ts-main -->
+            </div><!-- /admin-page -->
+        </div><!-- /admin-shell -->
 
         <script type="text/javascript"><![CDATA[
             function selectStatus(el) {
