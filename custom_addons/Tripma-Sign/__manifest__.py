@@ -10,6 +10,7 @@
         'security/ir.model.access.csv',
         'data/tripma_sequences.xml',
         'views/templates.xml',
+        'views/production_templates.xml',
         'views/menus.xml',
     ],
     'application': True,
