@@ -138,7 +138,14 @@ class TripmaProductionController(http.Controller):
         if request.env.user and not request.env.user._is_public():
             orders = request.env['tripma.order'].search(
                 [('customer_id', '=', request.env.user.partner_id.id)])
-        return request.render('Tripma-Sign.track_order', {'orders': orders, 'query': q})
+        return request.render('Tripma-Sign.track_order', {
+            'order':        False,
+            'orders':       orders,
+            'query':        q,
+            'order_name':   '',
+            'progress_pct': 0,
+            'active_step':  0,
+        })
 
     @http.route('/tripma/track/<string:order_name>', auth='public', website=True)
     def track_order_detail(self, order_name, **kw):
@@ -147,6 +154,8 @@ class TripmaProductionController(http.Controller):
         progress_pct, active_step = self._compute_progress(order) if order else (0, 0)
         return request.render('Tripma-Sign.track_order', {
             'order':        order or False,
+            'orders':       [],
+            'query':        order_name,
             'order_name':   order_name,
             'progress_pct': progress_pct,
             'active_step':  active_step,

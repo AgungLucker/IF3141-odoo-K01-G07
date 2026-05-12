@@ -503,14 +503,13 @@
         </t>
         <t t-set="additional_title">Track Order - Tripma Sign</t>
 
-        <!-- Normalise context: both controllers render this template
-             but pass different variable sets. -->
-        <t t-set="v_order"      t-value="values.get('order', False)"/>
-        <t t-set="v_orders"     t-value="values.get('orders', [])"/>
-        <t t-set="v_query"      t-value="values.get('query', '') or values.get('order_name', '')"/>
-        <t t-set="v_order_name" t-value="values.get('order_name', '')"/>
-        <t t-set="v_pct"        t-value="values.get('progress_pct', 0)"/>
-        <t t-set="v_step"       t-value="values.get('active_step', 0)"/>
+        <!-- Both controllers always pass all 6 variables, so direct access is safe. -->
+        <t t-set="v_order"      t-value="order"/>
+        <t t-set="v_orders"     t-value="orders"/>
+        <t t-set="v_query"      t-value="query"/>
+        <t t-set="v_order_name" t-value="order_name"/>
+        <t t-set="v_pct"        t-value="progress_pct"/>
+        <t t-set="v_step"       t-value="active_step"/>
 
         <div class="page-wrap">
             <!-- Search hero -->
@@ -574,7 +573,7 @@
                     <div class="progress-title">Progress Produksi</div>
                     <div class="progress-steps">
                         <div class="progress-track">
-                            <div class="progress-fill" t-att-style="'width: %d%%;' % v_pct"/>
+                            <div class="progress-fill" t-att-style="'width: {}%;'.format(v_pct)"/>
                         </div>
                         <div class="steps-row">
                             <!-- Step 0: Diterima -->
@@ -692,7 +691,7 @@
                         <div class="progress-steps">
                             <div class="progress-track">
                                 <div class="progress-fill"
-                                     t-att-style="'width: %d%%; background: %s;' % (o_pct, '#16a34a' if o_done else '#1e3a5f')"/>
+                                     t-att-style="'width: {}%; background: {};'.format(o_pct, '#16a34a' if o_done else '#1e3a5f')"/>
                             </div>
                             <div class="steps-row">
                                 <t t-foreach="[('Diterima','✓'), ('Pembayaran','✓'), ('Produksi','⚙'), ('Siap Kirim','📦'), ('Terkirim','✈')]" t-as="step">
