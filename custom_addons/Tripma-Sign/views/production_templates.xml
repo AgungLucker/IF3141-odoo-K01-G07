@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- ============================================================
+     1. PRODUCTION DASHBOARD  (UC-5)
+     Route: GET /tripma/production
+     ============================================================ -->
+<record id="production_dashboard" model="ir.ui.view">
+    <field name="name">tripma.production.dashboard</field>
+    <field name="type">qweb</field>
+    <field name="key">Tripma-Sign.production_dashboard</field>
+    <field name="arch" type="xml">
+    <t t-name="Tripma-Sign.production_dashboard">
+    <t t-call="website.layout">
+        <t t-set="head">
+            <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+            <style><![CDATA[
+                .ts-main { padding: 28px 32px; background: var(--bg); min-height: calc(100vh - 57px); }
+                .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+                .kanban-col { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+                .kanban-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+                .kanban-title { display: flex; align-items: center; gap: 8px; font-size: .82rem; font-weight: 700; color: var(--navy); }
+                .k-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+                .kanban-cards { padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 260px; }
+                .order-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px; cursor: pointer; transition: all .15s; }
+                .order-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-sm); background: var(--white); }
+                .oc-no { font-size: .7rem; color: var(--navy); font-weight: 700; margin-bottom: 3px; }
+                .oc-name { font-size: .83rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+                .oc-product { font-size: .75rem; color: var(--text-muted); margin-bottom: 10px; }
+                .oc-footer { display: flex; align-items: center; justify-content: space-between; }
+                .oc-due { font-size: .7rem; color: var(--text-muted); }
+                .oc-btn { font-size: .68rem; font-weight: 600; padding: 4px 10px; border: none; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .15s; text-decoration: none; display: inline-block; }
+                .oc-btn-start { background: #e8eef5; color: var(--navy); }
+                .oc-btn-update { background: var(--amber-bg); color: var(--amber); }
+                .oc-btn-done { background: var(--green-bg); color: var(--green); }
+                .kanban-empty { text-align: center; color: var(--text-light); font-size: .8rem; padding: 24px 0; }
+            ]]></style>
+        </t>
+        <t t-set="additional_title">Dashboard Produksi - Tripma Sign</t>
+
+        <div style="background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy);">Dashboard Produksi</div>
+            <div style="font-size: .78rem; color: var(--text-muted);">
+                Klik tombol <strong>Update</strong> pada kartu pesanan untuk memperbarui status.
+            </div>
+        </div>
+
+        <div class="ts-main">
+            <!-- Stat strip -->
+            <div class="ts-stat-grid" style="margin-bottom: 22px;">
+                <div class="ts-stat-card">
+                    <div class="ts-stat-header">
+                        <div>
+                            <div class="ts-stat-value" t-esc="queue_count"/>
+                            <div class="ts-stat-label">Antrian Baru</div>
+                        </div>
+                        <div class="ts-stat-icon ts-stat-icon-blue">📥</div>
+                    </div>
+                    <span class="ts-badge ts-badge-blue">Belum mulai</span>
+                </div>
+                <div class="ts-stat-card">
+                    <div class="ts-stat-header">
+                        <div>
+                            <div class="ts-stat-value" t-esc="production_count"/>
+                            <div class="ts-stat-label">Sedang Dikerjakan</div>
+                        </div>
+                        <div class="ts-stat-icon ts-stat-icon-gold">⚙️</div>
+                    </div>
+                    <span class="ts-badge ts-badge-gold">Dalam produksi</span>
+                </div>
+                <div class="ts-stat-card">
+                    <div class="ts-stat-header">
+                        <div>
+                            <div class="ts-stat-value" t-esc="ready_count"/>
+                            <div class="ts-stat-label">Siap Kirim</div>
+                        </div>
+                        <div class="ts-stat-icon ts-stat-icon-green">📦</div>
+                    </div>
+                    <span class="ts-badge ts-badge-green">Perlu pickup</span>
+                </div>
+                <div class="ts-stat-card">
+                    <div class="ts-stat-header">
+                        <div>
+                            <div class="ts-stat-value" t-esc="near_deadline_count"/>
+                            <div class="ts-stat-label">Mendekati Deadline</div>
+                        </div>
+                        <div class="ts-stat-icon" style="background: var(--red-bg);">⚠️</div>
+                    </div>
+                    <span class="ts-badge ts-badge-red">Perhatikan</span>
+                </div>
+            </div>
+
+            <!-- Kanban board -->
+            <div class="kanban-board">
+
+                <!-- Col 1: Antrian -->
+                <div class="kanban-col">
+                    <div class="kanban-header">
+                        <div class="kanban-title">
+                            <div class="k-dot" style="background: var(--blue);"/>
+                            Antrian
+                        </div>
+                        <span class="ts-badge ts-badge-blue" t-esc="queue_count"/>
+                    </div>
+                    <div class="kanban-cards">
+                        <t t-foreach="antrian_orders" t-as="o">
+                            <div class="order-card">
+                                <div class="oc-no" t-esc="o.name"/>
+                                <div class="oc-name" t-esc="o.customer_id.name"/>
+                                <div class="oc-product" t-esc="(o.product_specs or '—')[:50]"/>
+                                <div class="oc-footer">
+                                    <span class="oc-due">📅 <t t-esc="o.order_date.strftime('%d %b') if o.order_date else '—'"/></span>
+                                    <a t-att-href="'/tripma/production/update/%d' % o.id" class="oc-btn oc-btn-start">→ Mulai</a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not antrian_orders">
+                            <div class="kanban-empty">Tidak ada pesanan</div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- Col 2: Sedang Dikerjakan (cutting / printing / assembly) -->
+                <div class="kanban-col">
+                    <div class="kanban-header">
+                        <div class="kanban-title">
+                            <div class="k-dot" style="background: var(--amber);"/>
+                            Sedang Dikerjakan
+                        </div>
+                        <span class="ts-badge ts-badge-gold" t-esc="len(in_progress_orders)"/>
+                    </div>
+                    <div class="kanban-cards">
+                        <t t-foreach="in_progress_orders" t-as="o">
+                            <div class="order-card">
+                                <div class="oc-no" t-esc="o.name"/>
+                                <div class="oc-name" t-esc="o.customer_id.name"/>
+                                <div class="oc-product" t-esc="(o.product_specs or '—')[:50]"/>
+                                <div class="oc-footer">
+                                    <span class="oc-due">📅 <t t-esc="o.order_date.strftime('%d %b') if o.order_date else '—'"/></span>
+                                    <a t-att-href="'/tripma/production/update/%d' % o.id" class="oc-btn oc-btn-update">Update</a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not in_progress_orders">
+                            <div class="kanban-empty">Tidak ada pesanan</div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- Col 3: Finishing / QC -->
+                <div class="kanban-col">
+                    <div class="kanban-header">
+                        <div class="kanban-title">
+                            <div class="k-dot" style="background: var(--navy);"/>
+                            Finishing / QC
+                        </div>
+                        <span class="ts-badge ts-badge-navy" t-esc="len(finishing_orders)"/>
+                    </div>
+                    <div class="kanban-cards">
+                        <t t-foreach="finishing_orders" t-as="o">
+                            <div class="order-card">
+                                <div class="oc-no" t-esc="o.name"/>
+                                <div class="oc-name" t-esc="o.customer_id.name"/>
+                                <div class="oc-product" t-esc="(o.product_specs or '—')[:50]"/>
+                                <div class="oc-footer">
+                                    <span class="oc-due">📅 <t t-esc="o.order_date.strftime('%d %b') if o.order_date else '—'"/></span>
+                                    <a t-att-href="'/tripma/production/update/%d' % o.id" class="oc-btn oc-btn-update">Update</a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not finishing_orders">
+                            <div class="kanban-empty">Tidak ada pesanan</div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- Col 4: Siap Kirim -->
+                <div class="kanban-col">
+                    <div class="kanban-header">
+                        <div class="kanban-title">
+                            <div class="k-dot" style="background: var(--green);"/>
+                            Siap Kirim
+                        </div>
+                        <span class="ts-badge ts-badge-green" t-esc="ready_count"/>
+                    </div>
+                    <div class="kanban-cards">
+                        <t t-foreach="siap_kirim_orders" t-as="o">
+                            <div class="order-card">
+                                <div class="oc-no" t-esc="o.name"/>
+                                <div class="oc-name" t-esc="o.customer_id.name"/>
+                                <div class="oc-product" t-esc="(o.product_specs or '—')[:50]"/>
+                                <div class="oc-footer">
+                                    <span style="font-size: .7rem; color: var(--green);">✅ Selesai</span>
+                                    <a t-att-href="'/tripma/production/update/%d' % o.id" class="oc-btn oc-btn-done">📦 Detail</a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not siap_kirim_orders">
+                            <div class="kanban-empty">Tidak ada pesanan</div>
+                        </t>
+                    </div>
+                </div>
+
+            </div><!-- /kanban-board -->
+        </div><!-- /ts-main -->
+    </t>
+    </t>
+    </field>
+</record>
+
+
+<!-- ============================================================
+     2. UPDATE STATUS FORM  (UC-5 — SubmitStatusUpdate)
+     Route: GET /tripma/production/update/<order_id>
+     POST target: /tripma/production/update/submit
+     ============================================================ -->
+<record id="update_status" model="ir.ui.view">
+    <field name="name">tripma.update.status</field>
+    <field name="type">qweb</field>
+    <field name="key">Tripma-Sign.update_status</field>
+    <field name="arch" type="xml">
+    <t t-name="Tripma-Sign.update_status">
+    <t t-call="website.layout">
+        <t t-set="head">
+            <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+            <style><![CDATA[
+                .ts-main { padding: 28px 32px; background: var(--bg); min-height: calc(100vh - 57px); }
+                .content-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+                .form-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+                .fs-title { font-size: .875rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+                .order-info-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+                .oi-no { font-size: .72rem; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+                .oi-name { font-size: 1rem; font-weight: 700; color: var(--navy); }
+                .order-specs { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--bg); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+                .spec-cell { padding: 12px 15px; border-right: 1px solid var(--border); }
+                .spec-cell:last-child { border-right: none; }
+                .spec-lbl { font-size: .7rem; color: var(--text-muted); margin-bottom: 3px; }
+                .spec-val { font-size: .85rem; font-weight: 600; color: var(--text); }
+                .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+                .status-option { border: 1.5px solid var(--border); border-radius: var(--radius); padding: 13px 14px; cursor: pointer; transition: all .15s; display: flex; align-items: flex-start; gap: 10px; background: var(--white); }
+                .status-option:hover { border-color: var(--navy-light); background: var(--bg); }
+                .status-option.selected { border-color: var(--navy); background: #e8eef5; }
+                .status-option.selected .s-name { color: var(--navy); }
+                .s-icon { font-size: 1.2rem; flex-shrink: 0; }
+                .s-name { font-size: .83rem; font-weight: 600; color: var(--text); }
+                .s-desc { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+                .timeline { position: relative; padding-left: 36px; }
+                .timeline::before { content: ''; position: absolute; left: 12px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+                .tl-item { position: relative; margin-bottom: 18px; }
+                .tl-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; position: absolute; left: -36px; top: 0; }
+                .tl-done { background: var(--navy); color: #fff; }
+                .tl-active { background: var(--amber); color: #fff; box-shadow: 0 0 0 4px var(--amber-bg); }
+                .tl-pending { background: var(--white); border: 1.5px solid var(--border); color: var(--text-muted); }
+                .tl-title { font-size: .83rem; font-weight: 600; color: var(--text); }
+                .tl-time { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+                .tl-note { font-size: .75rem; color: var(--text-muted); background: var(--bg); border-radius: var(--radius); padding: 7px 10px; margin-top: 6px; border-left: 3px solid var(--border); }
+                .sidebar-action { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow-sm); position: sticky; top: 20px; }
+                .sa-title { font-size: .875rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+                .stage-box { border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px; }
+                .stage-box-current { background: var(--amber-bg); border: 1px solid rgba(217,119,6,0.2); }
+                .stage-box-next { background: var(--green-bg); border: 1px solid rgba(22,163,74,0.2); }
+                .stage-lbl { font-size: .7rem; color: var(--text-muted); margin-bottom: 3px; }
+                .stage-val-current { font-size: .88rem; font-weight: 700; color: var(--amber); }
+                .stage-val-next { font-size: .88rem; font-weight: 700; color: var(--green); }
+                .pending-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+                .pending-header { padding: 13px 16px; border-bottom: 1px solid var(--border); font-size: .82rem; font-weight: 700; color: var(--navy); }
+                .pending-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; text-decoration: none; color: inherit; }
+                .pending-item:last-child { border-bottom: none; }
+                .pending-item:hover { background: var(--bg); }
+                .pending-item.active-item { background: #e8eef5; }
+                .p-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+                .p-no { font-size: .7rem; color: var(--navy); font-weight: 700; }
+                .p-name { font-size: .8rem; color: var(--text); }
+                .p-stage { margin-left: auto; font-size: .7rem; color: var(--text-muted); }
+            ]]></style>
+        </t>
+        <t t-set="additional_title">Update Status — Tripma Sign</t>
+
+        <!-- Build helper: icon+label map from all_stages list -->
+        <t t-set="stage_icon_labels" t-value="{s[0]: s[1] + ' ' + s[2] for s in all_stages}"/>
+        <t t-set="cur_stage" t-value="order.current_production_stage or ''"/>
+
+        <!-- Page header -->
+        <div style="background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px;">
+            <div class="ts-breadcrumb">
+                <a href="/tripma/production">← Dashboard Produksi</a> /
+                <strong t-esc="order.name"/>
+            </div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px;">
+                Update Status — Pesanan <t t-esc="order.name"/>
+            </div>
+            <div style="font-size: .75rem; color: var(--text-muted); margin-top: 2px;">
+                Pilih status produksi terbaru untuk pesanan ini lalu klik <strong>Simpan</strong>.
+            </div>
+        </div>
+
+        <div class="ts-main">
+            <form id="status-form" action="/tripma/production/update/submit" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="order_id" t-att-value="order.id"/>
+                <input type="hidden" name="stage_name" id="stage-name-input" t-att-value="cur_stage"/>
+
+                <div class="content-layout">
+                    <!-- LEFT PANEL -->
+                    <div>
+                        <!-- Order info -->
+                        <div class="form-section">
+                            <div class="fs-title">Informasi Pesanan</div>
+                            <div class="order-info-header">
+                                <div>
+                                    <div class="oi-no" t-esc="order.name"/>
+                                    <div class="oi-name" t-esc="order.customer_id.name"/>
+                                </div>
+                                <span class="ts-badge ts-badge-gold">
+                                    <t t-esc="stage_icon_labels.get(cur_stage, '—') if cur_stage else 'Belum ada status'"/>
+                                </span>
+                            </div>
+                            <div class="order-specs">
+                                <div class="spec-cell">
+                                    <div class="spec-lbl">Spesifikasi Produk</div>
+                                    <div class="spec-val" t-esc="(order.product_specs or '—')[:60]"/>
+                                </div>
+                                <div class="spec-cell">
+                                    <div class="spec-lbl">Tanggal Order</div>
+                                    <div class="spec-val" t-esc="order.order_date.strftime('%d %B %Y') if order.order_date else '—'"/>
+                                </div>
+                                <div class="spec-cell">
+                                    <div class="spec-lbl">Total Tagihan</div>
+                                    <div class="spec-val" t-esc="'Rp {:,.0f}'.format(order.billing_total) if order.billing_total else '—'"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status selector -->
+                        <div class="form-section">
+                            <div class="fs-title">Pilih Status Terbaru</div>
+                            <div class="status-grid">
+                                <t t-foreach="all_stages" t-as="s">
+                                    <div t-att-class="'status-option' + (' selected' if s[0] == cur_stage else '')"
+                                         t-att-data-stage="s[0]"
+                                         t-att-data-label="s[1] + ' ' + s[2]"
+                                         onclick="selectStatus(this)">
+                                        <div class="s-icon" t-esc="s[1]"/>
+                                        <div>
+                                            <div class="s-name" t-esc="s[2]"/>
+                                            <div class="s-desc" t-esc="s[3]"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Catatan Update (opsional)</label>
+                                <textarea class="ts-input ts-textarea" name="note"
+                                          placeholder="Catatan untuk Admin dan pelanggan..."/>
+                            </div>
+                        </div>
+
+                        <!-- History timeline -->
+                        <div class="form-section">
+                            <div class="fs-title">Riwayat Status Pesanan</div>
+                            <t t-if="not history">
+                                <div style="color: var(--text-muted); font-size: .85rem;">Belum ada riwayat status.</div>
+                            </t>
+                            <div class="timeline">
+                                <t t-foreach="history.sorted('update_time')" t-as="h">
+                                    <t t-set="is_latest" t-value="h_last"/>
+                                    <div class="tl-item">
+                                        <div t-att-class="'tl-dot ' + ('tl-active' if is_latest else 'tl-done')">
+                                            <t t-if="is_latest">→</t>
+                                            <t t-else="">✓</t>
+                                        </div>
+                                        <div t-att-class="'tl-title' + (' ' if not is_latest else '')"
+                                             t-att-style="'color: var(--amber);' if is_latest else ''">
+                                            <t t-esc="STAGE_LABELS.get(h.stage_name, h.stage_name)"/>
+                                            <t t-if="is_latest"> (Sekarang)</t>
+                                        </div>
+                                        <div class="tl-time">
+                                            <t t-esc="h.update_time.strftime('%d %B %Y · %H:%M') if h.update_time else ''"/>
+                                            — <t t-esc="h.updated_by.name"/>
+                                        </div>
+                                        <t t-if="h.note">
+                                            <div class="tl-note" t-esc="h.note"/>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT SIDEBAR -->
+                    <div>
+                        <div class="sidebar-action">
+                            <div class="sa-title">Simpan Perubahan</div>
+                            <div class="stage-box stage-box-current">
+                                <div class="stage-lbl">Status Saat Ini</div>
+                                <div class="stage-val-current">
+                                    <t t-esc="stage_icon_labels.get(cur_stage, '—') if cur_stage else 'Belum ada status'"/>
+                                </div>
+                            </div>
+                            <div class="stage-box stage-box-next">
+                                <div class="stage-lbl">Status Baru (Dipilih)</div>
+                                <div class="stage-val-next" id="next-stage">
+                                    <t t-esc="stage_icon_labels.get(cur_stage, '—') if cur_stage else 'Pilih status di kiri'"/>
+                                </div>
+                            </div>
+                            <button type="submit" form="status-form"
+                                    class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg"
+                                    style="margin-bottom: 8px;">
+                                ✅ Simpan &amp; Perbarui Status
+                            </button>
+                            <a href="/tripma/production" class="ts-btn ts-btn-secondary ts-btn-block">← Kembali ke Dashboard</a>
+                        </div>
+
+                        <div class="pending-card">
+                            <div class="pending-header">
+                                Pesanan Perlu Update (<t t-esc="len(pending_orders)"/>)
+                            </div>
+                            <t t-foreach="pending_orders" t-as="p">
+                                <a t-att-href="'/tripma/production/update/%d' % p.id" class="pending-item">
+                                    <div class="p-dot"/>
+                                    <div>
+                                        <div class="p-no" t-esc="p.name"/>
+                                        <div class="p-name" t-esc="p.customer_id.name"/>
+                                    </div>
+                                    <div class="p-stage">
+                                        <t t-esc="STAGE_LABELS.get(p.current_production_stage, '?') if p.current_production_stage else 'Antrian'"/> →
+                                    </div>
+                                </a>
+                            </t>
+                            <t t-if="not pending_orders">
+                                <div style="padding: 14px; font-size: .8rem; color: var(--text-muted);">Tidak ada pesanan lain.</div>
+                            </t>
+                        </div>
+                    </div>
+
+                </div><!-- /content-layout -->
+            </form>
+        </div><!-- /ts-main -->
+
+        <script type="text/javascript"><![CDATA[
+            function selectStatus(el) {
+                document.querySelectorAll('.status-option').forEach(function(o) {
+                    o.classList.remove('selected');
+                });
+                el.classList.add('selected');
+                document.getElementById('stage-name-input').value = el.dataset.stage;
+                document.getElementById('next-stage').textContent = el.dataset.label;
+            }
+        ]]></script>
+
+    </t>
+    </t>
+    </field>
+</record>
+
+
+<!-- ============================================================
+     3. TRACK ORDER  (UC-6 — customer monitors progress)
+     Route: GET /tripma/track           (search page)
+            GET /tripma/track/<name>    (order detail)
+     ============================================================ -->
+<record id="track_order" model="ir.ui.view">
+    <field name="name">tripma.track.order</field>
+    <field name="type">qweb</field>
+    <field name="key">Tripma-Sign.track_order</field>
+    <field name="arch" type="xml">
+    <t t-name="Tripma-Sign.track_order">
+    <t t-call="website.layout">
+        <t t-set="head">
+            <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+            <style><![CDATA[
+                .page-wrap { max-width: 960px; margin: 40px auto; padding: 0 48px; }
+                .search-hero { text-align: center; margin-bottom: 40px; }
+                .search-hero h1 { font-size: 1.8rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+                .search-hero p { color: var(--text-muted); font-size: .875rem; margin-bottom: 24px; }
+                .search-row { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
+                .order-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+                .order-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+                .order-no-label { font-size: .72rem; color: var(--text-muted); margin-bottom: 3px; }
+                .order-title { font-size: 1rem; font-weight: 700; color: var(--navy); }
+                .order-date { font-size: .78rem; color: var(--text-muted); margin-top: 3px; }
+                .progress-title { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 18px; }
+                .progress-steps { position: relative; margin-bottom: 20px; }
+                .progress-track { position: absolute; top: 17px; left: 17px; right: 17px; height: 2px; background: var(--border); z-index: 0; }
+                .progress-fill { height: 100%; background: var(--navy); }
+                .steps-row { display: flex; justify-content: space-between; position: relative; z-index: 1; }
+                .step-node { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+                .step-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .82rem; font-weight: 700; }
+                .step-done { background: var(--navy); color: #fff; }
+                .step-active { background: var(--navy); color: #fff; box-shadow: 0 0 0 5px rgba(30,58,95,0.15); }
+                .step-pending { background: var(--white); color: var(--text-muted); border: 1.5px solid var(--border); }
+                .step-done-green { background: var(--green); color: #fff; }
+                .step-info { text-align: center; }
+                .sname { font-size: .75rem; font-weight: 600; color: var(--text); }
+                .stime { font-size: .68rem; color: var(--text-muted); margin-top: 2px; }
+                .order-specs-4 { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--bg); border-radius: var(--radius); overflow: hidden; }
+                .spec-cell { padding: 13px 16px; border-right: 1px solid var(--border); }
+                .spec-cell:last-child { border-right: none; }
+                .spec-lbl { font-size: .7rem; color: var(--text-muted); margin-bottom: 3px; }
+                .spec-val { font-size: .875rem; font-weight: 600; color: var(--text); }
+                .not-found-box { text-align: center; padding: 60px 0; color: var(--text-muted); }
+            ]]></style>
+        </t>
+        <t t-set="additional_title">Track Order - Tripma Sign</t>
+
+        <!-- Normalise context: both controllers render this template
+             but pass different variable sets. -->
+        <t t-set="v_order"      t-value="values.get('order', False)"/>
+        <t t-set="v_orders"     t-value="values.get('orders', [])"/>
+        <t t-set="v_query"      t-value="values.get('query', '') or values.get('order_name', '')"/>
+        <t t-set="v_order_name" t-value="values.get('order_name', '')"/>
+        <t t-set="v_pct"        t-value="values.get('progress_pct', 0)"/>
+        <t t-set="v_step"       t-value="values.get('active_step', 0)"/>
+
+        <div class="page-wrap">
+            <!-- Search hero -->
+            <div class="search-hero">
+                <h1>Track Order</h1>
+                <p>Masukkan nomor order untuk melihat status produksi pesanan Anda</p>
+                <form class="search-row" action="/tripma/track" method="get">
+                    <input type="text" class="ts-input" name="q"
+                           placeholder="Contoh: TS-2025-0042"
+                           t-att-value="v_query"
+                           style="flex: 1;"/>
+                    <button type="submit" class="ts-btn ts-btn-primary">Cari</button>
+                </form>
+            </div>
+
+            <!-- Order not found -->
+            <t t-if="v_order_name and not v_order">
+                <div class="not-found-box">
+                    <div style="font-size: 2rem; margin-bottom: 12px;">🔍</div>
+                    <div style="font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 6px;">
+                        Order tidak ditemukan
+                    </div>
+                    <div style="font-size: .875rem;">
+                        Nomor order <strong t-esc="v_order_name"/> tidak ada dalam sistem.
+                    </div>
+                </div>
+            </t>
+
+            <!-- Single order detail (from /tripma/track/<order_name>) -->
+            <t t-if="v_order">
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-no-label">No. Order</div>
+                            <div class="order-title">
+                                <t t-esc="v_order.name"/> — <t t-esc="(v_order.product_specs or '')[:40]"/>
+                            </div>
+                            <div class="order-date">
+                                Dipesan: <t t-esc="v_order.order_date.strftime('%d %B %Y') if v_order.order_date else '—'"/>
+                            </div>
+                        </div>
+                        <!-- Status badge based on order.state -->
+                        <t t-if="v_order.state == 'done'">
+                            <span class="ts-badge ts-badge-green">✅ Selesai</span>
+                        </t>
+                        <t t-elif="v_order.state == 'in_production'">
+                            <span class="ts-badge ts-badge-gold">⚙️ Sedang Diproduksi</span>
+                        </t>
+                        <t t-elif="v_order.state == 'in_queue'">
+                            <span class="ts-badge ts-badge-blue">📥 Antri Produksi</span>
+                        </t>
+                        <t t-elif="v_order.state == 'waiting_payment'">
+                            <span class="ts-badge ts-badge-red">💳 Menunggu Pembayaran</span>
+                        </t>
+                        <t t-else="">
+                            <span class="ts-badge ts-badge-gray">Draft</span>
+                        </t>
+                    </div>
+
+                    <!-- 5-step progress bar -->
+                    <div class="progress-title">Progress Produksi</div>
+                    <div class="progress-steps">
+                        <div class="progress-track">
+                            <div class="progress-fill" t-att-style="'width: %d%%;' % v_pct"/>
+                        </div>
+                        <div class="steps-row">
+                            <!-- Step 0: Diterima -->
+                            <div class="step-node">
+                                <div t-att-class="'step-circle ' + ('step-done-green' if v_order.state == 'done' else ('step-done' if v_step >= 0 else 'step-pending'))">
+                                    <t t-if="v_step >= 0">✓</t><t t-else="">1</t>
+                                </div>
+                                <div class="step-info">
+                                    <div class="sname">Diterima</div>
+                                    <div class="stime" t-esc="v_order.order_date.strftime('%d %b') if v_order.order_date else '—'"/>
+                                </div>
+                            </div>
+                            <!-- Step 1: Pembayaran -->
+                            <div class="step-node">
+                                <div t-att-class="'step-circle ' + ('step-done-green' if v_order.state == 'done' else ('step-done' if v_step >= 1 else ('step-active' if v_step == 1 else 'step-pending')))">
+                                    <t t-if="v_step >= 1">✓</t><t t-else="">2</t>
+                                </div>
+                                <div class="step-info">
+                                    <div class="sname">Pembayaran</div>
+                                    <div class="stime">—</div>
+                                </div>
+                            </div>
+                            <!-- Step 2: Produksi -->
+                            <div class="step-node">
+                                <div t-att-class="'step-circle ' + ('step-done-green' if v_order.state == 'done' else ('step-active' if v_step == 2 else ('step-done' if v_step > 2 else 'step-pending')))">
+                                    <t t-if="v_step > 2">✓</t>
+                                    <t t-elif="v_step == 2">⚙</t>
+                                    <t t-else="">3</t>
+                                </div>
+                                <div class="step-info">
+                                    <div class="sname">Produksi</div>
+                                    <div class="stime" t-esc="v_order.input_date.strftime('%d %b') if v_order.input_date else '—'"/>
+                                </div>
+                            </div>
+                            <!-- Step 3: Siap Kirim -->
+                            <div class="step-node">
+                                <div t-att-class="'step-circle ' + ('step-done-green' if v_order.state == 'done' else ('step-active' if v_step == 3 else ('step-done' if v_step > 3 else 'step-pending')))">
+                                    <t t-if="v_step > 3">✓</t>
+                                    <t t-elif="v_step == 3">📦</t>
+                                    <t t-else="">4</t>
+                                </div>
+                                <div class="step-info">
+                                    <div class="sname">Siap Kirim</div>
+                                    <div class="stime">—</div>
+                                </div>
+                            </div>
+                            <!-- Step 4: Terkirim / Selesai -->
+                            <div class="step-node">
+                                <div t-att-class="'step-circle ' + ('step-done-green' if v_order.state == 'done' else 'step-pending')">
+                                    <t t-if="v_order.state == 'done'">✓</t><t t-else="">✈</t>
+                                </div>
+                                <div class="step-info">
+                                    <div class="sname">Terkirim</div>
+                                    <div class="stime">—</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order specs -->
+                    <div class="order-specs-4">
+                        <div class="spec-cell">
+                            <div class="spec-lbl">Spesifikasi Produk</div>
+                            <div class="spec-val" t-esc="(v_order.product_specs or '—')[:40]"/>
+                        </div>
+                        <div class="spec-cell">
+                            <div class="spec-lbl">Tanggal Order</div>
+                            <div class="spec-val" t-esc="v_order.order_date.strftime('%d %B %Y') if v_order.order_date else '—'"/>
+                        </div>
+                        <div class="spec-cell">
+                            <div class="spec-lbl">Status Produksi</div>
+                            <div class="spec-val" t-esc="v_order.current_production_stage or 'Menunggu'"/>
+                        </div>
+                        <div class="spec-cell">
+                            <div class="spec-lbl">Total Bayar</div>
+                            <div class="spec-val" t-esc="'Rp {:,.0f}'.format(v_order.billing_total) if v_order.billing_total else '—'"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- Customer order list (from /tripma/track when logged in) -->
+            <t t-if="v_orders">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                    <div style="font-size: .875rem; font-weight: 700; color: var(--navy);">Riwayat Pesanan Anda</div>
+                </div>
+                <t t-foreach="v_orders" t-as="o">
+                    <t t-set="o_pct" t-value="100 if o.state == 'done' else (80 if o.current_production_stage == 'ready' else (55 if o.state in ('in_queue', 'in_production') else (25 if o.state == 'waiting_payment' else 0)))"/>
+                    <t t-set="o_done" t-value="o.state == 'done'"/>
+                    <div class="order-card" t-att-style="'' if not o_done else 'opacity: 0.9;'">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-no-label">No. Order</div>
+                                <div class="order-title">
+                                    <t t-esc="o.name"/> — <t t-esc="(o.product_specs or '')[:40]"/>
+                                </div>
+                                <div class="order-date">
+                                    Dipesan: <t t-esc="o.order_date.strftime('%d %B %Y') if o.order_date else '—'"/>
+                                </div>
+                            </div>
+                            <t t-if="o_done">
+                                <span class="ts-badge ts-badge-green">✅ Selesai &amp; Terkirim</span>
+                            </t>
+                            <t t-elif="o.state == 'in_production'">
+                                <span class="ts-badge ts-badge-gold">⚙️ Sedang Diproduksi</span>
+                            </t>
+                            <t t-elif="o.state == 'in_queue'">
+                                <span class="ts-badge ts-badge-blue">📥 Antri Produksi</span>
+                            </t>
+                            <t t-else="">
+                                <span class="ts-badge ts-badge-red">💳 Menunggu Pembayaran</span>
+                            </t>
+                        </div>
+                        <div class="progress-title">Progress Produksi</div>
+                        <div class="progress-steps">
+                            <div class="progress-track">
+                                <div class="progress-fill"
+                                     t-att-style="'width: %d%%; background: %s;' % (o_pct, '#16a34a' if o_done else '#1e3a5f')"/>
+                            </div>
+                            <div class="steps-row">
+                                <t t-foreach="[('Diterima','✓'), ('Pembayaran','✓'), ('Produksi','⚙'), ('Siap Kirim','📦'), ('Terkirim','✈')]" t-as="step">
+                                    <t t-set="s_idx" t-value="step_index"/>
+                                    <t t-set="s_done" t-value="o_done or s_idx * 25 &lt; o_pct"/>
+                                    <div class="step-node">
+                                        <div t-att-class="'step-circle ' + ('step-done-green' if o_done else ('step-done' if s_done else 'step-pending'))">
+                                            <t t-if="s_done or o_done"><t t-esc="step[1]"/></t>
+                                            <t t-else=""><t t-esc="s_idx + 1"/></t>
+                                        </div>
+                                        <div class="step-info">
+                                            <div class="sname" t-esc="step[0]"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 12px;">
+                            <a t-att-href="'/tripma/track/' + o.name" class="ts-btn ts-btn-secondary ts-btn-sm">
+                                Lihat Detail →
+                            </a>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </div><!-- /page-wrap -->
+
+        <footer class="ts-footer">
+            <div class="ts-footer-logo">Tripma<em>Sign</em></div>
+            <div class="ts-footer-text">© 2026 Tripma Sign</div>
+        </footer>
+    </t>
+    </t>
+    </field>
+</record>
+
+</odoo>
