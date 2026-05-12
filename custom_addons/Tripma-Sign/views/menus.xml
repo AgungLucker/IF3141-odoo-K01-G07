@@ -7,9 +7,22 @@
         <field name="target">new</field>
     </record>
 
+    <record id="action_tripma_external_order" model="ir.actions.act_url">
+        <field name="name">Input Pesanan Eksternal</field>
+        <field name="url">/tripma/admin/external-order</field>
+        <field name="target">self</field>
+    </record>
+
     <!-- Menu Utama di Dashboard Admin Odoo -->
     <menuitem id="menu_tripma_root" 
               name="Tripma UI Mockups" 
               sequence="10" 
               action="action_tripma_mockups"/>
+
+    <menuitem id="menu_tripma_external_order"
+              name="Input Pesanan Eksternal"
+              parent="menu_tripma_root"
+              action="action_tripma_external_order"
+              groups="Tripma-Sign.group_tripma_admin"
+              sequence="20"/>
 </odoo>
