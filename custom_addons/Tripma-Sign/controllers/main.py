@@ -1,5 +1,6 @@
+import base64
 import datetime
-from odoo import http
+from odoo import fields, http
 from odoo.http import request
 
 STAGE_LABELS = {
@@ -30,7 +31,38 @@ class TripmaUI(http.Controller):
 class TripmaProductionController(http.Controller):
 
     def _check_production_staff(self):
-        return request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')
+        return (
+            request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')
+            or request.env.user.has_group('Tripma-Sign.group_tripma_admin')
+        )
+
+    def _check_sales_admin(self):
+        return request.env.user.has_group('Tripma-Sign.group_tripma_admin')
+
+    def _parse_money(self, value):
+        if not value:
+            return 0.0
+        normalized = str(value).replace('.', '').replace(',', '.').strip()
+        try:
+            return float(normalized)
+        except ValueError:
+            return 0.0
+
+    def _external_order_context(self, created_order=False, errors=None, values=None):
+        recent_orders = request.env['tripma.order'].search([
+            ('source_channel', 'in', ['whatsapp', 'offline', 'phone']),
+        ], order='input_date desc, order_date desc', limit=5)
+        return {
+            'created_order': created_order,
+            'errors': errors or [],
+            'values': values or {},
+            'recent_orders': recent_orders,
+            'channels': [
+                ('whatsapp', 'WhatsApp'),
+                ('offline', 'Langsung / Walk-in'),
+                ('phone', 'Telepon'),
+            ],
+        }
 
     def _compute_progress(self, order):
         state = order.state
@@ -82,6 +114,75 @@ class TripmaProductionController(http.Controller):
             'today':              today,
             'STAGE_LABELS':       STAGE_LABELS,
         })
+
+    @http.route('/tripma/admin/external-order', auth='user', website=True)
+    def external_order_form(self, **kw):
+        if not self._check_sales_admin():
+            return request.redirect('/odoo')
+        return request.render(
+            'Tripma-Sign.external_order_form',
+            self._external_order_context(),
+        )
+
+    @http.route('/tripma/admin/external-order/success/<int:order_id>', auth='user', website=True)
+    def external_order_success(self, order_id, **kw):
+        if not self._check_sales_admin():
+            return request.redirect('/odoo')
+        order = request.env['tripma.order'].browse(order_id)
+        if not order.exists():
+            return request.redirect('/tripma/admin/external-order')
+        return request.render(
+            'Tripma-Sign.external_order_form',
+            self._external_order_context(created_order=order),
+        )
+
+    @http.route('/tripma/admin/external-order/submit', auth='user', methods=['POST'], website=True, csrf=True)
+    def submit_external_order(self, **post):
+        if not self._check_sales_admin():
+            return request.redirect('/odoo')
+        required_fields = ['customer_name', 'customer_phone', 'customer_address', 'product_name']
+        errors = [
+            'Field %s wajib diisi.' % field.replace('_', ' ')
+            for field in required_fields
+            if not (post.get(field) or '').strip()
+        ]
+        channel = (post.get('source_channel') or '').strip()
+        if channel not in ['whatsapp', 'offline', 'phone']:
+            errors.append('Kanal pesanan tidak valid.')
+        if errors:
+            return request.render(
+                'Tripma-Sign.external_order_form',
+                self._external_order_context(errors=errors, values=post),
+            )
+
+        width = (post.get('width_cm') or '').strip()
+        height = (post.get('height_cm') or '').strip()
+        size = '%s x %s cm' % (width, height) if width or height else ''
+        uploaded_file = request.httprequest.files.get('design_file')
+        design_file = False
+        if uploaded_file and uploaded_file.filename:
+            design_file = base64.b64encode(uploaded_file.read())
+
+        order = request.env['tripma.order'].create_external_order({
+            'source_channel': channel,
+            'customer_name': (post.get('customer_name') or '').strip(),
+            'customer_phone': (post.get('customer_phone') or '').strip(),
+            'customer_email': (post.get('customer_email') or '').strip(),
+            'company_name': (post.get('company_name') or '').strip(),
+            'customer_address': (post.get('customer_address') or '').strip(),
+            'product_name': (post.get('product_name') or '').strip(),
+            'material': (post.get('material') or '').strip(),
+            'size': size,
+            'quantity': (post.get('quantity') or '1').strip(),
+            'special_instructions': (post.get('special_instructions') or '').strip(),
+            'billing_total': self._parse_money(post.get('billing_total')),
+            'order_date': post.get('order_date') or fields.Date.today(),
+            'target_date': post.get('target_date') or '',
+            'external_reference': (post.get('external_reference') or '').strip(),
+            'external_notes': (post.get('external_notes') or '').strip(),
+            'design_file': design_file,
+        })
+        return request.redirect('/tripma/admin/external-order/success/%d' % order.id)
 
     @http.route('/tripma/production/update/<int:order_id>', auth='user', website=True)
     def update_status_form(self, order_id, **kw):
