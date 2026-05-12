@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+Tripma-Sign.access_tripma_order_admin,tripma.order admin,Tripma-Sign.model_tripma_order,Tripma-Sign.group_tripma_admin,1,1,1,1
+Tripma-Sign.access_tripma_order_customer,tripma.order customer,Tripma-Sign.model_tripma_order,Tripma-Sign.group_tripma_customer,1,0,0,0
+Tripma-Sign.access_tripma_order_staff,tripma.order staff,Tripma-Sign.model_tripma_order,Tripma-Sign.group_tripma_production_staff,1,0,0,0
+Tripma-Sign.access_tripma_invoice_admin,tripma.invoice admin,Tripma-Sign.model_tripma_invoice,Tripma-Sign.group_tripma_admin,1,1,1,1
+Tripma-Sign.access_tripma_invoice_customer,tripma.invoice customer,Tripma-Sign.model_tripma_invoice,Tripma-Sign.group_tripma_customer,1,0,0,0
+Tripma-Sign.access_tripma_invoice_staff,tripma.invoice staff,Tripma-Sign.model_tripma_invoice,Tripma-Sign.group_tripma_production_staff,1,0,0,0
+Tripma-Sign.access_tripma_production_status_admin,tripma.production.status admin,Tripma-Sign.model_tripma_production_status,Tripma-Sign.group_tripma_admin,1,1,1,1
+Tripma-Sign.access_tripma_production_status_customer,tripma.production.status customer,Tripma-Sign.model_tripma_production_status,Tripma-Sign.group_tripma_customer,1,0,0,0
+Tripma-Sign.access_tripma_production_status_staff,tripma.production.status staff,Tripma-Sign.model_tripma_production_status,Tripma-Sign.group_tripma_production_staff,1,1,1,0
