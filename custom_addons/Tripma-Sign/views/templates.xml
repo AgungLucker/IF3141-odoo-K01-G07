@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--
-        CATATAN UNTUK IMPLEMENTASI NANTI:
-        Untuk membuat halaman website di Odoo, gunakan format <record> bukan <template>.
-        Contoh format yang benar:
-
-        <record id="tripma_page_landing" model="ir.ui.view">
-            <field name="name">tripma.page.landing</field>
-            <field name="type">qweb</field>
-            <field name="key">Tripma-Sign.page_landing</field>
-            <field name="arch" type="xml">
-                <t t-name="Tripma-Sign.page_landing">
-                    <t t-call="website.layout">
-                        <div class="container">
-                            <h1>Landing Page</h1>
-                        </div>
-                    </t>
+    <!-- Template halaman test sederhana -->
+    <record id="test_page" model="ir.ui.view">
+        <field name="name">Test Page</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.test_page</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.test_page">
+                <t t-call="website.layout">
+                    <div class="container mt-5">
+                        <h1>Tripma Sign — OK</h1>
+                    </div>
                 </t>
-            </field>
-        </record>
-
-        Saat ini halaman masih menggunakan static HTML di /static/mockup/
-        Route dihandle oleh controllers/main.py dan menu di views/menus.xml
-    -->
+            </t>
+        </field>
+    </record>
 </odoo>

@@ -27,5 +27,17 @@ class TripmaInvoice(models.Model):
                 vals['name'] = self.env['ir.sequence'].next_by_code('tripma.invoice') or 'New'
         return super().create(vals_list)
 
-    def update_payment_status(self, new_status):
-        self.write({'payment_status': new_status})
+    def update_payment_status(self, new_status=None):
+        """Update status pembayaran invoice. Bisa dipanggil secara programatik."""
+        if new_status is None:
+            new_status = self.env.context.get('new_status')
+        if new_status:
+            self.write({'payment_status': new_status})
+
+    def action_mark_paid(self):
+        """FR-04: Tombol 'Tandai Lunas' — hanya Admin (dijaga di view via groups=)."""
+        self.write({'payment_status': 'paid'})
+
+    def action_cancel_invoice(self):
+        """FR-04: Tombol 'Batalkan Invoice' — hanya Admin (dijaga di view via groups=)."""
+        self.write({'payment_status': 'cancelled'})
