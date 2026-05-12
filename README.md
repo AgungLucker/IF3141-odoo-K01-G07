@@ -80,9 +80,9 @@ http://localhost:8069
 | Method | Route | Auth | Keterangan |
 | --- | --- | --- | --- |
 | `GET` | `/tripma/order` | Public | Redirect ke mockup form order statis |
-| `GET` | `/tripma/admin/external-order` | User, Admin Penjualan | Form input pesanan eksternal dari WhatsApp/langsung/telepon |
-| `POST` | `/tripma/admin/external-order/submit` | User, Admin Penjualan | Registrasi pesanan eksternal ke database utama dan antrian produksi |
-| `GET` | `/tripma/admin/external-order/success/<order_id>` | User, Admin Penjualan | Halaman sukses setelah nomor order resmi diterbitkan |
+| `GET` | `/tripma/admin/external-order` | Admin Penjualan | Form input pesanan eksternal dari WhatsApp/langsung/telepon |
+| `POST` | `/tripma/admin/external-order/submit` | Admin Penjualan | Registrasi pesanan eksternal ke database utama dan antrian produksi |
+| `GET` | `/tripma/admin/external-order/success/<order_id>` | Admin Penjualan | Halaman sukses setelah nomor order resmi diterbitkan |
 | `GET` | `/tripma/production` | User, Admin Penjualan atau Staf Produksi | Dashboard antrian dan status produksi |
 | `GET` | `/tripma/production/update/<order_id>` | User, Admin Penjualan atau Staf Produksi | Form update status produksi untuk order tertentu |
 | `POST` | `/tripma/production/update/submit` | User, Admin Penjualan atau Staf Produksi | Submit perubahan status produksi |
