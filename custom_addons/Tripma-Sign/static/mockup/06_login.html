@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    body { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg); }
+    .login-wrap { width:100%; max-width:480px; padding:24px; }
+    .brand-center { text-align:center; margin-bottom:32px; }
+    .brand-center .logo { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.8rem; font-weight:800; color:var(--navy); }
+    .brand-center .logo em { color:var(--gold); font-style:normal; }
+    .brand-center p { color:var(--text-muted); font-size:0.95rem; margin-top:8px; }
+    .role-tabs { display:flex; background:var(--white); border:1px solid var(--border); border-radius:12px; padding:6px; gap:6px; margin-bottom:28px; }
+    .role-tab { flex:1; padding:12px; border-radius:8px; text-align:center; font-size:0.9rem; font-weight:600; cursor:pointer; transition:all 0.15s; color:var(--text-muted); }
+    .role-tab.active { background:var(--navy); color:white; }
+    .form-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:32px; box-shadow:var(--shadow-lg); }
+    .forgot { text-align:right; margin-top:5px; }
+    .forgot a { font-size:0.75rem; color:var(--blue); text-decoration:none; }
+    .register-link { text-align:center; font-size:0.9rem; color:var(--text-muted); margin-top:24px; }
+    .register-link a { color:var(--navy); font-weight:600; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="brand-center">
+      <div class="logo">Tripma<em>Sign</em></div>
+      <p>Masuk ke akun Anda</p>
+    </div>
+    <div class="role-tabs">
+      <div class="role-tab active" onclick="setRole(this,'customer')">👤 Pelanggan</div>
+      <div class="role-tab" onclick="setRole(this,'admin')">⚙️ Admin</div>
+      <div class="role-tab" onclick="setRole(this,'produksi')">🔧 Staf Produksi</div>
+    </div>
+    <div class="form-card">
+      <div class="ts-form-group"><label class="ts-label">Email</label><input type="email" class="ts-input" placeholder="email@contoh.com" value="pelanggan@email.com"></div>
+      <div class="ts-form-group">
+        <label class="ts-label">Kata Sandi</label>
+        <input type="password" class="ts-input" value="password123">
+        <div class="forgot"><a href="#">Lupa kata sandi?</a></div>
+      </div>
+      <button class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" style="margin-top:8px">Login</button>
+    </div>
+    <div class="register-link">Belum punya akun? <a href="05_register.html">Daftar gratis</a></div>
+  </div>
+  <a href="index.html" class="ts-back-btn">← Navigator</a>
+  <script>
+    function setRole(el, role) {
+      document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>

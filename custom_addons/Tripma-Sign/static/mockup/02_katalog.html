@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Katalog Produk - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .catalog-layout { display:grid; grid-template-columns:260px 1fr; min-height:calc(100vh - 128px); }
+    .sidebar-filter { padding:24px; border-right:1px solid var(--border); background:var(--white); }
+    .filter-group { margin-bottom:24px; }
+    .filter-group-title { font-size:0.72rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+    .filter-item { display:flex; align-items:center; gap:9px; margin-bottom:8px; cursor:pointer; }
+    .filter-item input { accent-color:var(--navy); width:15px; height:15px; }
+    .filter-item label { font-size:0.85rem; color:var(--text); cursor:pointer; }
+    .filter-item .fcount { margin-left:auto; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1px 8px; font-size:0.7rem; color:var(--text-muted); }
+    .range-slider { width:100%; accent-color:var(--navy); margin:8px 0; }
+    .range-labels { display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-muted); }
+    .products-area { padding:24px 28px; background:var(--bg); }
+    .toolbar { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+    .search-box { flex:1; position:relative; }
+    .search-box input { padding-left:36px; }
+    .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:0.85rem; }
+    .cat-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .chip { padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:500; cursor:pointer; border:1.5px solid var(--border); background:var(--white); color:var(--text-muted); transition:all 0.15s; }
+    .chip.active { background:var(--navy); border-color:var(--navy); color:white; }
+    .chip:hover:not(.active) { border-color:var(--navy); color:var(--navy); }
+    .products-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .product-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; transition:all 0.2s; }
+    .product-card:hover { box-shadow:var(--shadow); border-color:var(--navy-light); transform:translateY(-2px); }
+    .product-img { height:160px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:3rem; position:relative; }
+    .product-badge-tag { position:absolute; top:10px; left:10px; background:var(--navy); color:white; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:6px; }
+    .product-badge-new { background:var(--gold); }
+    .product-info { padding:16px; }
+    .product-cat { font-size:0.7rem; color:var(--gold); font-weight:600; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px; }
+    .product-name { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .product-desc { font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin-bottom:14px; }
+    .product-footer { display:flex; align-items:center; justify-content:space-between; }
+    .product-price { font-size:0.95rem; font-weight:700; color:var(--text); }
+    .product-price span { font-size:0.72rem; color:var(--text-muted); font-weight:400; }
+    .results-count { font-size:0.82rem; color:var(--text-muted); white-space:nowrap; }
+  </style>
+</head>
+<body>
+<nav class="ts-nav">
+  <a href="01_landing.html" class="ts-logo">Tripma<em>Sign</em></a>
+  <div class="ts-nav-links">
+    <a href="01_landing.html">Home</a>
+    <a href="#" class="active">Katalog</a>
+    <a href="03_form_order.html">Order Now</a>
+    <a href="04_lacak_pesanan.html">Track Order</a>
+  </div>
+  <div class="ts-nav-actions">
+    <a href="06_login.html" class="ts-btn ts-btn-secondary ts-btn-sm">Login</a>
+    <a href="05_register.html" class="ts-btn ts-btn-primary ts-btn-sm">Register</a>
+  </div>
+</nav>
+
+<div class="ts-page-header">
+  <h1>Katalog Produk</h1>
+  <p>Temukan signage yang sesuai kebutuhan bisnis Anda</p>
+</div>
+
+<div class="catalog-layout">
+  <aside class="sidebar-filter">
+    <div class="filter-group">
+      <div class="filter-group-title">Kategori</div>
+      <div class="filter-item"><input type="checkbox" id="c1" checked><label for="c1">Neon Sign</label><span class="fcount">12</span></div>
+      <div class="filter-item"><input type="checkbox" id="c2" checked><label for="c2">Acrylic Sign</label><span class="fcount">18</span></div>
+      <div class="filter-item"><input type="checkbox" id="c3"><label for="c3">Banner & Spanduk</label><span class="fcount">24</span></div>
+      <div class="filter-item"><input type="checkbox" id="c4"><label for="c4">Stiker & Cutting</label><span class="fcount">31</span></div>
+      <div class="filter-item"><input type="checkbox" id="c5"><label for="c5">Papan Nama</label><span class="fcount">9</span></div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-group-title">Bahan</div>
+      <div class="filter-item"><input type="checkbox" id="m1" checked><label for="m1">LED Strip Flex</label></div>
+      <div class="filter-item"><input type="checkbox" id="m2" checked><label for="m2">Acrylic</label></div>
+      <div class="filter-item"><input type="checkbox" id="m3"><label for="m3">Flexi / MMT</label></div>
+      <div class="filter-item"><input type="checkbox" id="m4"><label for="m4">Vinyl</label></div>
+      <div class="filter-item"><input type="checkbox" id="m5"><label for="m5">ACP</label></div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-group-title">Rentang Harga</div>
+      <input type="range" class="range-slider" min="10000" max="2000000" value="1000000">
+      <div class="range-labels"><span>Rp 10.000</span><span>Rp 2 jt</span></div>
+    </div>
+    <div style="padding:12px;background:var(--gold-bg);border-radius:var(--radius);border:1px solid rgba(200,148,10,0.2)">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--gold);margin-bottom:6px">Produk Non-Katalog?</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:10px">Punya ide signage unik di luar katalog? Ajukan permintaan custom ke Admin.</div>
+      <a href="03_form_order.html" class="ts-btn ts-btn-secondary ts-btn-sm" style="width:100%;justify-content:center">Ajukan Permintaan Khusus</a>
+    </div>
+  </aside>
+
+  <main class="products-area">
+    <div class="toolbar">
+      <div class="search-box"><span class="search-icon">🔍</span><input type="text" class="ts-input" placeholder="Cari produk signage..."></div>
+      <select class="ts-input ts-select" style="width:180px">
+        <option>Urutkan: Terpopuler</option>
+        <option>Harga Terendah</option>
+        <option>Harga Tertinggi</option>
+      </select>
+      <span class="results-count">24 produk</span>
+    </div>
+    <div class="cat-chips">
+      <div class="chip active">Semua</div>
+      <div class="chip">Neon Sign</div>
+      <div class="chip">Acrylic Sign</div>
+      <div class="chip">Banner</div>
+      <div class="chip">Stiker</div>
+      <div class="chip">Papan Nama</div>
+      <div class="chip" style="border-color:var(--gold);color:var(--gold)">✏️ Custom</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card"><div class="product-img">💡<div class="product-badge-tag">Terlaris</div></div><div class="product-info"><div class="product-cat">Neon Sign</div><div class="product-name">Neon Sign Custom LED</div><div class="product-desc">Neon sign LED RGB custom sesuai bentuk dan warna pilihan Anda. Ukuran dapat didiskusikan.</div><div class="product-footer"><div class="product-price">Rp 450.000 <span>/unit</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+      <div class="product-card"><div class="product-img">🔷</div><div class="product-info"><div class="product-cat">Acrylic Sign</div><div class="product-name">Plang Acrylic 3D Letter</div><div class="product-desc">Huruf 3D dari acrylic tebal dengan finishing premium dan lampu backlit.</div><div class="product-footer"><div class="product-price">Rp 280.000 <span>/unit</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+      <div class="product-card"><div class="product-img">✨<div class="product-badge-tag product-badge-new">Baru</div></div><div class="product-info"><div class="product-cat">Acrylic Sign</div><div class="product-name">Logo Acrylic Backlit</div><div class="product-desc">Logo perusahaan dari acrylic dengan pencahayaan LED dari belakang.</div><div class="product-footer"><div class="product-price">Rp 320.000 <span>/unit</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+      <div class="product-card"><div class="product-img">🖼️</div><div class="product-info"><div class="product-cat">Banner</div><div class="product-name">Banner Flexi Premium</div><div class="product-desc">Banner outdoor flexi 340gsm tahan cuaca, resolusi cetak tinggi.</div><div class="product-footer"><div class="product-price">Rp 35.000 <span>/m²</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+      <div class="product-card"><div class="product-img">🔖</div><div class="product-info"><div class="product-cat">Stiker</div><div class="product-name">Stiker Cutting Vinyl</div><div class="product-desc">Stiker vinyl cutting custom anti air untuk kendaraan, dinding, atau kaca.</div><div class="product-footer"><div class="product-price">Rp 15.000 <span>/m²</span></div><a href="03_form_order.html" class="ts-btn ts-btn-primary ts-btn-sm">Pesan</a></div></div></div>
+      <div class="product-card" style="border:2px dashed var(--border-dark)"><div class="product-img" style="background:#fef9ee;font-size:2.5rem">✏️</div><div class="product-info"><div class="product-cat" style="color:var(--gold)">Permintaan Khusus</div><div class="product-name">Signage Custom / Non-Katalog</div><div class="product-desc">Punya ide unik di luar katalog? Ceritakan ke kami — Admin akan mendiskusikan spesifikasi dan harga bersama Anda.</div><div class="product-footer"><div class="product-price" style="font-size:0.78rem;color:var(--text-muted);font-weight:400">Harga sesuai diskusi</div><a href="03_form_order.html" class="ts-btn ts-btn-secondary ts-btn-sm">Ajukan</a></div></div></div>
+    </div>
+  </main>
+</div>
+
+<footer class="ts-footer"><div class="ts-footer-logo">Tripma<em>Sign</em></div><div class="ts-footer-text">© 2025 Tripma Sign</div></footer>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

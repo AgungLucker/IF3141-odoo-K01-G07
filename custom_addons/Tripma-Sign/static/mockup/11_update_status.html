@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Update Status Produksi - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .main-content { padding:28px 32px; background:var(--bg); min-height:calc(100vh - 57px); }
+    .content-layout { display:grid; grid-template-columns:1fr 300px; gap:20px; }
+    .form-section { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px; margin-bottom:16px; box-shadow:var(--shadow-sm); }
+    .fs-title { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    /* Order info */
+    .order-info-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; }
+    .oi-no { font-size:0.72rem; font-weight:700; color:var(--navy); margin-bottom:3px; }
+    .oi-name { font-size:1rem; font-weight:700; color:var(--navy); }
+    .order-specs { display:grid; grid-template-columns:repeat(3,1fr); background:var(--bg); border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); }
+    .spec-cell { padding:12px 15px; border-right:1px solid var(--border); }
+    .spec-cell:last-child { border-right:none; }
+    .spec-lbl { font-size:0.7rem; color:var(--text-muted); margin-bottom:3px; }
+    .spec-val { font-size:0.85rem; font-weight:600; color:var(--text); }
+    /* Status grid */
+    .status-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+    .status-option { border:1.5px solid var(--border); border-radius:var(--radius); padding:13px 14px; cursor:pointer; transition:all 0.15s; display:flex; align-items:flex-start; gap:10px; background:var(--white); }
+    .status-option:hover { border-color:var(--navy-light); background:var(--bg); }
+    .status-option.selected { border-color:var(--navy); background:#e8eef5; }
+    .s-icon { font-size:1.2rem; flex-shrink:0; }
+    .s-name { font-size:0.83rem; font-weight:600; color:var(--text); }
+    .s-desc { font-size:0.72rem; color:var(--text-muted); margin-top:2px; }
+    .status-option.selected .s-name { color:var(--navy); }
+    /* Timeline */
+    .timeline { position:relative; padding-left:36px; }
+    .timeline::before { content:''; position:absolute; left:12px; top:4px; bottom:4px; width:2px; background:var(--border); }
+    .tl-item { position:relative; margin-bottom:18px; }
+    .tl-dot { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:700; position:absolute; left:-36px; top:0; }
+    .tl-done { background:var(--navy); color:white; }
+    .tl-active { background:var(--amber); color:white; box-shadow:0 0 0 4px var(--amber-bg); }
+    .tl-pending { background:var(--white); border:1.5px solid var(--border); color:var(--text-muted); }
+    .tl-title { font-size:0.83rem; font-weight:600; color:var(--text); }
+    .tl-active-dot .tl-title { color:var(--amber); }
+    .tl-time { font-size:0.72rem; color:var(--text-muted); margin-top:2px; }
+    .tl-note { font-size:0.75rem; color:var(--text-muted); background:var(--bg); border-radius:var(--radius); padding:7px 10px; margin-top:6px; border-left:3px solid var(--border); }
+    /* Sidebar */
+    .sidebar-action { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; margin-bottom:14px; box-shadow:var(--shadow-sm); position:sticky; top:20px; }
+    .sa-title { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .stage-box { border-radius:var(--radius); padding:12px 14px; margin-bottom:10px; }
+    .stage-box-current { background:var(--amber-bg); border:1px solid rgba(217,119,6,0.2); }
+    .stage-box-next { background:var(--green-bg); border:1px solid rgba(22,163,74,0.2); }
+    .stage-lbl { font-size:0.7rem; color:var(--text-muted); margin-bottom:3px; }
+    .stage-val-current { font-size:0.88rem; font-weight:700; color:var(--amber); }
+    .stage-val-next { font-size:0.88rem; font-weight:700; color:var(--green); }
+    /* Pending list */
+    .pending-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
+    .pending-header { padding:13px 16px; border-bottom:1px solid var(--border); font-size:0.82rem; font-weight:700; color:var(--navy); }
+    .pending-item { display:flex; align-items:center; gap:10px; padding:11px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.15s; }
+    .pending-item:last-child { border-bottom:none; }
+    .pending-item:hover { background:var(--bg); }
+    .pending-item.active-item { background:#e8eef5; }
+    .p-dot { width:7px; height:7px; border-radius:50%; background:var(--amber); flex-shrink:0; }
+    .p-no { font-size:0.7rem; color:var(--navy); font-weight:700; }
+    .p-name { font-size:0.8rem; color:var(--text); }
+    .p-stage { margin-left:auto; font-size:0.7rem; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+<div style="display:grid;grid-template-columns:240px 1fr;min-height:100vh">
+  <aside class="ts-sidebar">
+    <div style="padding:18px 20px 18px;border-bottom:1px solid var(--border);margin-bottom:8px">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px">Panel Staf Produksi</div>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Produksi</div>
+      <a href="10_produksi_dashboard.html" class="ts-sidebar-item"><span class="icon">🔧</span>Dashboard Produksi</a>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Lainnya</div>
+      <a href="#" class="ts-sidebar-item"><span class="icon">📋</span>Riwayat Selesai</a>
+    </div>
+    <div class="ts-sidebar-user">
+      <div class="ts-avatar" style="background:#1a5276">SP</div>
+      <div><div class="ts-user-name">Staf Produksi</div><div class="ts-user-role">Production Staff</div></div>
+    </div>
+  </aside>
+
+  <div style="display:flex;flex-direction:column">
+    <div style="background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px">
+      <div class="ts-breadcrumb"><a href="10_produksi_dashboard.html">← Dashboard Produksi</a> / Kanban / <strong>TS-2025-0045</strong> / Update Status</div>
+      <div style="font-size:1.1rem;font-weight:700;color:var(--navy);margin-top:3px">Update Status — Pesanan <span style="color:var(--navy)">TS-2025-0045</span></div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">Halaman ini dibuka dari kartu pesanan Budi Prasetyo di Dashboard Produksi.</div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-layout">
+        <div>
+          <!-- ORDER INFO -->
+          <div class="form-section">
+            <div class="fs-title">Informasi Pesanan</div>
+            <div class="order-info-header">
+              <div>
+                <div class="oi-no">TS-2025-0045</div>
+                <div class="oi-name">Budi Prasetyo — Acrylic 3D Letter</div>
+              </div>
+              <span class="ts-badge ts-badge-gold">⚙️ Persiapan / Cutting</span>
+            </div>
+            <div class="order-specs">
+              <div class="spec-cell"><div class="spec-lbl">Produk</div><div class="spec-val">Acrylic 3D Letter</div></div>
+              <div class="spec-cell"><div class="spec-lbl">Ukuran</div><div class="spec-val">80 × 30 cm</div></div>
+              <div class="spec-cell"><div class="spec-lbl">Target Selesai</div><div class="spec-val">24 April 2025</div></div>
+            </div>
+          </div>
+
+          <!-- STATUS SELECTOR -->
+          <div class="form-section">
+            <div class="fs-title">Pilih Status Terbaru</div>
+            <div class="status-grid">
+              <div class="status-option" onclick="selectStatus(this,'Menunggu Antrian')"><div class="s-icon">📥</div><div><div class="s-name">Menunggu Antrian</div><div class="s-desc">Belum mulai dikerjakan</div></div></div>
+              <div class="status-option" onclick="selectStatus(this,'Persiapan / Cutting')"><div class="s-icon">✂️</div><div><div class="s-name">Persiapan / Cutting</div><div class="s-desc">Sedang dipotong / disiapkan</div></div></div>
+              <div class="status-option selected" onclick="selectStatus(this,'Printing / Produksi')"><div class="s-icon">🖨️</div><div><div class="s-name">Printing / Produksi</div><div class="s-desc">Sedang dicetak / diproduksi</div></div></div>
+              <div class="status-option" onclick="selectStatus(this,'Pemasangan / Assembly')"><div class="s-icon">🔧</div><div><div class="s-name">Pemasangan / Assembly</div><div class="s-desc">Tahap perakitan komponen</div></div></div>
+              <div class="status-option" onclick="selectStatus(this,'Finishing / QC')"><div class="s-icon">✨</div><div><div class="s-name">Finishing / QC</div><div class="s-desc">Quality check &amp; finishing</div></div></div>
+              <div class="status-option" onclick="selectStatus(this,'Siap Dikirim')"><div class="s-icon">📦</div><div><div class="s-name">Siap Dikirim</div><div class="s-desc">Pesanan selesai, siap pickup</div></div></div>
+            </div>
+            <div class="ts-form-group">
+              <label class="ts-label">Catatan Update (opsional)</label>
+              <textarea class="ts-input ts-textarea" placeholder="Catatan untuk Admin dan pelanggan...">Proses cutting akrilik selesai. Saat ini masuk tahap printing UV untuk detail huruf.</textarea>
+            </div>
+          </div>
+
+          <!-- TIMELINE -->
+          <div class="form-section">
+            <div class="fs-title">Riwayat Status Pesanan</div>
+            <div class="timeline">
+              <div class="tl-item"><div class="tl-dot tl-done">✓</div><div class="tl-title">Pesanan Diterima</div><div class="tl-time">20 April 2025 · 14:32</div></div>
+              <div class="tl-item"><div class="tl-dot tl-done">✓</div><div class="tl-title">Masuk Antrian Produksi</div><div class="tl-time">21 April 2025 · 08:00</div></div>
+              <div class="tl-item"><div class="tl-dot tl-done">✓</div><div class="tl-title">Persiapan / Cutting</div><div class="tl-time">22 April 2025 · 09:15</div><div class="tl-note">Bahan akrilik 5mm siap. Memulai proses cutting CNC.</div></div>
+              <div class="tl-item tl-active-dot"><div class="tl-dot tl-active">→</div><div class="tl-title" style="color:var(--amber)">Printing / Produksi (Sekarang)</div><div class="tl-time">23 April 2025 · 10:00</div><div class="tl-note">Proses cutting selesai. Masuk tahap printing UV.</div></div>
+              <div class="tl-item"><div class="tl-dot tl-pending"></div><div class="tl-title" style="color:var(--text-muted)">Pemasangan / Assembly</div><div class="tl-time" style="color:var(--border)">Menunggu...</div></div>
+              <div class="tl-item"><div class="tl-dot tl-pending"></div><div class="tl-title" style="color:var(--text-muted)">Finishing / QC</div><div class="tl-time" style="color:var(--border)">Menunggu...</div></div>
+              <div class="tl-item"><div class="tl-dot tl-pending"></div><div class="tl-title" style="color:var(--text-muted)">Siap Dikirim</div><div class="tl-time" style="color:var(--border)">Est. 24 April 2025</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+          <div class="sidebar-action">
+            <div class="sa-title">Simpan Perubahan</div>
+            <div class="stage-box stage-box-current"><div class="stage-lbl">Status Saat Ini</div><div class="stage-val-current">⚙️ Persiapan / Cutting</div></div>
+            <div class="stage-box stage-box-next"><div class="stage-lbl">Status Baru (Dipilih)</div><div class="stage-val-next" id="next-stage">🖨️ Printing / Produksi</div></div>
+            <button class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" style="margin-bottom:8px">✅ Simpan &amp; Kirim Notifikasi</button>
+            <a href="10_produksi_dashboard.html" class="ts-btn ts-btn-secondary ts-btn-block">← Kembali ke Dashboard</a>
+          </div>
+
+          <div class="pending-card">
+            <div class="pending-header">Pesanan Perlu Update (5)</div>
+            <div class="pending-item active-item">
+              <div class="p-dot"></div>
+              <div><div class="p-no">TS-2025-0045</div><div class="p-name">Budi Prasetyo</div></div>
+              <div class="p-stage">Cutting →</div>
+            </div>
+            <div class="pending-item">
+              <div class="p-dot" style="background:var(--red)"></div>
+              <div><div class="p-no">TS-2025-0047</div><div class="p-name">CV Maju Jaya</div></div>
+              <div class="p-stage">Antrian →</div>
+            </div>
+            <div class="pending-item">
+              <div class="p-dot"></div>
+              <div><div class="p-no">TS-2025-0043</div><div class="p-name">Salon Cantik</div></div>
+              <div class="p-stage">Finishing →</div>
+            </div>
+            <div class="pending-item">
+              <div class="p-dot"></div>
+              <div><div class="p-no">TS-2025-0042</div><div class="p-name">Kafe Kopi Hits</div></div>
+              <div class="p-stage">Finishing →</div>
+            </div>
+            <div class="pending-item">
+              <div class="p-dot"></div>
+              <div><div class="p-no">TS-2025-0044</div><div class="p-name">Toko Sejahtera</div></div>
+              <div class="p-stage">Cutting →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+<script>
+  function selectStatus(el, name) {
+    document.querySelectorAll('.status-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const icon = el.querySelector('.s-icon').textContent;
+    document.getElementById('next-stage').textContent = icon + ' ' + name;
+  }
+</script>
+</body>
+</html>

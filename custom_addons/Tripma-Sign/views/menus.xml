@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action untuk membuka URL Mockup HTML kita -->
+    <record id="action_tripma_mockups" model="ir.actions.act_url">
+        <field name="name">Buka Mockup Tripma Sign</field>
+        <field name="url">/Tripma-Sign/static/mockup/index.html</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu Utama di Dashboard Admin Odoo -->
+    <menuitem id="menu_tripma_root" 
+              name="Tripma UI Mockups" 
+              sequence="10" 
+              action="action_tripma_mockups"/>
+</odoo>

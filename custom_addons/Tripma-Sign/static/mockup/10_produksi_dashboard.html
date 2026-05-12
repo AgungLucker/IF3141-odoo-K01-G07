@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Produksi - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .main-content { padding:28px 32px; background:var(--bg); min-height:calc(100vh - 57px); }
+    .kanban-board { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .kanban-col { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
+    .kanban-header { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .kanban-title { display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; color:var(--navy); }
+    .k-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .k-dot-blue { background:var(--blue); }
+    .k-dot-amber { background:var(--amber); }
+    .k-dot-navy { background:var(--navy); }
+    .k-dot-green { background:var(--green); }
+    .kanban-cards { padding:12px; display:flex; flex-direction:column; gap:10px; min-height:260px; }
+    .order-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:13px; transition:all 0.15s; cursor:pointer; }
+    .order-card:hover { border-color:var(--navy-light); box-shadow:var(--shadow-sm); background:var(--white); }
+    .oc-no { font-size:0.7rem; color:var(--navy); font-weight:700; margin-bottom:3px; }
+    .oc-name { font-size:0.83rem; font-weight:600; color:var(--text); margin-bottom:2px; }
+    .oc-product { font-size:0.75rem; color:var(--text-muted); margin-bottom:10px; }
+    .oc-footer { display:flex; align-items:center; justify-content:space-between; }
+    .oc-due { font-size:0.7rem; color:var(--text-muted); }
+    .oc-due-warn { color:var(--amber); }
+    .oc-due-late { color:var(--red); }
+    .oc-btn { font-size:0.68rem; font-weight:600; padding:4px 10px; border:none; border-radius:6px; cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.15s; }
+    .oc-btn-start { background:#e8eef5; color:var(--navy); }
+    .oc-btn-update { background:var(--amber-bg); color:var(--amber); }
+    .oc-btn-ship { background:var(--green-bg); color:var(--green); }
+    .prio-badge { font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:6px; background:var(--red-bg); color:var(--red); }
+  </style>
+</head>
+<body>
+<div style="display:grid;grid-template-columns:240px 1fr;min-height:100vh">
+  <aside class="ts-sidebar">
+    <div style="padding:18px 20px 18px;border-bottom:1px solid var(--border);margin-bottom:8px">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px">Panel Staf Produksi</div>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Produksi</div>
+      <a href="#" class="ts-sidebar-item active"><span class="icon">🔧</span>Dashboard Produksi</a>
+    </div>
+    <div class="ts-sidebar-section">
+      <div class="ts-sidebar-label">Lainnya</div>
+      <a href="#" class="ts-sidebar-item"><span class="icon">📋</span>Riwayat Selesai</a>
+    </div>
+    <div class="ts-sidebar-user">
+      <div class="ts-avatar" style="background:#1a5276">SP</div>
+      <div><div class="ts-user-name">Staf Produksi</div><div class="ts-user-role">Production Staff</div></div>
+    </div>
+  </aside>
+
+  <div style="display:flex;flex-direction:column">
+    <div style="background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--navy)">Dashboard Produksi</div>
+        <div style="font-size:0.78rem;color:var(--text-muted)">Rabu, 23 April 2025 — Klik tombol <strong>Update</strong> pada kartu pesanan untuk memperbarui status.</div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="ts-stat-grid" style="margin-bottom:22px">
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">5</div><div class="ts-stat-label">Antrian Baru</div></div><div class="ts-stat-icon ts-stat-icon-blue">📥</div></div><span class="ts-badge ts-badge-blue">Belum mulai</span></div>
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">7</div><div class="ts-stat-label">Sedang Dikerjakan</div></div><div class="ts-stat-icon ts-stat-icon-gold">⚙️</div></div><span class="ts-badge ts-badge-gold">Dalam produksi</span></div>
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">3</div><div class="ts-stat-label">Siap Kirim Hari Ini</div></div><div class="ts-stat-icon ts-stat-icon-green">📦</div></div><span class="ts-badge ts-badge-green">Perlu pickup</span></div>
+        <div class="ts-stat-card"><div class="ts-stat-header"><div><div class="ts-stat-value">2</div><div class="ts-stat-label">Mendekati Deadline</div></div><div class="ts-stat-icon" style="background:var(--red-bg)">⚠️</div></div><span class="ts-badge ts-badge-red">Perhatikan</span></div>
+      </div>
+
+      <!-- KANBAN -->
+      <div class="kanban-board">
+        <!-- ANTRIAN -->
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <div class="kanban-title"><div class="k-dot k-dot-blue"></div>Antrian</div>
+            <span class="ts-badge ts-badge-blue">5</span>
+          </div>
+          <div class="kanban-cards">
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0048</div>
+              <div class="oc-name">Rina Susanti</div>
+              <div class="oc-product">Neon Sign LED · 60×40cm</div>
+              <div class="oc-footer"><span class="oc-due">📅 27 Apr</span><button class="oc-btn oc-btn-start" onclick="location.href='11_update_status.html'">→ Mulai</button></div>
+            </div>
+            <div class="order-card" style="border-left:3px solid var(--red)">
+              <div class="oc-no">TS-2025-0047</div>
+              <div class="oc-name">CV Maju Jaya</div>
+              <div class="oc-product">Banner Flexi · 3×1m</div>
+              <div class="oc-footer"><span class="oc-due oc-due-warn">📅 25 Apr</span><button class="oc-btn oc-btn-start" onclick="location.href='11_update_status.html'">→ Mulai</button></div>
+            </div>
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0046</div>
+              <div class="oc-name">Ahmad Fauzi</div>
+              <div class="oc-product">Stiker Vinyl · 2m²</div>
+              <div class="oc-footer"><span class="oc-due">📅 28 Apr</span><button class="oc-btn oc-btn-start" onclick="location.href='11_update_status.html'">→ Mulai</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERSIAPAN / CUTTING -->
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <div class="kanban-title"><div class="k-dot k-dot-amber"></div>Persiapan / Cutting</div>
+            <span class="ts-badge ts-badge-gold">3</span>
+          </div>
+          <div class="kanban-cards">
+            <div class="order-card" style="border-left:3px solid var(--red)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px"><div class="oc-no">TS-2025-0045</div><span class="prio-badge">Urgent</span></div>
+              <div class="oc-name">Budi Prasetyo</div>
+              <div class="oc-product">Acrylic 3D Letter · 80×30cm</div>
+              <div class="oc-footer"><span class="oc-due oc-due-warn">📅 24 Apr</span><button class="oc-btn oc-btn-update" onclick="location.href='11_update_status.html'">Update</button></div>
+            </div>
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0044</div>
+              <div class="oc-name">Toko Sejahtera</div>
+              <div class="oc-product">Papan Nama ACP · 1×0.5m</div>
+              <div class="oc-footer"><span class="oc-due">📅 26 Apr</span><button class="oc-btn oc-btn-update" onclick="location.href='11_update_status.html'">Update</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FINISHING -->
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <div class="kanban-title"><div class="k-dot k-dot-navy"></div>Finishing / QC</div>
+            <span class="ts-badge ts-badge-navy">4</span>
+          </div>
+          <div class="kanban-cards">
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0043</div>
+              <div class="oc-name">Salon Cantik</div>
+              <div class="oc-product">Neon Sign · 40×25cm</div>
+              <div class="oc-footer"><span class="oc-due">📅 23 Apr</span><button class="oc-btn oc-btn-update" onclick="location.href='11_update_status.html'">Update</button></div>
+            </div>
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0042</div>
+              <div class="oc-name">Kafe Kopi Hits</div>
+              <div class="oc-product">Logo Acrylic Backlit</div>
+              <div class="oc-footer"><span class="oc-due">📅 24 Apr</span><button class="oc-btn oc-btn-update" onclick="location.href='11_update_status.html'">Update</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIAP KIRIM -->
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <div class="kanban-title"><div class="k-dot k-dot-green"></div>Siap Kirim</div>
+            <span class="ts-badge ts-badge-green">3</span>
+          </div>
+          <div class="kanban-cards">
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0041</div>
+              <div class="oc-name">PT Maju Bersama</div>
+              <div class="oc-product">Papan Nama ACP · 2×1m</div>
+              <div class="oc-footer"><span class="oc-due" style="color:var(--green)">✅ Selesai</span><button class="oc-btn oc-btn-ship">📦 Kirim</button></div>
+            </div>
+            <div class="order-card">
+              <div class="oc-no">TS-2025-0040</div>
+              <div class="oc-name">Warung Bahagia</div>
+              <div class="oc-product">Banner Flexi · 4×1m</div>
+              <div class="oc-footer"><span class="oc-due" style="color:var(--green)">✅ Selesai</span><button class="oc-btn oc-btn-ship">📦 Kirim</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>

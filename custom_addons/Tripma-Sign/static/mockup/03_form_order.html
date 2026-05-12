@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Pemesanan - Tripma Sign</title>
+  <link rel="stylesheet" href="tripma.css">
+  <style>
+    .order-layout { display:grid; grid-template-columns:1fr 340px; gap:24px; max-width:1200px; margin:32px auto; padding:0 48px; }
+    .form-section { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin-bottom:16px; box-shadow:var(--shadow-sm); }
+    .form-section-title { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+    .form-section-num { width:24px; height:24px; border-radius:6px; background:var(--navy); color:white; font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .product-selected { display:flex; align-items:center; gap:14px; padding:14px; background:var(--bg); border-radius:var(--radius); border:1px solid var(--border); margin-bottom:20px; }
+    .product-thumb { font-size:2rem; }
+    .product-info-name { font-size:0.9rem; font-weight:600; color:var(--navy); }
+    .product-info-cat { font-size:0.75rem; color:var(--gold); margin-top:2px; }
+    .change-link { margin-left:auto; font-size:0.75rem; color:var(--blue); text-decoration:underline; cursor:pointer; }
+    .file-upload { border:2px dashed var(--border); border-radius:var(--radius); padding:28px; text-align:center; cursor:pointer; transition:all 0.15s; background:var(--bg); }
+    .file-upload:hover { border-color:var(--navy); background:#f0f4f8; }
+    .file-icon { font-size:1.8rem; margin-bottom:8px; }
+    .file-text { font-size:0.85rem; color:var(--text-muted); }
+    .file-text strong { color:var(--navy); }
+    .file-formats { font-size:0.72rem; color:var(--text-light); margin-top:4px; }
+    /* Summary card */
+    .summary-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px; position:sticky; top:24px; box-shadow:var(--shadow-sm); }
+    .summary-title { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .summary-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.83rem; }
+    .summary-row .lbl { color:var(--text-muted); }
+    .summary-row .val { color:var(--text); font-weight:500; text-align:right; max-width:55%; }
+    .summary-total { display:flex; justify-content:space-between; font-weight:700; margin-bottom:18px; }
+    .summary-total .lbl { color:var(--text); }
+    .summary-total .val { color:var(--navy); font-size:1.05rem; }
+    .disclaimer { font-size:0.72rem; color:var(--text-muted); text-align:center; line-height:1.5; margin-top:10px; }
+  </style>
+</head>
+<body>
+<nav class="ts-nav">
+  <a href="01_landing.html" class="ts-logo">Tripma<em>Sign</em></a>
+  <div class="ts-nav-links">
+    <a href="01_landing.html">Home</a>
+    <a href="02_katalog.html">Katalog</a>
+    <a href="#" class="active">Order Now</a>
+    <a href="04_lacak_pesanan.html">Track Order</a>
+  </div>
+  <div class="ts-nav-actions">
+    <a href="01_landing.html" class="ts-btn ts-btn-secondary ts-btn-sm">Logout</a>
+  </div>
+</nav>
+
+<div class="ts-page-header">
+  <h1>Form Pemesanan Mandiri</h1>
+  <p>Isi detail pesanan Anda. Nomor order dan invoice akan diterbitkan otomatis.</p>
+</div>
+
+<div class="order-layout">
+  <div>
+
+    <div class="product-selected">
+      <div class="product-thumb">💡</div>
+      <div><div class="product-info-name">Neon Sign Custom LED</div><div class="product-info-cat">Neon Sign</div></div>
+      <div class="change-link">Ganti produk</div>
+    </div>
+    <div style="background:var(--gold-bg);border:1px solid rgba(200,148,10,0.2);border-radius:var(--radius);padding:11px 14px;margin-bottom:20px;font-size:0.8rem;color:var(--text-muted);line-height:1.5">
+      💡 <strong style="color:var(--navy)">Fleksibel:</strong> Ukuran, bahan, dan spesifikasi dapat disesuaikan. Jika ingin produk di luar katalog, pilih <strong>"Signage Custom"</strong> di produk dan deskripsikan kebutuhan Anda di catatan.
+    </div>
+
+    <!-- DATA PELANGGAN -->
+    <div class="form-section">
+      <div class="form-section-title"><div class="form-section-num">01</div>Data Pelanggan</div>
+      <div class="ts-form-row">
+        <div class="ts-form-group"><label class="ts-label">Nama Lengkap <span class="req">*</span></label><input type="text" class="ts-input" placeholder="Nama lengkap Anda"></div>
+        <div class="ts-form-group"><label class="ts-label">Email <span class="req">*</span></label><input type="email" class="ts-input" placeholder="email@contoh.com"></div>
+      </div>
+      <div class="ts-form-row">
+        <div class="ts-form-group"><label class="ts-label">No. Telepon / WhatsApp <span class="req">*</span></label><input type="tel" class="ts-input" placeholder="08xxxxxxxxxx"></div>
+        <div class="ts-form-group"><label class="ts-label">Nama Usaha / Instansi</label><input type="text" class="ts-input" placeholder="Opsional"></div>
+      </div>
+      <div class="ts-form-group"><label class="ts-label">Alamat Pengiriman <span class="req">*</span></label><textarea class="ts-input ts-textarea" placeholder="Jalan, nomor, kelurahan, kecamatan, kota, kode pos"></textarea></div>
+    </div>
+
+    <!-- SPESIFIKASI -->
+    <div class="form-section">
+      <div class="form-section-title"><div class="form-section-num">02</div>Spesifikasi Produk</div>
+      <div class="ts-form-row">
+        <div class="ts-form-group"><label class="ts-label">Jenis Bahan <span class="req">*</span></label><select class="ts-input ts-select"><option selected>LED Strip Flex Neon</option><option>LED Strip Rigid</option><option>LED Strip SMD</option></select></div>
+        <div class="ts-form-group"><label class="ts-label">Warna LED <span class="req">*</span></label><select class="ts-input ts-select"><option>Warm White</option><option>Cool White</option><option>RGB Multicolor</option></select></div>
+      </div>
+      <div class="ts-form-row">
+        <div class="ts-form-group"><label class="ts-label">Lebar (cm) <span class="req">*</span></label><input type="number" class="ts-input" placeholder="contoh: 60" value="60"></div>
+        <div class="ts-form-group"><label class="ts-label">Tinggi (cm) <span class="req">*</span></label><input type="number" class="ts-input" placeholder="contoh: 40" value="40"></div>
+      </div>
+      <div class="ts-form-row">
+        <div class="ts-form-group"><label class="ts-label">Jumlah (unit) <span class="req">*</span></label><input type="number" class="ts-input" value="1" min="1"></div>
+        <div class="ts-form-group"><label class="ts-label">Backing / Alas</label><select class="ts-input ts-select"><option>Tanpa Backing</option><option>Akrilik Bening</option><option>Akrilik Hitam</option><option>Kayu MDF</option></select></div>
+      </div>
+      <div class="ts-form-group"><label class="ts-label">Catatan Tambahan</label><textarea class="ts-input ts-textarea" placeholder="Instruksi khusus, warna spesifik, atau permintaan lain..."></textarea></div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="form-section">
+      <div class="form-section-title"><div class="form-section-num">03</div>Upload File Desain</div>
+      <div class="file-upload">
+        <div class="file-icon">📁</div>
+        <div class="file-text">Drag & drop file desain di sini, atau <strong>klik untuk browse</strong></div>
+        <div class="file-formats">Format: AI, PSD, PDF, PNG, JPG — Maks. 50MB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div>
+    <div class="summary-card">
+      <div class="summary-title">Ringkasan Pesanan</div>
+      <div class="summary-row"><span class="lbl">Produk</span><span class="val">Neon Sign Custom LED</span></div>
+      <div class="summary-row"><span class="lbl">Bahan</span><span class="val">LED Strip Flex Neon</span></div>
+      <div class="summary-row"><span class="lbl">Ukuran</span><span class="val">60 × 40 cm</span></div>
+      <div class="summary-row"><span class="lbl">Jumlah</span><span class="val">1 unit</span></div>
+      <div class="summary-row"><span class="lbl">Est. Selesai</span><span class="val" style="color:var(--text-muted);font-size:0.78rem">Dikonfirmasi Admin</span></div>
+      <div class="ts-divider"></div>
+      <div class="summary-row"><span class="lbl">Harga Satuan</span><span class="val">Rp 450.000</span></div>
+      <div class="summary-row"><span class="lbl">Ongkos Kirim</span><span class="val">Dihitung setelah konfirmasi</span></div>
+      <div class="ts-divider"></div>
+      <div class="summary-total"><span class="lbl">Total Estimasi</span><span class="val">Rp 450.000</span></div>
+      <a href="12_invoice.html" class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" style="text-align:center">Buat Pesanan →</a>
+      <p class="disclaimer">Invoice resmi diterbitkan setelah Admin mengkonfirmasi pesanan. Spesifikasi dan harga dapat didiskusikan lebih lanjut.</p>
+    </div>
+  </div>
+</div>
+
+<a href="index.html" class="ts-back-btn">← Navigator</a>
+</body>
+</html>
