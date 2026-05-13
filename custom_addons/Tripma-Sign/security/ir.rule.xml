@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================
+             RECORD RULES — FR-04: Hak Akses Berbasis Peran (Role-Based)
+             Tujuan: Customer hanya bisa mengakses data milik sendiri.
+             Admin dan Staf Produksi punya akses sesuai tanggung jawab.
+        ============================================================ -->
+
+        <!-- === RULES: tripma.order === -->
+
+        <!-- Customer: hanya lihat pesanan milik sendiri -->
+        <record id="rule_tripma_order_customer_own" model="ir.rule">
+            <field name="name">Tripma Order: Customer hanya lihat pesanan sendiri</field>
+            <field name="model_id" ref="model_tripma_order"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
+            <field name="domain_force">[('customer_id.user_ids', 'in', [user.id])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Admin: akses penuh ke semua pesanan -->
+        <record id="rule_tripma_order_admin_all" model="ir.rule">
+            <field name="name">Tripma Order: Admin akses semua pesanan</field>
+            <field name="model_id" ref="model_tripma_order"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Staf Produksi: hanya lihat pesanan yang sedang in_queue / in_production / done -->
+        <record id="rule_tripma_order_staff_production" model="ir.rule">
+            <field name="name">Tripma Order: Staf Produksi lihat pesanan relevan</field>
+            <field name="model_id" ref="model_tripma_order"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_production_staff'))]"/>
+            <field name="domain_force">[('state', 'in', ['in_queue', 'in_production', 'done'])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- === RULES: tripma.invoice === -->
+
+        <!-- Customer: hanya lihat invoice untuk pesanan milik sendiri -->
+        <record id="rule_tripma_invoice_customer_own" model="ir.rule">
+            <field name="name">Tripma Invoice: Customer hanya lihat invoice sendiri</field>
+            <field name="model_id" ref="model_tripma_invoice"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
+            <field name="domain_force">[('order_id.customer_id.user_ids', 'in', [user.id])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Admin: akses penuh ke semua invoice -->
+        <record id="rule_tripma_invoice_admin_all" model="ir.rule">
+            <field name="name">Tripma Invoice: Admin akses semua invoice</field>
+            <field name="model_id" ref="model_tripma_invoice"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Staf Produksi: hanya bisa lihat invoice (read-only, untuk referensi) -->
+        <record id="rule_tripma_invoice_staff_readonly" model="ir.rule">
+            <field name="name">Tripma Invoice: Staf Produksi hanya lihat invoice</field>
+            <field name="model_id" ref="model_tripma_invoice"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_production_staff'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- === RULES: tripma.production.status === -->
+
+        <!-- Customer: hanya lihat status produksi untuk pesanan milik sendiri -->
+        <record id="rule_tripma_prodstatus_customer_own" model="ir.rule">
+            <field name="name">Tripma Prod Status: Customer hanya lihat status pesanan sendiri</field>
+            <field name="model_id" ref="model_tripma_production_status"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
+            <field name="domain_force">[('order_id.customer_id.user_ids', 'in', [user.id])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Admin: akses penuh ke semua status produksi -->
+        <record id="rule_tripma_prodstatus_admin_all" model="ir.rule">
+            <field name="name">Tripma Prod Status: Admin akses semua status</field>
+            <field name="model_id" ref="model_tripma_production_status"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Staf Produksi: bisa lihat dan update semua status produksi -->
+        <record id="rule_tripma_prodstatus_staff_all" model="ir.rule">
+            <field name="name">Tripma Prod Status: Staf Produksi akses semua status</field>
+            <field name="model_id" ref="model_tripma_production_status"/>
+            <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_production_staff'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

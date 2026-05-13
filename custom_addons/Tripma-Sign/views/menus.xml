@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Action untuk membuka URL Mockup HTML kita -->
-    <record id="action_tripma_mockups" model="ir.actions.act_url">
-        <field name="name">Buka Mockup Tripma Sign</field>
-        <field name="url">/Tripma-Sign/static/mockup/index.html</field>
-        <field name="target">new</field>
+
+    <!-- ============================================================
+         MENU STRUCTURE — FR-04: Navigasi Berbasis Peran (Role-Based)
+         Setiap menu hanya tampil untuk group yang berwenang.
+    ============================================================ -->
+
+    <!-- Root menu — tampil untuk semua Tripma user yang login -->
+    <menuitem id="menu_tripma_root"
+              name="Tripma Sign"
+              sequence="10"
+              web_icon="Tripma-Sign,static/description/icon.png"
+              groups="Tripma-Sign.group_tripma_user,Tripma-Sign.group_tripma_admin,Tripma-Sign.group_tripma_production_staff,base.group_system"/>
+
+    <!-- ===== Link ke QWeb Dashboard Admin ===== -->
+    <record id="action_tripma_admin_dashboard" model="ir.actions.act_url">
+        <field name="name">Buka Dashboard Admin</field>
+        <field name="url">/tripma/admin/dashboard</field>
+        <field name="target">self</field>
     </record>
 
     <record id="action_tripma_external_order" model="ir.actions.act_url">
@@ -25,4 +38,25 @@
               action="action_tripma_external_order"
               groups="Tripma-Sign.group_tripma_admin"
               sequence="20"/>
+    <menuitem id="menu_tripma_admin_dashboard"
+              name="Dashboard Admin"
+              parent="menu_tripma_root"
+              sequence="10"
+              action="action_tripma_admin_dashboard"
+              groups="Tripma-Sign.group_tripma_admin"/>
+
+    <!-- ===== Link ke QWeb Dashboard Produksi ===== -->
+    <record id="action_tripma_production_dashboard" model="ir.actions.act_url">
+        <field name="name">Buka Dashboard Produksi</field>
+        <field name="url">/tripma/production</field>
+        <field name="target">self</field>
+    </record>
+
+    <menuitem id="menu_tripma_production_dashboard"
+              name="Dashboard Produksi"
+              parent="menu_tripma_root"
+              sequence="20"
+              action="action_tripma_production_dashboard"
+              groups="Tripma-Sign.group_tripma_production_staff"/>
+
 </odoo>
