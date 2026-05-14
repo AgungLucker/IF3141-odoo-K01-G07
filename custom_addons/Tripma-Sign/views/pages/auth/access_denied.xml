@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         FR-04: Halaman Akses Ditolak
+         Ditampilkan saat user mencoba akses route tanpa izin.
+    ============================================================ -->
+    <record id="page_akses_ditolak" model="ir.ui.view">
+        <field name="name">Akses Ditolak</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.page_akses_ditolak</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.page_akses_ditolak">
+                <t t-call="Tripma-Sign.tripma_layout">
+                    <div class="container d-flex flex-column align-items-center justify-content-center"
+                         style="min-height: 70vh; text-align: center;">
+
+                        <!-- Icon -->
+                        <div style="font-size: 5rem; color: #dc3545; margin-bottom: 1.5rem;">
+                            &#128274;
+                        </div>
+
+                        <h1 class="display-4 fw-bold" style="color: #212529;">
+                            Akses Ditolak
+                        </h1>
+                        <p class="lead text-muted mt-3" style="max-width: 480px;">
+                            Anda tidak memiliki izin untuk mengakses halaman ini.
+                            Silakan hubungi administrator jika Anda merasa ini adalah kesalahan.
+                        </p>
+
+                        <!-- Info role (jika sudah login) -->
+                        <t t-if="user_role and user_role != 'unknown'">
+                            <div class="alert alert-warning mt-3" style="max-width: 400px;">
+                                <strong>Role Anda:</strong>
+                                <t t-if="user_role == 'admin'"> Admin Penjualan</t>
+                                <t t-elif="user_role == 'production_staff'"> Staf Produksi</t>
+                                <t t-elif="user_role == 'customer'"> Pelanggan</t>
+                            </div>
+                        </t>
+
+                        <!-- Tombol navigasi sesuai role -->
+                        <div class="mt-4 d-flex gap-3">
+                            <t t-if="user_role == 'admin'">
+                                <a href="/tripma/admin/dashboard" class="btn btn-primary btn-lg">
+                                    Ke Dashboard Admin
+                                </a>
+                            </t>
+                            <t t-elif="user_role == 'production_staff'">
+                                <a href="/tripma/production" class="btn btn-primary btn-lg">
+                                    Ke Dashboard Produksi
+                                </a>
+                            </t>
+                            <t t-elif="user_role == 'customer'">
+                                <a href="/tripma/pelanggan/pesanan" class="btn btn-primary btn-lg">
+                                    Ke Pesanan Saya
+                                </a>
+                            </t>
+                            <t t-else="">
+                                <a href="/web/login?redirect=/tripma/login" class="btn btn-primary btn-lg">
+                                    Login
+                                </a>
+                            </t>
+                            <a href="/" class="btn btn-outline-secondary btn-lg">
+                                Halaman Utama
+                            </a>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>

@@ -2,6 +2,7 @@
 <odoo>
 
     <!-- ============================================================
+    TODO: might delete
          MENU STRUCTURE — FR-04: Navigasi Berbasis Peran (Role-Based)
          Setiap menu hanya tampil untuk group yang berwenang.
     ============================================================ -->
@@ -20,6 +21,18 @@
         <field name="target">self</field>
     </record>
 
+    <record id="action_tripma_external_order" model="ir.actions.act_url">
+        <field name="name">Input Pesanan Eksternal</field>
+        <field name="url">/tripma/admin/external-order</field>
+        <field name="target">self</field>
+    </record>
+
+    <menuitem id="menu_tripma_external_order"
+              name="Input Pesanan Eksternal"
+              parent="menu_tripma_root"
+              action="action_tripma_external_order"
+              groups="Tripma-Sign.group_tripma_admin"
+              sequence="20"/>
     <menuitem id="menu_tripma_admin_dashboard"
               name="Dashboard Admin"
               parent="menu_tripma_root"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-<!-- ============================================================
+    <!-- ============================================================
      1. PRODUCTION DASHBOARD  (UC-5)
      Route: GET /tripma/production
      ============================================================ -->
@@ -11,7 +10,9 @@
     <field name="key">Tripma-Sign.production_dashboard</field>
     <field name="arch" type="xml">
     <t t-name="Tripma-Sign.production_dashboard">
-    <t t-call="Tripma-Sign.tripma_sidebar_layout">
+    <t t-call="website.layout">
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
         <t t-set="head">
             <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
             <style><![CDATA[
@@ -38,8 +39,13 @@
         </t>
         <t t-set="additional_title">Dashboard Produksi - Tripma Sign</t>
 
-        <div style="background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px;">
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy);">Dashboard Produksi</div>
+        <div class="admin-shell">
+            <t t-set="active_menu" t-value="'production'"/>
+            <t t-call="Tripma-Sign.admin_sidebar"/>
+
+            <div class="admin-page">
+        <div class="admin-page-head">
+            <div class="admin-page-title">Dashboard Produksi</div>
             <div style="font-size: .78rem; color: var(--text-muted);">
                 Klik tombol <strong>Update</strong> pada kartu pesanan untuk memperbarui status.
             </div>
@@ -135,6 +141,11 @@
                                 <div class="oc-no" t-esc="o.name"/>
                                 <div class="oc-name" t-esc="o.customer_id.name"/>
                                 <div class="oc-product" t-esc="(o.product_specs or '—')[:50]"/>
+                                <div style="margin-bottom: 8px;">
+                                    <span style="font-size: .68rem; background: var(--amber-bg); color: var(--amber); border-radius: 4px; padding: 2px 7px; font-weight: 600;">
+                                        <t t-esc="STAGE_LABELS.get(o.current_production_stage, 'Dalam Produksi') if o.current_production_stage else 'Dalam Produksi'"/>
+                                    </span>
+                                </div>
                                 <div class="oc-footer">
                                     <span class="oc-due">📅 <t t-esc="o.order_date.strftime('%d %b') if o.order_date else '—'"/></span>
                                     <a t-att-href="'/tripma/production/update/%d' % o.id" class="oc-btn oc-btn-update">Update</a>
@@ -203,6 +214,8 @@
 
             </div><!-- /kanban-board -->
         </div><!-- /ts-main -->
+            </div><!-- /admin-page -->
+        </div><!-- /admin-shell -->
     </t>
     </t>
     </field>
@@ -220,7 +233,9 @@
     <field name="key">Tripma-Sign.update_status</field>
     <field name="arch" type="xml">
     <t t-name="Tripma-Sign.update_status">
-    <t t-call="Tripma-Sign.tripma_sidebar_layout">
+    <t t-call="website.layout">
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
         <t t-set="head">
             <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
             <style><![CDATA[
@@ -280,13 +295,18 @@
         <t t-set="stage_icon_labels" t-value="{s[0]: s[1] + ' ' + s[2] for s in all_stages}"/>
         <t t-set="cur_stage" t-value="order.current_production_stage or ''"/>
 
+        <div class="admin-shell">
+            <t t-set="active_menu" t-value="'production'"/>
+            <t t-call="Tripma-Sign.admin_sidebar"/>
+
+            <div class="admin-page">
         <!-- Page header -->
-        <div style="background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px;">
+        <div class="admin-page-head">
             <div class="ts-breadcrumb">
                 <a href="/tripma/production">← Dashboard Produksi</a> /
                 <strong t-esc="order.name"/>
             </div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px;">
+            <div class="admin-page-title">
                 Update Status — Pesanan <t t-esc="order.name"/>
             </div>
             <div style="font-size: .75rem; color: var(--text-muted); margin-top: 2px;">
@@ -436,6 +456,8 @@
                 </div><!-- /content-layout -->
             </form>
         </div><!-- /ts-main -->
+            </div><!-- /admin-page -->
+        </div><!-- /admin-shell -->
 
         <script type="text/javascript"><![CDATA[
             function selectStatus(el) {
