@@ -31,7 +31,7 @@
 
                     <div class="ts-sidebar-section">
                         <div class="ts-sidebar-label">Utama</div>
-                        <t t-if="is_tripma_admin">
+                        <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">
                             <a href="/tripma/admin/dashboard"
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'dashboard' else '')">
                                 <span class="icon">DB</span>Dashboard
@@ -49,13 +49,13 @@
 
                     <div class="ts-sidebar-section">
                         <div class="ts-sidebar-label">Manajemen</div>
-                        <t t-if="is_tripma_admin or is_production_staff">
+                        <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin') or request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')">
                             <a href="/tripma/production"
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'production' else '')">
                                 <span class="icon">PR</span>Produksi
                             </a>
                         </t>
-                        <t t-if="is_tripma_admin">
+                        <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">
                             <a href="/odoo"
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'orders' else '')">
                                 <span class="icon">PO</span>Semua Pesanan
@@ -76,8 +76,8 @@
                         <div>
                             <div class="ts-user-name" t-esc="request.env.user.name"/>
                             <div class="ts-user-role">
-                                <t t-if="is_tripma_admin">Admin</t>
-                                <t t-elif="is_production_staff">Staf Produksi</t>
+                                <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">Admin</t>
+                                <t t-elif="request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')">Staf Produksi</t>
                                 <t t-else="">Pengguna</t>
                             </div>
                         </div>
