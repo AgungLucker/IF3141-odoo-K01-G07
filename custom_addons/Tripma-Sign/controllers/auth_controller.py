@@ -189,11 +189,6 @@ class TripmaAuthController(TripmaBaseController):
         """
         if request.session.uid:
             # Already logged in, redirect based on group
-            user = request.env.user
-            if user.has_group("base.group_system") or user.has_group(
-                "base.group_erp_manager"
-            ):
-                return request.redirect("/web/home")
             return self._redirect_by_role()
 
         # Not logged in, go to Tripma login page
