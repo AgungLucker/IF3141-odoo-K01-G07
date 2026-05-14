@@ -12,6 +12,7 @@
 
         # Data
         'data/tripma_sequences.xml',
+        'data/demo_users.xml',
 
         # Layouts
         'views/layouts/main_layout.xml',

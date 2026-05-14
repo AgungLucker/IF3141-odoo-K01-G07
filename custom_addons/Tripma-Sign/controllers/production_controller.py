@@ -8,7 +8,7 @@ class TripmaProductionController(TripmaBaseController):
 
     @http.route('/tripma/production', auth='user', website=True)
     def production_dashboard(self, **kw):
-        if not self.is_admin() or not self.is_production_staff():
+        if not self.is_admin() and not self.is_production_staff():
             return request.redirect('/odoo')
         Order = request.env['tripma.order']
         today = datetime.date.today()
@@ -49,7 +49,7 @@ class TripmaProductionController(TripmaBaseController):
 
     @http.route('/tripma/production/update/<int:order_id>', auth='user', website=True)
     def update_status_form(self, order_id, **kw):
-        if not self.is_admin() or not self.is_production_staff():
+        if not self.is_admin() and not self.is_production_staff():
             return request.redirect('/odoo')
         order = request.env['tripma.order'].browse(order_id)
         if not order.exists():
@@ -69,7 +69,7 @@ class TripmaProductionController(TripmaBaseController):
 
     @http.route('/tripma/production/update/submit', auth='user', methods=['POST'], website=True, csrf=True)
     def submit_status_update(self, **post):
-        if not self.is_admin() or not self.is_production_staff():
+        if not self.is_admin() and not self.is_production_staff():
             return request.redirect('/odoo')
         order_id = int(post.get('order_id', 0))
         stage_name = post.get('stage_name', '').strip()
