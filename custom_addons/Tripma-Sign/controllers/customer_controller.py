@@ -60,11 +60,17 @@ class TripmaCustomerController(TripmaBaseController):
         quantity = int(post.get("quantity", 1))
         width = float(post.get("width_cm", 0))
         height = float(post.get("height_cm", 0))
+        shipping_address = post.get("shipping_address")
         design_file = request.httprequest.files.get("design_file")
 
         if not product_specs:
             return request.redirect(
                 "/tripma/order/form?error=Spesifikasi produk wajib diisi"
+            )
+
+        if not shipping_address:
+            return request.redirect(
+                "/tripma/order/form?error=Alamat pengiriman wajib diisi"
             )
 
         # Automated Pricing Logic
@@ -95,6 +101,7 @@ class TripmaCustomerController(TripmaBaseController):
                     "width_cm": width,
                     "height_cm": height,
                     "design_file": file_data,
+                    "shipping_address": shipping_address,
                     "billing_total": billing_total,
                     "source_channel": "website",
                     "state": "draft",

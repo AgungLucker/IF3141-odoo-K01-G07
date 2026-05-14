@@ -64,6 +64,15 @@
                                         <small class="text-muted">Format: AI, PSD, PDF, PNG, JPG — Maks. 50MB</small>
                                     </div>
                                 </div>
+
+                                <div class="card p-4 shadow-sm mt-4">
+                                    <h5 class="border-bottom pb-2 mb-3">3. Informasi Pengiriman</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label">Alamat Pengiriman <span class="text-danger">*</span></label>
+                                        <textarea name="shipping_address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap pengiriman..." required="1"><t t-esc="customer.street"/></textarea>
+                                        <small class="text-muted">Pastikan alamat lengkap untuk kurir pengiriman</small>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Right: Summary -->

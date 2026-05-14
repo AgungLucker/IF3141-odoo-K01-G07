@@ -62,6 +62,7 @@ class TripmaOrder(models.Model):
     quantity = fields.Integer(string="Quantity", default=1)
     width_cm = fields.Float(string="Width (cm)")
     height_cm = fields.Float(string="Height (cm)")
+    shipping_address = fields.Text(string="Shipping Address")
 
     invoice_ids = fields.One2many("tripma.invoice", "order_id", string="Invoices")
     production_status_ids = fields.One2many(
