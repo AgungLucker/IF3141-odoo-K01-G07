@@ -18,9 +18,21 @@ services:
       --db_port=5432 
       --db_user=odoo 
       --db_password=password 
-      -i base -u Tripma-Sign
+      -u Tripma-Sign
       --load-language=en_US
       --without-demo=all
+
+  seeder:
+    image: odoo:17.0
+    depends_on:
+      web:
+        condition: service_started
+    volumes:
+      - ./config:/etc/odoo
+      - ./custom_addons:/mnt/extras-addons
+      - ./scripts:/mnt/scripts
+    command: >
+      sh -c "sleep 30 && odoo shell --db_host=db --db_port=5432 --db_user=odoo --db_password=password -d postgres --no-http < /mnt/scripts/seed_products.py"
 
   db:
     image: postgres:16-alpine
@@ -81,4 +93,3 @@ volumes:
     name: odoo-web-data
   odoo-db-data:
     name: odoo-db-data
-

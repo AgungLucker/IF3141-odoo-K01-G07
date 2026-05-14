@@ -12,63 +12,36 @@
         </record>
 
         <!-- ============================================================
-             BASE USER GROUP
+             FUNCTIONAL GROUPS
+             We DO NOT imply base groups (like base.group_user or portal)
+             to avoid "more than one user types" errors during restore.
+             Base types should be assigned directly to users if needed.
         ============================================================ -->
 
+        <!-- Base User Group -->
         <record id="group_tripma_user" model="res.groups">
             <field name="name">User</field>
             <field name="category_id" ref="module_category_tripma"/>
-
-            <!-- Internal user -->
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
-        <!-- ============================================================
-             CUSTOMER
-        ============================================================ -->
-
+        <!-- Customer Group -->
         <record id="group_tripma_customer" model="res.groups">
             <field name="name">Customer</field>
             <field name="category_id" ref="module_category_tripma"/>
-
-            <!-- Portal access -->
-            <field name="implied_ids" eval="[
-                (4, ref('base.group_portal'))
-            ]"/>
         </record>
 
-        <!-- ============================================================
-             PRODUCTION STAFF
-        ============================================================ -->
-
+        <!-- Production Staff -->
         <record id="group_tripma_production_staff" model="res.groups">
             <field name="name">Staf Produksi</field>
             <field name="category_id" ref="module_category_tripma"/>
-
-            <!-- Internal user -->
-            <field name="implied_ids" eval="[
-                (4, ref('group_tripma_user'))
-            ]"/>
+            <field name="implied_ids" eval="[(4, ref('group_tripma_user'))]"/>
         </record>
 
-        <!-- ============================================================
-             ADMIN
-        ============================================================ -->
-
+        <!-- Admin Group -->
         <record id="group_tripma_admin" model="res.groups">
             <field name="name">Admin Penjualan</field>
             <field name="category_id" ref="module_category_tripma"/>
-
-            <!-- Full system administrator -->
-            <field name="implied_ids" eval="[
-                (4, ref('base.group_system')),
-                (4, ref('group_tripma_user'))
-            ]"/>
-
-            <!-- Automatically assign built-in admin -->
-            <field name="users" eval="[
-                (4, ref('base.user_admin'))
-            ]"/>
+            <field name="implied_ids" eval="[(4, ref('group_tripma_user'))]"/>
         </record>
 
     </data>
