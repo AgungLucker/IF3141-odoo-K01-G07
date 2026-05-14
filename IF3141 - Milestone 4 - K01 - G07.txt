@@ -1,0 +1,926 @@
+﻿Dosen Pengampu: Ir. Windy Gambetta, M.B.A.
+
+
+  
+Milestone 4
+Perancangan Sistem Informasi
+
+
+Diperbaharui tanggal 24 April 2026
+________________
+
+
+
+
+Disusun oleh
+
+
+Kelompok 07 - K01
+13523013            Nathaniel Jonathan Rusli
+13523021     Muhammad Raihan Nazhim Oktana
+13523023     Muhammad Aufa Farabi
+13523043     Najwa Kahani Fatima
+13523061     Darrel Adinarya Sunanda
+
+
+
+
+
+
+
+
+
+
+
+
+DAFTAR ISI
+DAFTAR ISI        2
+DAFTAR GAMBAR        4
+DAFTAR TABEL        5
+BAB I        6
+RANCANGAN DESAIN SISTEM INFORMASI        6
+I.1 Pemodelan Proses - State Transition Diagram        6
+I.2 Pemodelan Data - Data Flow Diagram        6
+I.2.1 DFD Level 0        7
+I.2.2 DFD Level 1        8
+I.2.3 DFD Level 2        8
+I.2.4 Data Dictionary DFD        11
+I.3 Pemodelan Data - Entity Relationship Diagram        12
+I.4 Pemodelan Fungsional - Use Case Diagram        13
+I.5 Pemodelan Struktur - Class Diagram        19
+I.6 Pemodelan Behavior - Sequence Diagram        24
+I.6.1 Use Case 01 : Melakukan Registrasi Akun        25
+I.6.2 Use Case 02 : Melakukan Pemesanan Mandiri        25
+I.6.3 Use Case 03 : Menginput Pesanan Channel Eksternal        26
+I.6.4 Use Case 04 : Menerbitkan Invoice        26
+I.6.5 Use Case 05 : Memperbarui Status Produksi        27
+I.6.6 Use Case 06 : Memantau Progres Pesanan        27
+I.6.7 Use Case 07 : Memvalidasi Hak Akses (Login)        28
+I.7 User Interface        28
+I.7.1 Screen Mockup        28
+I.7.2 Pemetaan Layar        35
+BAB II        36
+RENCANA PENGUJIAN SISTEM INFORMASI        36
+II.1 Skenario Uji Tiap Kebutuhan Fungsional        36
+II.1.1 Skenario Uji Sistem Mampu Memfasilitasi Pemesanan Produk Secara Mandiri        36
+II.1.2 Skenario Uji Sistem Mampu Memproses Input Pesanan dari Channel Eksternal Secara Terpusat        37
+II.1.3 Skenario Uji Sistem Dapat Memperbarui Status Pengerjaan Pesanan secara Real-time        37
+II.1.4 Skenario Uji Sistem Mampu Membatasi Hak Akses Data Sesuai Dengan Tingkat Otoritas dan Kebijakan Privasi        38
+REFERENSI        40
+LAMPIRAN        41
+
+
+DAFTAR GAMBAR
+Gambar 1.1 Gambar State Transition Diagram        5
+Gambar 1.2 Gambar DFD Level 0        6
+Gambar 1.3 Gambar DFD Level 1        7
+Gambar 1.4 Gambar DFD Level 2 Manajemen Pelanggan        7
+Gambar 1.5 Gambar DFD Level 2 Manajemen Perusahaan        8
+Gambar 1.6 Gambar DFD Level 2 Manajemen Produksi        9
+Gambar 1.7 Gambar ERD        11
+Gambar 1.8  Use Case Diagram        13
+Gambar 1.9  Class Diagram        18
+Gambar 1.10  Sequence Diagram UC-1 Melakukan Registrasi Akun        24
+Gambar 1.11  Sequence Diagram UC-2 Melakukan Pemesanan Mandiri        24
+Gambar 1.12  Sequence Diagram UC-3 Menginput Pesanan Channel Eksternal        25
+Gambar 1.13  Sequence Diagram UC-4 Menerbitkan Invoice        25
+Gambar 1.14 Sequence Diagram UC-5 Memperbarui Status Produksi        26
+Gambar 1.15  Sequence Diagram UC-6 Memantau Progres Pesanan        26
+Gambar 1.16  Sequence Diagram UC-7 Memvalidasi Hak Akses (Login)        27
+
+
+DAFTAR TABEL
+Tabel 1.1 Tabel Kamus Data DFD        10
+Tabel 1.2 Tabel Basis Data        11
+Tabel 1.3 Tabel Pendefinisian Actor        13
+Tabel 1.4 Tabel Pendefinisian Use Case        13
+Tabel 1.5 Detail Use Case UC-1 Melakukan Registrasi Akun        14
+Tabel 1.6 Detail Use Case UC-2 Melakukan Pemesanan Mandiri        15
+Tabel 1.7 Detail Use Case UC-3 Menginput Pesanan Channel Eksternal        15
+Tabel 1.8 Detail Use Case UC-4 Menerbitkan Invoice        16
+Tabel 1.9 Detail Use Case UC-5 Memperbarui Status Produksi        16
+Tabel 1.10 Detail Use Case UC-6 Memantau Progres Pesanan        17
+Tabel 1.11 Detail Use Case UC-7 Memvalidasi Hak Akses (Login)        17
+Tabel 1.12 Deskripsi Class Diagram Customer        19
+Tabel 1.13 Deskripsi Class Diagram Order        19
+Tabel 1.14 Deskripsi Class Diagram Invoice        20
+Tabel 1.15 Deskripsi Class Diagram ProductionStatus        20
+Tabel 1.16 Deskripsi Class Diagram Internal User        20
+Tabel 1.17 Deskripsi Class Diagram Admin        20
+Tabel 1.18 Deskripsi Class Diagram ProductionStaff        21
+Tabel 1.19 Deskripsi Class Diagram AuthController        21
+Tabel 1.20 Deskripsi Class Diagram OrderController        22
+Tabel 1.21 Deskripsi Class Diagram ProductionController        22
+Tabel 1.22 Deskripsi Class Diagram CustomerUI        22
+Tabel 1.23 Deskripsi Class Diagram AdminUI        23
+Tabel 1.24 Deskripsi Class Diagram ProductionUI        23
+Tabel 1.25 Deskripsi Class Diagram LoginUI        23
+Tabel 1.26.1 Tabel Screen Mockup Register        27
+Tabel 1.26.2 Tabel Screen Mockup Login        28
+Tabel 1.26.3 Tabel Screen Mockup Katalog Produk        28
+Tabel 1.26.4 Tabel Screen Mockup Form Pemesanan        29
+Tabel 1.26.5 Tabel Screen Mockup Invoice        30
+Tabel 1.26.6 Tabel Screen Mockup Lacak Pesanan        31
+Tabel 1.26.7 Tabel Screen Mockup Dashboard Admin        31
+Tabel 1.26.8 Tabel Screen Mockup Input Pesanan Eksternal        32
+Tabel 1.26.9 Tabel Screen Mockup Dashboard Produksi        33
+Tabel 1.26.10 Tabel Screen Mockup Update Status Produksi        33
+Tabel 1.27 Tabel Pemetaan Layar        34
+
+
+BAB I
+RANCANGAN DESAIN SISTEM INFORMASI
+1. Pemodelan Proses - State Transition Diagram
+  
+
+Gambar 1.1 Gambar State Transition Diagram
+State Transition Diagram (STD) di atas memodelkan siklus hidup dari entitas Pesanan (Order) pada sistem E-Commerce Mandiri Tripma Sign. Pemodelan ini difokuskan pada tahapan inti pesanan dari pencatatan hingga penyelesaian produksi.
+Alur dimulai dari Initial State ketika pesanan baru direkam ke dalam sistem. Sistem kemudian menerbitkan invoice tagihan, yang membentuk state "Menunggu Pembayaran". Setelah sistem memvalidasi bukti pembayaran dari pelanggan, terjadi transisi yang mengubah status pesanan menjadi "Antri Produksi". Pada tahap ini, pesanan diteruskan dan masuk ke dalam daftar antrean pengerjaan oleh divisi produksi. Saat staf produksi memilih pesanan tersebut dan mulai mengerjakan fisik signage, sistem memperbarui state menjadi "Proses Produksi". Terakhir, saat pekerjaan telah rampung secara keseluruhan, staf memberikan konfirmasi penyelesaian yang menggeser state menjadi "Selesai Produksi". Kondisi ini merupakan Final State dari batasan fungsionalitas sistem dalam menangani operasional produksi pesanan.
+2. Pemodelan Data - Data Flow Diagram
+Pemodelan data pada sistem E-Commerce Mandiri Tripma Sign divisualisasikan menggunakan Data Flow Diagram (DFD). Pemodelan ini bertujuan untuk memetakan secara logis bagaimana aliran informasi bergerak dari entitas eksternal (Pelanggan, Admin Penjualan, dan Staf Produksi) masuk ke dalam sistem, bagaimana data tersebut ditransformasikan oleh proses-proses bisnis utama, hingga bagaimana data disimpan pada basis data dan didistribusikan kembali sebagai luaran (output).
+Untuk memberikan tingkat detail yang komprehensif, penjabaran aliran data ini dibagi menjadi tiga tingkatan (level of detail), yaitu: DFD Level 0 (Context Diagram) yang memberikan pandangan makro terkait batasan dan interaksi sistem dengan lingkungan luarnya; DFD Level 1 yang memecah sistem menjadi modul-modul fungsionalitas utama (Manajemen Pelanggan, Manajemen Pemesanan, dan Manajemen Produksi); serta DFD Level 2 yang menguraikan masing-masing proses utama menjadi subproses yang lebih spesifik. Seluruh definisi dan spesifikasi rinci terkait atribut data yang mengalir pada diagram-diagram tersebut kemudian dirangkum di dalam sebuah Kamus Data (Data Dictionary).
+1. DFD Level 0
+  
+
+Gambar 1.2 Gambar DFD Level 0
+DFD Level 0 atau Context Diagram di atas menggambarkan interaksi sistem informasi Tripma Sign secara makro dengan tiga entitas eksternal utamanya: Pelanggan, Admin Penjualan, dan Staf Produksi. Diagram ini berfokus pada aliran data bisnis utama. Pelanggan dan Admin memberikan masukan berupa data pendaftaran profil serta rincian spesifikasi pesanan, dan sistem membalasnya dengan luaran berupa tagihan (invoice) dan informasi progres kerja. Di ranah operasional, Staf Produksi menerima aliran instruksi kerja detail dari sistem dan secara berkesinambungan memberikan umpan balik berupa pembaruan status pengerjaan pesanan.
+2. DFD Level 1
+  
+
+Gambar 1.3 Gambar DFD Level 1
+DFD Level 1 menjabarkan Context Diagram menjadi tiga proses bisnis operasional utama yang saling terintegrasi, yaitu (1.0) Manajemen Pelanggan, (2.0) Manajemen Pemesanan, dan (3.0) Manajemen Produksi.
+* Proses (1.0) bertugas menerima dan merekam data identitas dari Pelanggan ke dalam data store customer.
+* Proses (2.0) menjadi pusat transaksi, menangani masuknya data spesifikasi pesanan (baik input mandiri dari Pelanggan maupun input eksternal dari Admin) untuk disimpan ke dalam data store orders dan order_item, lalu memproduksi invoice serta laporan.
+* Terakhir, Proses (3.0) menarik data pesanan tersebut untuk didistribusikan sebagai instruksi kerja kepada Staf Produksi, sekaligus mengelola pembaruan status lapangan yang akan disajikan kembali sebagai informasi pantauan progres bagi Pelanggan.
+3. DFD Level 2
+1. DFD Level 2 : Proses 1 - Manajemen Pelanggan
+  
+
+Gambar 1.4 Gambar DFD Level 2 Manajemen Pelanggan
+
+
+DFD Level 2 untuk Proses 1.0 Manajemen Pelanggan difokuskan pada perekaman data entitas pengguna. Subproses (1.1) Penerimaan Data Registrasi bertugas menerima input profil dari pelanggan baru—seperti nama, kontak, alamat, dan password—untuk kemudian divalidasi formatnya dan disimpan (insert) sebagai baris data baru ke dalam data store customer.
+2. DFD Level 2 : Proses 2 - Manajemen Perusahaan
+  
+
+Gambar 1.5 Gambar DFD Level 2 Manajemen Perusahaan
+DFD Level 2 pada Proses 2.0 Manajemen Pemesanan dipecah menjadi tiga subproses berdasarkan alur masuk transaksinya. Subproses (2.1) Perekaman Pesanan Mandiri dan (2.2) Perekaman Pesanan Eksternal masing-masing menangani aliran input pesanan dari Pelanggan (via website) dan dari Admin (via rekap saluran komunikasi luar). Kedua arus data spesifikasi ini akan diformat dan disimpan ke dalam data store orders dan order_item. Setelah data pesanan terekam kokoh di basis data, subproses (2.3) Penerbitan Tagihan & Laporan akan menarik rincian pesanan tersebut untuk mengkalkulasi total biaya, lalu mendistribusikan dokumen invoice untuk Pelanggan serta rekapitulasi data pesanan untuk Admin.
+3. DFD Level 2 : Proses 3 - Manajemen Produksi
+  
+
+Gambar 1.6 Gambar DFD Level 2 Manajemen Produksi
+DFD Level 2 untuk Proses 3.0 Manajemen Produksi menguraikan bagaimana pesanan dieksekusi di lapangan. Subproses (3.1) Penugasan Produksi menarik data spesifikasi dan file desain dari penyimpanan untuk didistribusikan sebagai instruksi kerja kepada Staf Produksi. Seiring pengerjaan fisik berlangsung, staf akan menyetor pembaruan tahapan melalui subproses (3.2) Pembaruan Status Kerja untuk memodifikasi record di data store pesanan. Rincian status mutakhir ini kemudian dibaca oleh subproses (3.3) Notifikasi Pemantauan yang menerjemahkannya menjadi representasi visual progres pesanan kepada Pelanggan secara real-time.
+4. Data Dictionary DFD
+Tabel 1.1 Tabel Kamus Data DFD
+ID Data Flow
+	Nama Data Flow
+	Deskripsi Data Flow
+	Source
+	Destination
+	Type
+	DF-01
+	Data Profil & Registrasi
+	Data pendaftaran yang berisi rincian identitas dan kontak pelanggan baru.
+	Pelanggan
+	Proses 1.1 (Penerimaan Data Registrasi)
+	nama: string, email: string, telepon: varchar, alamat: text
+	DF-02
+	Spesifikasi & File Desain
+	Masukan rinci pesanan mandiri (dimensi, material, kuantitas) dan unggahan referensi desain.
+	Pelanggan
+	Proses 2.1 (Perekaman Pesanan Mandiri)
+	bahan: text, dimensi: varchar, qty: int, file_desain: file
+	DF-03
+	Data Pesanan Eksternal
+	Entri pesanan yang dikompilasi oleh Admin yang memuat detail pesanan dari saluran luar.
+	Admin
+	Proses 2.2 (Perekaman Pesanan Eksternal)
+	cust_id: varchar, pesanan_detail: text, tgl_pesan: datetime
+	DF-04
+	Invoice Tagihan
+	Dokumen tagihan resmi digital yang berisi kalkulasi harga total dari produk yang dipesan.
+	Proses 2.3 (Penerbitan Tagihan & Laporan)
+	Pelanggan
+	inv_id: varchar, order_id: varchar, amount: decimal, issue_date: datetime
+	DF-05
+	Laporan Rekap Pesanan
+	Informasi kompilasi data pesanan masuk untuk dipantau oleh bagian penjualan.
+	Proses 2.3 (Penerbitan Tagihan & Laporan)
+	Admin
+	list_of_orders: array, status: string
+	DF-06
+	Update Status Pengerjaan
+	Perintah manipulasi nilai tahapan produksi pesanan (contoh: 'Antri', 'Proses', 'Selesai').
+	Staf Produksi
+	Proses 3.2 (Pembaruan Status Kerja)
+	order_id: varchar, current_status: string, update_time: datetime
+	DF-07
+	Informasi Progres Pesanan
+	Aliran informasi status operasional terkini dari sebuah pesanan untuk ditampilkan ke layar pengguna.
+	Proses 3.3 (Notifikasi Pemantauan)
+	Pelanggan
+	order_id: varchar, progress_desc: text
+	________________
+3. Pemodelan Data - Entity Relationship Diagram
+Entity-Relationship Diagram (ERD) berikut menyajikan struktur logis basis data sistem pemesanan signage untuk memvisualisasikan bagaimana data pelanggan, pesanan, dan proses produksi saling terintegrasi secara terpusat. Diagram ini berfungsi sebagai blueprint arsitektur data yang mendefinisikan hubungan antar entitas untuk menjamin integritas dan keamanan informasi sesuai dengan kebijakan operasional perusahaan.
+
+
+  
+ 
+Gambar 1.7 Gambar ERD
+Transformasi dari rancangan Entity-Relationship Diagram (ERD) ke dalam bentuk tabel basis data merupakan tahap krusial untuk memetakan hubungan logis antar data ke dalam struktur fisik yang terorganisir. Dalam bagian ini, setiap entitas akan diimplementasikan sebagai tabel utama, sementara setiap relationship set (diamond) dipetakan menjadi tabel relasi yang menghubungkan berbagai primary key untuk menjaga integritas data dan mendukung efisiensi operasional sistem.
+
+
+Tabel 1.2 Tabel Basis Data
+ID-Tabel
+	Nama Tabel
+	Primary Key
+	Deskripsi
+	D-01
+	customer
+	customer_id
+	Menyimpan informasi profil pelanggan yang melakukan registrasi, terdiri dari ID Pelanggan (Varchar), Nama (String), Email (String), Nomor Telepon (Varchar), Alamat (Text), dan Password (Varchar)
+	D-02
+	orders
+	order_id
+	Tabel utama transaksi yang menghubungkan pelanggan dengan pesanan, terdiri dari Nomor Order/Order ID (Varchar), ID Pelanggan (Varchar), dan Tanggal Pesan (Datetime).
+	D-03
+	order_item
+	order_id
+	Menyimpan detail spesifikasi produk signage, terdiri dari Order ID (Varchar), Tanggal Pesan (Datetime), Spesifikasi (Text), File Desain (Varchar), dan Harga (Decimal), dan Sumber Channel (Varchar).
+	D-04
+	invoice
+	invoice_id
+	Menyimpan data tagihan resmi yang diterbitkan sistem, terdiri dari Invoice_ID (Varchar), Tanggal Terbit (Datetime), Status Pembayaran (String), dan Order ID (Varchar)
+	D-05
+	internal_user
+	user_id
+	Menyimpan data kredensial staf internal perusahaan (Admin/Produksi), terdiri dari User ID (Varchar), Username (String), Password (String) dan Jabatan/Peran (String).
+	D-06
+	manages
+	order_id
+	Tabel Relasi antara Internal_User dan Order_Item untuk input channel eksternal, berisi User_ID, Item_ID, dan tambahan atribut Input_Date (Datetime).
+	D-07
+	production_status
+	status_id
+	Weak Entity yang menyimpan riwayat pengerjaan, keberadaannya bergantung pada Order_Item, terdiri dari Status_ID (Varchar), Tahapan (String), dan Waktu (Datetime), serta Order ID (Varchar).
+	
+
+4. Pemodelan Fungsional - Use Case Diagram
+Di bawah ini adalah use case diagram yang diturunkan dari Functional Requirement E-Commerce TripmaSign.
+  
+ 
+Gambar 1.8  Use Case Diagram 
+        Di bawah ini adalah role yang memiliki peran dalam penggunaan sistem ini.
+Tabel 1.3 Tabel Pendefinisian Actor
+No
+	Actor
+	Deskripsi (Fitur yang digunakan)
+	A-1
+	Pelanggan
+	Aktor dengan peran ini memiliki wewenang untuk melakukan registrasi akun, melakukan pemesanan produk secara mandiri dengan mengunggah spesifikasi dan desain, serta mengakses fitur pelacakan status pesanan dan mengunduh rincian tagihan (invoice).
+	A-2
+	Admin
+	Aktor Admin bertanggung jawab menggunakan fitur input pesanan manual untuk mendigitalisasi data dari channel eksternal (WhatsApp/Offline) ke dalam sistem terpusat, sehingga mendapatkan nomor order resmi. Selain itu, admin juga dapat mengakses dashboard operasional sesuai dengan tingkat otoritasnya untuk membantu koordinasi pelanggan.
+	A-3
+	Staf Produksi
+	Aktor Staf Produksi memiliki wewenang untuk mengakses fitur update status pengerjaan secara real-time untuk mengubah kondisi status produksi di basis data yang nantinya akan diinformasikan kepada pelanggan.
+	A-4
+	User
+	User adalah generalisasi dari seluruh aktor, memiliki kewenangan untuk memvalidasi hak akses (Login).
+	
+
+Di bawah ini adalah tabel use case untuk sistem yang dikembangkan:
+Tabel 1.4 Tabel Pendefinisian Use Case 
+No
+	Use Case
+	Deskripsi 
+	UC-1
+	Melakukan registrasi akun
+
+
+
+
+	Sistem memfasilitasi pengguna untuk mendaftarkan identitas diri dan menyimpan profil pelanggan ke dalam basis data.
+
+
+	UC-2
+	Melakukan pemesanan mandiri
+	Sistem menampilkan formulir spesifikasi dan unggah desain untuk pembuatan entri pesanan baru oleh pelanggan.
+	UC-3
+	Menginput pesanan channel eksternal
+	Sistem menyediakan sarana bagi admin untuk memasukkan data pesanan dari WhatsApp atau pesanan langsung ke dalam sistem Odoo.
+	UC-4
+	Menerbitkan invoice
+	Sistem menghasilkan rincian tagihan dan nomor order resmi secara otomatis setelah data pesanan berhasil disimpan.
+	UC-5
+	Memperbarui status produksi
+	Sistem memfasilitasi staf produksi untuk mengubah tahapan pengerjaan pesanan agar data di basis data diperbarui secara real-time.
+	UC-6
+	Memantau progres pesanan
+	Sistem menampilkan tampilan pembaruan status pengerjaan yang dapat dilihat oleh pelanggan dan admin.
+	UC-7
+	Memvalidasi hak akses (Login)
+	Sistem melakukan verifikasi kredensial login dan membatasi izin akses dashboard berdasarkan peran jabatan pengguna.
+	
+
+Untuk memahami setiap use case lebih detail, dilakukan pengkajian skenario (flow of event) untuk setiap use case sebagai berikut.
+Nama Use Case: Melakukan Registrasi Akun
+Skenario:
+Tabel 1.5 Detail Use Case UC-1 Melakukan Registrasi Akun
+Nama
+	Melakukan Registrasi Akun
+	Actors
+	Pelanggan
+	Entry Conditions
+	Pelanggan belum memiliki akun dan mengakses halaman pendaftaran.
+	Flow of Events
+	1. Pelanggan membuka formulir pendaftaran pada platform web.
+2. Pelanggan mengisi data identitas (nama, email, nomor telepon, dan password).
+3. Pelanggan melakukan konfirmasi pendaftaran.
+4. Sistem memvalidasi kelengkapan data dan memeriksa apakah email sudah terdaftar.
+	Exit Conditions
+	Profil pelanggan tersimpan dalam basis data dan akun siap digunakan untuk login.
+	Special requirements
+	-
+	        
+        Nama Use Case: Melakukan Pemesanan Mandiri
+Skenario:
+        Tabel 1.6 Detail Use Case UC-2 Melakukan Pemesanan Mandiri
+Nama
+	Melakukan Pemesanan Mandiri
+	Actors
+	Pelanggan
+	Entry Conditions
+	Pelanggan telah login ke sistem.
+	Flow of Events
+	1. Pelanggan masuk ke menu pemesanan produk signage.
+2. Pelanggan mengisi spesifikasi pesanan (dimensi, bahan, jumlah).
+3. Pelanggan mengunggah file referensi desain.
+4. Pelanggan melakukan konfirmasi pemesanan.
+	Exit Conditions
+	Entri pesanan baru berhasil dibuat dan masuk ke dalam sistem utama.
+	Special requirements
+	Include dengan UC-4 (Menerbitkan invoice).
+	
+
+        Nama Use Case: Menginput Pesanan Channel Eksternal
+Skenario:
+        Tabel 1.7 Detail Use Case UC-3 Menginput Pesanan Channel Eksternal
+Nama
+	Menginput Pesanan Channel Eksternal
+	Actors
+	Admin
+	Entry Conditions
+	Admin menerima pesanan dari WhatsApp atau pesanan langsung.
+	Flow of Events
+	1. Admin membuka formulir input pesanan eksternal di sistem Odoo.
+2. Admin  memasukkan detail pesanan pelanggan secara manual.
+3. Admin melakukan konfirmasi simpan data untuk standarisasi.
+	Exit Conditions
+	Pesanan eksternal terdaftar secara resmi di basis data dan terintegrasi dengan antrian produksi.
+	Special requirements
+	Include dengan UC-4 (Menerbitkan invoice).
+	        
+        Nama Use Case: Menerbitkan Invoice
+Skenario:
+        Tabel 1.8 Detail Use Case UC-4 Menerbitkan Invoice
+Nama
+	Menerbitkan Invoice
+	Actors
+	Sistem
+	Entry Conditions
+	Data pesanan baru (mandiri atau eksternal) berhasil disimpan ke basis data.
+	Flow of Events
+	1. Sistem mengambil data spesifikasi dan harga produk dari basis data.
+2. Sistem men-generate nomor order resmi secara unik.
+3. Sistem menghitung total tagihan berdasarkan spesifikasi.
+4. Sistem membuat dokumen rincian tagihan (invoice) dalam format digital.
+	Exit Conditions
+	Nomor order dan invoice tersedia di akun pelanggan serta dapat diakses oleh admin.
+	Special requirements
+	Digunakan sebagai include association oleh UC-2 dan UC-3.
+	        
+        Nama Use Case: Memperbarui Status Produksi
+Skenario:
+        Tabel 1.9 Detail Use Case UC-5 Memperbarui Status Produksi
+Nama
+	Memperbarui Status Produksi
+	Actors
+	Staf Produksi
+	Entry Conditions
+	Staf produksi mulai atau menyelesaikan tahapan pengerjaan fisik signage.
+	Flow of Events
+	1. Staf Produksi mengakses daftar antrian produksi pada sistem.
+2. Staf Produksi memilih pesanan yang dikerjakan.
+3. Staf Produksi mengubah status tahapan (contoh: dari "Antri" ke "Proses" atau "Selesai").
+4. Staf Produksi melakukan konfirmasi perubahan status.
+	Exit Conditions
+	Status produksi diperbarui secara real-time di basis data Odoo.
+	Special requirements
+	Extend association dengan UC-6 (Memantau progres pesanan).
+	        
+        Nama Use Case: Memantau Progres Pesanan
+Skenario:
+        Tabel 1.10 Detail Use Case UC-6 Memantau Progres Pesanan
+Nama
+	Memantau Progres Pesanan
+	Actors
+	Pelanggan, Admin
+	Entry Conditions
+	Pengguna ingin mengetahui sejauh mana pesanan dikerjakan.
+	Flow of Events
+	1. Pengguna membuka dashboard pemantauan atau klik nomor order terkait.
+2. Sistem mengambil data status terbaru dari basis data produksi.
+3. Sistem menampilkan progres pengerjaan signage secara visual atau teks kepada pengguna.
+	Exit Conditions
+	Pengguna mendapatkan informasi status terbaru pengerjaan produk secara akurat.
+	Special requirements
+	Extend association dari UC-5 (Memperbarui Status Produksi).
+	
+
+        Nama Use Case: Memvalidasi Hak Akses (Login)
+Skenario:
+        Tabel 1.11 Detail Use Case UC-7 Memvalidasi Hak Akses (Login)
+Nama
+	Memvalidasi Hak Akses (Login)
+	Actors
+	Seluruh Pengguna
+	Entry Conditions
+	Pengguna mencoba mengakses fitur yang membutuhkan otorisasi.
+	Flow of Events
+	1. Pengguna memasukkan kredensial login (username/password).
+2. Sistem melakukan enkripsi dan validasi data login melalui protokol HTTPS.
+3. Sistem memeriksa peran jabatan (role) pengguna dalam basis data.
+4. Sistem membuka akses ke fitur sesuai tingkat otoritas.
+	Exit Conditions
+	Pengguna berhasil masuk ke dashboard yang sesuai dengan wewenangnya atau ditolak jika data tidak valid..
+	Special requirements
+	-
+	
+
+5. Pemodelan Struktur - Class Diagram
+Pemodelan struktur sistem E-Commerce Mandiri Tripma Sign direpresentasikan menggunakan Class Diagram. Diagram ini menggambarkan struktur statis sistem yang terdiri dari kelas-kelas beserta atribut dan operasinya (methods), serta hubungan relasional antar kelas tersebut. Representasi terstruktur ini berperan sebagai fondasi arsitektur yang menjembatani logika operasional perusahaan dengan berbagai modul teknis yang berkaitan sehingga dapat menjadi panduan yang jelas bagi pengembang dalam membangun sistem.
+  Gambar 1.9  Class Diagram
+Class Diagram ini merancang arsitektur Sistem E-Commerce Mandiri Tripma Sign dengan mengadopsi pola Boundary-Control-Entity (BCE) guna mendistribusikan tanggung jawab sistem secara terstruktur ke dalam lapisan antarmuka, logika pemrosesan, dan objek penyimpanan data. Interaksi sistem diawali dari kelas Boundary (CustomerUI, AdminUI, ProductionUI, dan LoginUI) yang mendelegasikan instruksi operasional melalui relasi dependensi kepada kelas Control (OrderController, AuthController, dan ProductionController) untuk mengeksekusi logika bisnis yang dinamis. Selanjutnya, kelas Control berinteraksi dengan kelas Entity yang berfokus penuh pada representasi dan penyimpanan atribut data permanen sistem. Pada lapisan entitas ini, integritas struktural dijamin melalui relasi komposisi yang mengikat eksistensi dan siklus hidup kelas Invoice serta riwayat tahapan status pada kelas ProductionStatus secara mutlak kepada entitas pesanan utama pada kelas Order. Sebagai pelengkap arsitektur, pemisahan wewenang pengguna diakomodasi secara fleksibel melalui relasi pewarisan (inheritance), di mana otoritas khusus kelas Admin dan ProductionStaff diturunkan dari kerangka dasar kelas abstrak InternalUser agar sistem tetap sejalan dengan tata kelola organisasi dan regulasi perusahaan.
+
+
+Berikut adalah penjelasan lebih rinci terkait kelas entity, controller, dan boundary yang terdapat pada Class Diagram, dilengkapi dengan deskripsi, daftar atribut, dan juga daftar methods masing-masing kelas:
+Tabel 1.12 Deskripsi Class Diagram Customer
+Nama
+	Customer
+	Deskripsi
+	Kelas entitas yang menyimpan data profil dan kredensial pelanggan
+	Attributes
+	Customer ID, Name, Email, Phone Number, Address, Password
+	Methods
+	GetProfileDetails()
+	Digunakan untuk mengambil informasi profil lengkap pelanggan untuk keperluan administrasi
+	
+
+        Tabel 1.13 Deskripsi Class Diagram Order
+Nama
+	Order
+	Deskripsi
+	Kelas entitas yang menyimpan detail transaksi dan spesifikasi produk pesanan
+	Attributes
+	Order ID, Order Date, Product Specifications, Design File, Billing Total, Source Channel 
+	Methods
+	GetOrderSummary()
+	Digunakan untuk menghasilkan ringkasan data pesanan untuk keperluan tampilan dashboard
+	
+
+        Tabel 1.14 Deskripsi Class Diagram Invoice
+Nama
+	Invoice
+	Deskripsi
+	Kelas entitas yang mengelola informasi tagihan dan status keuangan pesanan
+	Attributes
+	Invoice ID, Issue Date, Payment Status
+	Methods
+	UpdatePaymentStatus()
+	Digunakan untuk mengubah status pembayaran setelah verifikasi keuangan dilakukan
+	
+
+Tabel 1.15 Deskripsi Class Diagram ProductionStatus
+Nama
+	Production Status
+	Deskripsi
+	Kelas entitas yang menyimpan riwayat tahapan produksi suatu pesanan secara kronologis
+	Attributes
+	Status ID, Stage Name, Update Time
+	Methods
+	GetLatestStatus()
+	Digunakan untuk mengambil informasi tahapan pengerjaan terakhir untuk ditampilkan kepada pengguna
+	
+
+Tabel 1.16 Deskripsi Class Diagram Internal User
+Nama
+	Internal User
+	Deskripsi
+	Kelas abstrak yang menyimpan data dasar profil karyawan perusahaan
+	Attributes
+	User ID, Username, Password, Role
+	
+
+Tabel 1.17 Deskripsi Class Diagram Admin
+Nama
+	Admin
+	Deskripsi
+	Kelas entitas konkret yang mewarisi InternalUser dan merepresentasikan staf yang memiliki otoritas fungsional untuk mengelola data operasional penjualan dan pemeliharaan konten katalog pada sistem
+	Attributes
+	User ID, Username, Password, Role
+	Methods
+	Login()
+	Digunakan untuk memvalidasi hak akses terhadap system dashboard berdasarkan role administrator
+	InputExternalOrder()
+	Digunakan untuk melakukan input pesanan secara manual dari kanal eksternal
+	ManageCatalog()
+	Digunakan untuk mengelola informasi produk pada website, termasuk menambahkan produk, memperbarui harga, mengunggah foto produk, serta mengatur kategori produk
+	
+
+Tabel 1.18 Deskripsi Class Diagram ProductionStaff
+Nama
+	Production Staff
+	Deskripsi
+	Kelas entitas konkret yang mewarisi InternalUser dan merepresentasikan personel divisi Produksi yang bertanggung jawab atas pembaruan data teknis pengerjaan di area bengkel
+	Attributes
+	User ID, Username, Password, Role
+	Methods
+	Login()
+	Digunakan untuk memvalidasi hak akses terhadap system dashboard berdasarkan role Staff Produksi
+	UpdateProductionStatus()
+	Digunakan untuk memperbarui status produksi terhadap suatu pesanan
+	
+        Tabel 1.19 Deskripsi Class Diagram AuthController
+Nama
+	Auth Controller
+	Deskripsi
+	Kelas pengontrol yang menangani logika autentikasi dan validasi hak akses pengguna.
+	Attributes
+	Session Token
+	Methods
+	ValidateLogin()
+	Digunakan untuk memproses pengecekan kredensial ke basis data dan memberikan izin akses jika data cocok
+	CheckUserRole()
+	Digunakan untuk menentukan tingkat otoritas dan mengarahkan pengguna ke dashboard yang sesuai
+	
+
+Tabel 1.20 Deskripsi Class Diagram OrderController
+Nama
+	Order Controller
+	Deskripsi
+	Kelas pengontrol yang mengatur alur pembuatan dan penyimpanan data pesanan
+	Attributes
+	Current Order ID
+	Methods
+	ProcessNewOrder()
+	Digunakan untuk menangani logika penyimpanan pesanan mandiri maupun eksternal ke dalam sistem
+	CalculateBilling()
+	Digunakan untuk menghitung total biaya berdasarkan spesifikasi produk dan jumlah pesanan untuk diterbitkan sebagai invoice
+	
+
+Tabel 1.21 Deskripsi Class Diagram ProductionController
+Nama
+	Production Controller
+	Deskripsi
+	Kelas pengontrol yang mengatur pembaruan status dan sinkronisasi progres pengerjaan
+	Attributes
+	Last Update Item
+	Methods
+	SubmitStatusUpdate()
+	Digunakan untuk memvalidasi dan mengirimkan pembaruan tahapan produksi ke entitas riwayat status
+	
+
+Tabel 1.22 Deskripsi Class Diagram CustomerUI
+Nama
+	Customer UI
+	Deskripsi
+	Kelas antarmuka yang berinteraksi langsung dengan pelanggan untuk aktivitas pemesanan dan pemantauan status
+	Methods
+	ShowOrderForm()
+	Digunakan untuk menampilkan formulir pengisian spesifikasi produk dan unggah desain bagi pelanggan
+	DisplayOrderStatus()
+	Digunakan untuk menampilkan informasi status pengerjaan pesanan secara visual kepada pelanggan
+	
+
+Tabel 1.23 Deskripsi Class Diagram AdminUI
+Nama
+	Admin UI
+	Deskripsi
+	Kelas antarmuka bagi staf Admin/Penjualan untuk mengelola operasional harian dan input data
+	Methods
+	ShowExternalOrderForm()
+	Digunakan untuk menampilkan formulir untuk mendigitalisasi pesanan dari WhatsApp atau kanal eksternal lainnya
+	ShowCCatalogDashboard()
+	Digunakan untuk menampilkan antarmuka pengelolaan katalog produk untuk pembaruan harga dan konten
+	
+
+Tabel 1.24 Deskripsi Class Diagram ProductionUI
+Nama
+	Production UI
+	Deskripsi
+	Kelas antarmuka teknis yang digunakan oleh staf di area produksi untuk memperbarui tahapan kerja
+	Methods
+	ShowUpdateStatusForm()
+	Digunakan untuk menampilkan opsi tahapan produksi yang dapat dipilih untuk diperbarui
+	DisplayOrderQueue()
+	Digunakan untuk menampilkan daftar antrian pesanan yang harus dikerjakan oleh tim produksi
+	
+
+Tabel 1.25 Deskripsi Class Diagram LoginUI
+Nama
+	Login UI
+	Deskripsi
+	Kelas antarmuka terpadu yang digunakan oleh seluruh aktor untuk masuk ke dalam sistem
+	Methods
+	ShowLoginForm()
+	Digunakan untuk menampilkan kolom input username dan password
+	DisplayLoginError()
+	Digunakan untuk menampilkan pesan peringatan jika kredensial yang dimasukkan tidak valid
+	
+
+6. Pemodelan Behavior - Sequence Diagram
+Sequence Diagram digunakan untuk menggambarkan interaksi antar objek atau aktor dalam sebuah sistem berdasarkan urutan waktu. Diagram ini menunjukkan bagaimana pesan atau informasi dikirim antar komponen untuk menyelesaikan suatu proses atau fungsi tertentu. Berikut adalah sequence diagram untuk setiap use case yang telah ditentukan.
+1. Use Case 01 : Melakukan Registrasi Akun
+  
+
+Gambar 1.10  Sequence Diagram UC-1 Melakukan Registrasi Akun 
+Aktor Pelanggan berinteraksi dengan RegisterUI. AuthController berfungsi sebagai jembatan logika untuk memvalidasi data sebelum entitas Customer menyimpan informasi tersebut ke basis data permanen.
+2. Use Case 02 : Melakukan Pemesanan Mandiri
+  
+
+Gambar 1.11  Sequence Diagram UC-2 Melakukan Pemesanan Mandiri 
+Aktor Pelanggan berinteraksi dengan CustomerUI untuk memasukkan data. Proses ini melibatkan OrderController untuk mengelola logika penyimpanan pesanan mandiri. Sesuai aturan special requirements, proses ini secara otomatis memicu (include) use case 4 untuk menghasilkan tagihan.
+3. Use Case 03 : Menginput Pesanan Channel Eksternal
+  
+
+Gambar 1.12  Sequence Diagram UC-3 Menginput Pesanan Channel Eksternal
+Aktor Admin berinteraksi dengan AdminUI untuk memasukkan data. Pesanan ini diproses oleh OrderController agar memiliki format yang sama dengan pesanan mandiri dan terintegrasi dengan antrean produksi. Sesuai aturan special requirements, proses ini secara otomatis memicu (include) use case 4 untuk menghasilkan tagihan.
+4. Use Case 04 : Menerbitkan Invoice
+  
+
+Gambar 1.13  Sequence Diagram UC-4 Menerbitkan Invoice
+Sebagai use case yang dijalankan oleh sistem, diagram ini menunjukkan bagaimana OrderController menghitung biaya menggunakan method calculateBilling() dan menyimpan hasilnya ke entitas Invoice.
+5. Use Case 05 : Memperbarui Status Produksi
+  
+
+Gambar 1.14 Sequence Diagram UC-5 Memperbarui Status Produksi
+Aktor StafProduksi memperbarui status melalui ProductionUI. Kemudian, ProductionController akan memproses pembaruan statusnya. Perubahan ini secara otomatis akan memperbarui tampilan yang dilihat oleh pengguna lain dengan mekanisme extend ke UC-6.
+6. Use Case 06 : Memantau Progres Pesanan
+  
+
+Gambar 1.15  Sequence Diagram UC-6 Memantau Progres Pesanan 
+Aktor User berinteraksi dengan CustomerUI atau AdminUI (tergantung jenis aktor). Diagram ini menunjukkan interaksi pasif di mana sistem mengambil data dari entitas ProductionStatus dan menampilkannya secara visual melalui antarmuka pengguna.
+7. Use Case 07 : Memvalidasi Hak Akses (Login)
+  
+
+Gambar 1.16  Sequence Diagram UC-7 Memvalidasi Hak Akses (Login)
+Aktor User berinteraksi dengan LoginUI. AuthController berfungsi untuk memvalidasi kredensial pengguna dan menentukan dashboard mana yang harus ditampilkan berdasarkan role (Admin, StafProduksi, atau Pelanggan) yang tersimpan di entitas InternalUser atau Customer.
+7. User Interface
+1. Screen Mockup
+Agar interaksi pengguna dengan sistem berdasarkan hasil analisis use case tergambar secara visual, dibuat suatu desain User Interface dalam bentuk screen mockup sebagai rancangan dari tampilan antarmuka yang akan dibuat pada sistem, Layar antarmuka di sini dibuat langsung sebagai halaman  mockup pada sistem odoo. Berikut ini adalah daftar layar yang dirancang untuk sistem tersebut.
+Tabel 1.26.1 Tabel Screen Mockup Register
+Nama Layar
+	Layar Register
+	Deskripsi Layar
+	Layar bagi calon pengguna untuk mendaftarkan akun pada website
+	User
+	Pelanggan
+	Tampilan Layar
+	  
+
+	
+
+                Tabel 1.26.2 Tabel Screen Mockup Login
+Nama Layar
+	Layar Login
+	Deskripsi Layar
+	Layar bagi seluruh pengguna untuk melakukan autentikasi identitas dengan memasukkan kredensial akun mereka sebelum dapat mengakses fitur yang sesuai dengan tingkat otoritasnya
+	User
+	Pelanggan, Admin, Staf Produksi
+	Tampilan Layar
+	  
+
+	
+
+                Tabel 1.26.3 Tabel Screen Mockup Katalog Produk
+Nama Layar
+	Layar Katalog Produk
+	Deskripsi Layar
+	Layar yang menampilkan daftar-daftar produk yang dapat dipesan oleh pelanggan berdasarkan jenis rambu atau custom
+	User
+	Pelanggan
+	Tampilan Layar
+	  
+
+  
+
+
+
+	
+
+Tabel 1.26.4 Tabel Screen Mockup Form Pemesanan
+Nama Layar
+	Layar Form Pemesanan
+	Deskripsi Layar
+	Layar untuk mengisi detail pesanan dan mengirim spesifikasi pesanan ke dalam sistem oleh pelanggan
+	User
+	Pelanggan
+	Tampilan Layar
+	  
+
+  
+
+	
+
+                Tabel 1.26.5 Tabel Screen Mockup Invoice
+Nama Layar
+	Layar Ringkasan Invoice
+	Deskripsi Layar
+	Layar yang menampilkan ringkasan Invoice kepada pelanggan setelah berhasil melakukan pemesanan produk
+	User
+	Pelanggan
+	Tampilan Layar
+	  
+
+  
+
+  
+
+
+
+	                
+                Tabel 1.26.6 Tabel Screen Mockup Lacak Pesanan
+Nama Layar
+	Layar Pesanan
+	Deskripsi Layar
+	Layar bagi pelanggan untuk melihat dan memantau semua daftar pesanan yang telah dibuat sebelumnya beserta status progres pesanannya
+	User
+	Pelanggan
+	Tampilan Layar
+	  
+
+  
+
+	
+
+                Tabel 1.26.7 Tabel Screen Mockup Dashboard Admin
+Nama Layar
+	Layar Dashboard Admin
+	Deskripsi Layar
+	Layar sebagai tempat Dashboard bagi admin untuk memantau statistik progres pesanan yang masuk dengan detail nya beserta link tombol untuk aksi-aksi yang dapat dilakukan oleh admin
+	User
+	Admin 
+	Tampilan Layar
+	  
+
+	        
+                Tabel 1.26.8 Tabel Screen Mockup Input Pesanan Eksternal
+Nama Layar
+	Layar Input Pesanan Eksternal
+	Deskripsi Layar
+	Layar untuk mengisi pesanan secara manual oleh admin untuk pesanan yang berasal dari luar aplikasi, seperti whatsapp atau pemesanan langsung di tempat.
+	User
+	Admin 
+	Tampilan Layar
+	  
+
+  
+
+	                
+
+
+
+
+                Tabel 1.26.9 Tabel Screen Mockup Dashboard Produksi
+Nama Layar
+	Layar Input Dashboard Produksi
+	Deskripsi Layar
+	Layar yang menampilkan daftar antrian produk pada sistem beserta status progres nya yang diketahui oleh staf Produksi
+	User
+	Staf Produksi
+	Tampilan Layar
+	  
+
+	
+
+Tabel 1.26.10 Tabel Screen Mockup Update Status Produksi
+Nama Layar
+	Layar Update Status Produksi
+	Deskripsi Layar
+	Layar yang diakses dari Layar Daftar Antrian yang dimanfaatkan Staf Produksi untuk mengubah status tahapan dari pemesanan produk tertentu.
+	User
+	Staf Produksi
+	Tampilan Layar
+	  
+
+  
+
+	
+
+2. Pemetaan Layar
+Layar-layar sebagai rancangan tampilan User Interface dari aplikasi dapat dihubungkan ke salah satu use case yang telah dibuat, berikut merupakan pemetaan use case dari sistem terhadap layar-layar yang ada
+
+
+Tabel 1.27 Tabel Pemetaan Layar
+No
+	Use Case / Activity
+	Layar
+	01
+	Melakukan Registrasi Akun
+	1. Layar Register
+	02
+	Melakukan Pemesanan Mandiri
+	1. Layar Katalog Produk
+2. Layar Form Pemesanan
+	03
+	Menginput Pesanan Channel Eksternal
+	1. Layar Input Pesanan Eksternal
+	04
+	Menerbitkan Invoice
+	1. Layar Invoice
+	05
+	Memperbarui Status Produksi
+	1. Layar Dashboard Produksi
+2. Layar Update Status Produksi
+	06
+	Memantau Progres Pesanan
+	1. Layar Dashboard Admin
+2. Layar Lacak Pesanan
+	07 
+	Memvalidasi Hak Akses (Login)
+	1. Layar Login
+	
+
+
+
+
+
+BAB II
+RENCANA PENGUJIAN SISTEM INFORMASI
+1. Skenario Uji Tiap Kebutuhan Fungsional
+Bab ini menguraikan rencana pengujian untuk Website E-Commerce Mandiri Tripma Sign berdasarkan rancangan fungsionalitas yang telah dibangun. Pengujian ini difokuskan pada penyusunan skenario uji untuk tiap kebutuhan fungsional (Functional Requirement) guna memastikan bahwa setiap fitur, seperti pemesanan mandiri dan integrasi data pesanan, beroperasi sesuai dengan spesifikasi yang diharapkan. Melalui skenario uji ini, seluruh interaksi antara aktor dan sistem mulai dari masukan data, proses operasi, hingga keluaran yang dihasilkan akan divalidasi secara terstruktur untuk menjamin keandalan dan kesiapan sistem sebelum memasuki tahap implementasi akhir.
+
+
+1. Skenario Uji Sistem Mampu Memfasilitasi Pemesanan Produk Secara Mandiri
+SRS-ID : FR-01
+Nama kebutuhan fungsional : Sistem mampu memfasilitasi pemesanan produk secara mandiri
+Deskripsi : Memungkinkan pelanggan untuk melakukan registrasi akun dan melakukan pemesanan produk Tripma Sign secara langsung melalui platform website secara terpusat.
+Data input : Data profil pelanggan (nama, email, telepon, alamat, password), spesifikasi produk (jenis bahan, dimensi, jumlah), dan unggahan file desain.
+Output yang diharapkan : Sistem menerbitkan nomor order resmi, menampilkan rincian pesanan yang akurat, serta menghasilkan rincian tagihan (invoice) secara otomatis.
+Langkah Pengujian :        Proses pengujian melibatkan langkah-langkah berikut:
+1. Akses halaman website utama Tripma Sign melalui browser.
+2. Navigasi ke menu registrasi dan masukkan data pendaftaran akun pelanggan.
+3. Login ke sistem menggunakan akun yang telah berhasil didaftarkan.
+4. Pilih kategori produk yang diinginkan pada katalog.
+5. Masukkan data spesifikasi pesanan dan unggah referensi file desain.
+6. Klik tombol Buat Pesanan[a].
+7. Sistem memproses penyimpanan data ke basis data dan menampilkan nomor order serta rincian tagihan pada layar pengguna.
+
+
+2. Skenario Uji Sistem Mampu Memproses Input Pesanan dari Channel Eksternal Secara Terpusat
+SRS-ID : FR-02
+Nama kebutuhan fungsional : Sistem mampu memproses input pesanan dari channel eksternal secara terpusat
+Deskripsi : Memungkinkan Admin untuk menginput data pesanan yang datang dari kanal eksternal (WhatsApp atau pemesanan langsung) ke dalam sistem Odoo guna menstandarisasi data.
+Data input : Rincian identitas pelanggan dan spesifikasi teknis pesanan yang diterima melalui WhatsApp atau layanan offline.
+Output yang diharapkan : Penerbitan nomor order resmi yang secara otomatis terintegrasi dengan daftar antrian pengerjaan pada divisi produksi.
+Langkah Pengujian :        Proses pengujian melibatkan langkah-langkah berikut:
+1. Login ke system dashboard menggunakan akun dengan role Admin.
+2. Navigasi ke menu Input Pesanan Eksternal.
+3. Klik tombol Tambah Pesanan Baru.
+4. Masukkan data pelanggan dan rincian spesifikasi produk sesuai dengan informasi yang didapatkan dari kanal eksternal.
+5. Klik tombol Simpan Pesanan.
+6. Sistem mengeksekusi registrasi pesanan ke dalam basis data utama dan menampilkan notifikasi bahwa pesanan telah berhasil diteruskan ke divisi Produksi.
+
+
+3. Skenario Uji Sistem Dapat Memperbarui Status Pengerjaan Pesanan secara Real-time
+SRS-ID : FR-03
+Nama kebutuhan fungsional : Sistem dapat memperbarui status pengerjaan pesanan secara real-time
+Deskripsi : Memungkinkan tim divisi Produksi untuk memperbarui status tahapan pengerjaan signage pada sistem Odoo agar pelanggan dapat memantau progres pengerjaan signage yang dipesan
+Data input : Status pengerjaan signage
+Output yang diharapkan : Notifikasi dan tampilan pembaruan status pesanan kepada pelanggan dan staf Penjualan
+Langkah Pengujian :        Proses pengujian melibatkan langkah-langkah berikut:
+1. Login ke dashboard produksi menggunakan akun dengan role staf produksi
+2. Pada dashboard produksi, Staf Produksi memilih salah satu card pesanan aktif pada antrian produksi dan menekan card tersebut untuk membuka halaman update status untuk produk tersebut
+3. Pada halaman update status, Staf Produksi mengubah opsi tahap pengerjaan (status pesanan) ke tahap berikutnya kemudian klik tombol Simpan Status
+4. Sistem menampilkan notifikasi sukses dan memperbarui status produk yang diubah status nya pada database
+5. Buka Halaman Lacak Pesanan sebagai pelanggan yang memesan produk yang diubah statusnya berdasarkan nomor ordernya, kemudian cek apakah produk yang diubah statusnya terlihat ada perubahan status pada progress bar pada card riwayat pesanan produk.
+
+
+4. Skenario Uji Sistem Mampu Membatasi Hak Akses Data Sesuai Dengan Tingkat Otoritas dan Kebijakan Privasi
+SRS-ID : FR-03
+Nama kebutuhan fungsional : Sistem mampu membatasi hak akses data sesuai dengan tingkat otoritas dan kebijakan privasi
+Deskripsi : Membatasi akses data sensitif pelanggan berdasarkan role staf internal
+Data input : Kredensial login (username/password) dan tingkat otoritas staf internal
+Output yang diharapkan : Izin akses ke dashboard operasional yang sesuai dengan role jabatan dari staf internal
+Langkah Pengujian :        Proses pengujian melibatkan langkah-langkah berikut:
+1. Buka halaman Login dan masukkan kredensial (email & password) dari akun dengan role Pelanggan.
+2. Sistem memvalidasi kredensial dan mengarahkan pelanggan ke halaman utama pelanggan.
+3. Logout dari sistem sebagai pelanggan untuk kembali ke halaman Login, kemudian masukkan kredensial (email & password) dari akun dengan role Admin.
+4. Sistem mengarahkan pengguna ke Dashboard Admin yang menampilkan daftar seluruh pesanan yang masuk
+5. Logout dari sistem sebagai pelanggan untuk kembali ke halaman Login, kemudian masukkan kredensial (email & password) dari akun dengan role Staf Produksi.
+6. Sistem mengarahkan pengguna ke Dashboard Produksi yang menampilkan antrian pengerjaan pesanan.
+
+
+[a]Di contoh tiap nama tombol sama menu di-bold, harus gini juga kah buat semuanya?
