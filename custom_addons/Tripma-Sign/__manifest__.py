@@ -17,6 +17,7 @@
         'views/templates.xml',
         'views/admin_templates.xml',
         'views/production_templates.xml',
+        'views/customer_templates.xml',
         'views/menus.xml',
     ],
     'application': True,

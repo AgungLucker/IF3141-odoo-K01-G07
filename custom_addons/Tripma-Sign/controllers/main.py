@@ -1,5 +1,6 @@
 import datetime
 import odoo
+import base64
 from odoo import http
 from odoo.http import request
 from odoo.exceptions import AccessDenied
@@ -27,6 +28,62 @@ class TripmaUI(http.Controller):
     # Dummy route untuk integrasi selanjutnya, saat ini dihapus agar tidak redirect ke mockup.
     pass
 
+class TripmaOrderController(http.Controller) :
+    @http.route('/tripma/order/form' , type = 'http' , auth = 'user' , website = True)
+    def order_form(self , **kw) :
+        """
+        FR-01: Menampilkan formulir pemesanan mandiri (FR-01)
+        Hanya pelanggan yang bisa mengakses halaman ini, staf produksi dan admin
+        akan diarahkan ke halaman akses ditolak.
+        """
+        if (not request.env.user.has_group('Tripma-Sign.group_tripma_customer')) :
+            return request.redirect('/tripma/akses-ditolak')
+        else :
+            return request.render('Tripma-Sign.tripma_order_form_template' , {
+                'customer': request.env.user.partner_id
+            })
+
+    @http.route('/tripma/order/submit' , type = 'http' , auth = 'user' , methods = ['POST'] , website = True , csrf = True)
+    def order_submit(self , **post) :
+        """
+        FR-01: Memproses input pesanan dan file desain (FR-01)
+        Hanya pelanggan yang bisa submit pesanan, staf produksi dan admin
+        akan diarahkan ke halaman akses ditolak.
+        """
+        user = request.env.user
+        product_specs = post.get('product_specs')
+        design_file = post.get('design_file')
+        if (not product_specs) :
+            return request.redirect('/tripma/order/form?error=Spesifikasi produk wajib diisi')
+        else :
+            file_data = False
+            if (design_file) :
+                file_data = base64.b64encode(design_file.read())
+            new_order = request.env['tripma.order'].sudo().create({
+                'customer_id' : user.partner_id.id,
+                'product_specs' : product_specs,
+                'design_file' : file_data,
+                'source_channel' : 'website',
+                'state' : 'draft'
+            })
+            new_order.action_issue_invoice()
+            return request.redirect(f'/tripma/order/success/{new_order.id}')
+
+    @http.route('/tripma/order/success/<int:order_id>' , type = 'http' , auth = 'user' , website = True)
+    def order_success(self , order_id , **kw) :
+        """
+        FR-01: Menampilkan rincian nomor order dan invoice setelah berhasil.
+        Hanya pelanggan yang bisa mengakses halaman ini, staf produksi dan admin
+        akan diarahkan ke halaman akses ditolak.
+        """
+        order = request.env['tripma.order'].sudo().browse(order_id)
+        if ((not order.exists()) or (order.customer_id.id != request.env.user.partner_id.id)) :
+            return request.redirect('/tripma/track')
+        else :
+            return request.render('Tripma-Sign.tripma_order_success_template' , {
+                'order' : order,
+                'invoice' : order.invoice_ids[:1]
+            })
 
 class TripmaProductionController(http.Controller):
 
@@ -414,4 +471,3 @@ class TripmaAuthController(http.Controller):
             'is_production_staff': user.has_group('Tripma-Sign.group_tripma_production_staff'),
             'is_customer':        user.has_group('Tripma-Sign.group_tripma_customer'),
         }
-
