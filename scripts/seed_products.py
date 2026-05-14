@@ -1,10 +1,7 @@
 # This script can be run using:
-# docker-compose exec web odoo shell -d <your_db_name> --nopid --no-xmlrpc < scripts/seed_products.py
+# docker-compose exec web odoo shell -d <your_db_name> < scripts/seed_products.py
 
-from odoo import api, SUPERUSER_ID
-
-env = api.Environment(cr, SUPERUSER_ID, {})
-
+# In Odoo shell, 'env' is already available.
 products = [
     {
         'name': 'Neon Sign Custom',
