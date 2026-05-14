@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tripma_order_form_template" model="ir.ui.view">
+        <field name="name">Tripma Order Form</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.tripma_order_form_template</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.tripma_order_form_template">
+                <t t-call="Tripma-Sign.tripma_layout">
+                    <t t-set="head">
+                        <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                    </t>
+                    <div class="container mt-5" style="max-width: 600px; margin: 40px auto; padding: 20px;">
+                        <h2 class="text-center mb-4" style="color: var(--navy); font-weight: 700;">Buat Pesanan Baru</h2>
+                        <t t-if="request.params.get('error')">
+                            <div class="alert alert-danger" role="alert" style="border-radius: 8px; margin-bottom: 20px;">
+                                <t t-esc="request.params.get('error')"/>
+                            </div>
+                        </t>
+                        <div class="card shadow-sm p-4 border-0 rounded-3" style="background: var(--white); border: 1px solid var(--border); box-shadow: var(--shadow-md);">
+                            <form action="/tripma/order/submit" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                
+                                <h5 style="color: var(--navy); margin-bottom: 16px; font-weight: 700;">1. Profil Pelanggan</h5>
+                                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div>
+                                        <label for="cust_name" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Nama Lengkap</label>
+                                        <input type="text" name="cust_name" id="cust_name" class="form-control ts-input" required="required" t-att-value="request.env.user.partner_id.name"/>
+                                    </div>
+                                    <div>
+                                        <label for="cust_email" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Email</label>
+                                        <input type="email" name="cust_email" id="cust_email" class="form-control ts-input" t-att-value="request.env.user.partner_id.email"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                                    <div>
+                                        <label for="cust_phone" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Nomor Telepon / WA</label>
+                                        <input type="text" name="cust_phone" id="cust_phone" class="form-control ts-input" required="required" t-att-value="request.env.user.partner_id.phone or request.env.user.partner_id.mobile"/>
+                                    </div>
+                                    <div>
+                                        <label for="cust_address" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Alamat Pengiriman</label>
+                                        <input type="text" name="cust_address" id="cust_address" class="form-control ts-input" required="required" t-att-value="request.env.user.partner_id.street"/>
+                                    </div>
+                                </div>
+
+                                <hr style="border-top: 1px solid var(--border); margin: 24px 0;"/>
+
+                                <h5 style="color: var(--navy); margin-bottom: 16px; font-weight: 700;">2. Spesifikasi Produk</h5>
+                                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div>
+                                        <label for="material" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Jenis Bahan</label>
+                                        <select name="material" id="material" class="form-control ts-input ts-select" required="required">
+                                            <option value="">Pilih Bahan...</option>
+                                            <option value="Akrilik">Akrilik</option>
+                                            <option value="Galvanis">Galvanis</option>
+                                            <option value="Kuningan">Kuningan</option>
+                                            <option value="Stainless">Stainless</option>
+                                            <option value="Lainnya">Lainnya (Tulis di Catatan)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="size" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Dimensi / Ukuran</label>
+                                        <input type="text" name="size" id="size" class="form-control ts-input" placeholder="Contoh: 100 x 50 cm" required="required"/>
+                                    </div>
+                                    <div>
+                                        <label for="quantity" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Jumlah (Unit)</label>
+                                        <input type="number" name="quantity" id="quantity" class="form-control ts-input" min="1" value="1" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="mb-3" style="margin-bottom: 24px;">
+                                    <label for="special_instructions" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Catatan Tambahan (Desain, Warna, dll)</label>
+                                    <textarea name="special_instructions" id="special_instructions" class="form-control ts-input" rows="3" placeholder="Contoh: Tolong gunakan warna emas..."></textarea>
+                                </div>
+                                
+                                <div class="mb-4" style="margin-bottom: 24px;">
+                                    <label for="design_file" class="form-label fw-bold" style="font-size: .875rem; font-weight: 600; color: var(--navy);">Unggah Desain (Opsional)</label>
+                                    <input type="file" name="design_file" id="design_file" class="form-control ts-input" accept="image/*,.pdf,.zip"/>
+                                    <div class="form-text" style="font-size: .75rem; color: var(--text-muted); margin-top: 4px;">Format yang didukung: JPG, PNG, PDF, ZIP. Maksimal 10MB.</div>
+                                </div>
+                                
+                                <button type="submit" class="ts-btn ts-btn-primary w-100 py-2 fw-bold" style="width: 100%;">Kirim Pesanan</button>
+                            </form>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>

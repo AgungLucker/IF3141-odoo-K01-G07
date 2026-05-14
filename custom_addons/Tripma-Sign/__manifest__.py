@@ -35,6 +35,8 @@
         # Customer Pages
         'views/pages/customer/tracking.xml',
         'views/pages/customer/invoice.xml',
+        'views/pages/customer/order_form.xml',
+        'views/pages/customer/order_success.xml',
     ],
     'application': True,
 }

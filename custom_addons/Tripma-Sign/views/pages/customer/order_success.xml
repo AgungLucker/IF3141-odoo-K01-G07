@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tripma_order_success_template" model="ir.ui.view">
+        <field name="name">Tripma Order Success</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.tripma_order_success_template</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.tripma_order_success_template">
+                <t t-call="Tripma-Sign.tripma_layout">
+                    <t t-set="head">
+                        <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                    </t>
+                    <div class="container mt-5 text-center" style="max-width: 600px; margin: 40px auto; padding: 20px;">
+                        <div class="mb-4" style="font-size: 4rem; margin-bottom: 16px;">🎉</div>
+                        <h2 style="color: var(--navy); font-weight: 700; margin-bottom: 16px;">Pesanan Berhasil Dibuat!</h2>
+                        <p class="text-muted mt-3 mb-4" style="color: var(--text-muted); margin-bottom: 24px;">Terima kasih telah mempercayakan pembuatan media promosi Anda kepada Tripma Sign.</p>
+                        
+                        <div class="card shadow-sm p-4 border-0 rounded-3 mb-4 text-start" style="background: var(--white); border: 1px solid var(--border); box-shadow: var(--shadow-md); padding: 24px; text-align: left; margin-bottom: 24px;">
+                            <div class="mb-3 border-bottom pb-2" style="border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px;">
+                                <span class="text-muted small" style="font-size: .75rem; color: var(--text-muted);">Nomor Order:</span>
+                                <h4 class="mb-0 fw-bold" style="font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-top: 4px;"><t t-esc="order.name"/></h4>
+                            </div>
+                            <div>
+                                <span class="text-muted small" style="font-size: .75rem; color: var(--text-muted);">Spesifikasi:</span>
+                                <p class="mb-0" style="font-size: .875rem; margin-top: 4px;"><t t-esc="order.product_specs"/></p>
+                            </div>
+                        </div>
+                        
+                        <a href="/tripma/track" class="ts-btn ts-btn-primary px-4 py-2 fw-bold" style="display: inline-block;">Lacak Pesanan Saya</a>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>
