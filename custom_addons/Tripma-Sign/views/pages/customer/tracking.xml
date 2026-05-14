@@ -2,36 +2,83 @@
 <odoo>
     <template id="track_order_page" name="Lacak Pesanan">
         <t t-call="Tripma-Sign.tripma_layout">
-            <div class="container mt-5">
+            <t t-set="head">
+                <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                <style>
+                    .track-steps { display: flex; justify-content: space-between; position: relative; margin: 40px 0; }
+                    .track-steps::before { content: ''; position: absolute; top: 20px; left: 10%; right: 10%; height: 2px; background: #e2e8f0; z-index: 1; }
+                    .t-step { text-align: center; position: relative; z-index: 2; width: 20%; }
+                    .t-icon { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold; color: #94a3b8; }
+                    .t-step.active .t-icon { background: var(--navy); border-color: var(--navy); color: white; }
+                    .t-step.done .t-icon { background: var(--green); border-color: var(--green); color: white; }
+                    .t-label { font-size: 0.75rem; font-weight: 600; color: #64748b; }
+                    .t-step.active .t-label { color: var(--navy); }
+                </style>
+            </t>
+            <div class="container mt-5 mb-5">
                 <div class="search-hero text-center mb-5">
-                    <h1>Lacak Pesanan Anda</h1>
-                    <p>Masukkan nomor order (Contoh: TS-2026-0001) untuk melihat status produksi.</p>
-                    <form action="/tripma/track" method="get" class="d-flex justify-content-center">
-                        <input type="text" name="q" class="form-control w-50 me-2" placeholder="Nomor Order..." t-att-value="query"/>
-                        <button type="submit" class="btn btn-primary">Cari</button>
+                    <h1 class="fw-bold" style="color: var(--navy);">Lacak Pesanan Anda</h1>
+                    <p class="text-muted">Masukkan nomor order untuk melihat status produksi signage Anda secara real-time.</p>
+                    <form action="/tripma/track" method="get" class="d-flex justify-content-center mt-4">
+                        <input type="text" name="q" class="form-control w-50 me-2" placeholder="Contoh: TS-2026-0001" t-att-value="query"/>
+                        <button type="submit" class="btn btn-primary px-4">Lacak Sekarang</button>
                     </form>
                 </div>
 
                 <t t-if="order">
-                    <div class="card shadow-sm p-4">
-                        <div class="d-flex justify-content-between border-bottom pb-3 mb-4">
-                            <div>
-                                <h4 class="mb-0">Order <t t-esc="order.name"/></h4>
-                                <span class="text-muted">Dipesan pada: <t t-esc="order.order_date"/></span>
+                    <div class="card shadow border-0 p-5">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h4 class="fw-bold mb-1" style="color: var(--navy);">Order #<t t-esc="order.name"/></h4>
+                                <p class="text-muted mb-0">Produk: <t t-esc="order.product_id.name or 'Custom'"/></p>
                             </div>
-                            <div class="text-end">
-                                <span class="badge bg-info text-dark"><t t-esc="order.state"/></span>
+                            <div class="col-md-6 text-md-end">
+                                <p class="text-muted mb-1">Tanggal Pesan</p>
+                                <h6 class="fw-bold"><t t-esc="order.order_date"/></h6>
                             </div>
                         </div>
 
-                        <div class="progress mb-4" style="height: 25px;">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                 role="progressbar" 
-                                 t-attf-style="width: #{progress_pct}%" 
-                                 t-att-aria-valuenow="progress_pct" aria-valuemin="0" aria-valuemax="100">
-                                <t t-esc="progress_pct"/>%
+                        <div class="track-steps">
+                            <t t-set="states" t-value="['draft', 'waiting_payment', 'in_queue', 'in_production', 'done']"/>
+                            <t t-set="current_idx" t-value="states.index(order.state)"/>
+
+                            <div t-attf-class="t-step #{'done' if current_idx &gt; 0 else ('active' if current_idx == 0 else '')}">
+                                <div class="t-icon">1</div>
+                                <div class="t-label">Draft</div>
+                            </div>
+                            <div t-attf-class="t-step #{'done' if current_idx &gt; 1 else ('active' if current_idx == 1 else '')}">
+                                <div class="t-icon">2</div>
+                                <div class="t-label">Pembayaran</div>
+                            </div>
+                            <div t-attf-class="t-step #{'done' if current_idx &gt; 2 else ('active' if current_idx == 2 else '')}">
+                                <div class="t-icon">3</div>
+                                <div class="t-label">Antri</div>
+                            </div>
+                            <div t-attf-class="t-step #{'done' if current_idx &gt; 3 else ('active' if current_idx == 3 else '')}">
+                                <div class="t-icon">4</div>
+                                <div class="t-label">Produksi</div>
+                            </div>
+                            <div t-attf-class="t-step #{'done' if current_idx == 4 else ('active' if current_idx == 4 else '')}">
+                                <div class="t-icon">5</div>
+                                <div class="t-label">Selesai</div>
                             </div>
                         </div>
+
+                        <div class="alert alert-light border mt-4">
+                            <h6 class="fw-bold mb-2">Detail Status:</h6>
+                            <p class="mb-0 text-muted">
+                                <t t-if="order.state == 'draft'">Pesanan telah diterima dan menunggu konfirmasi invoice.</t>
+                                <t t-if="order.state == 'waiting_payment'">Silakan lakukan pembayaran agar pesanan dapat masuk ke antrian produksi.</t>
+                                <t t-if="order.state == 'in_queue'">Pembayaran terverifikasi. Pesanan Anda berada dalam antrian pengerjaan.</t>
+                                <t t-if="order.state == 'in_production'">Tim kami sedang mengerjakan signage Anda: <strong><t t-esc="dict(order._fields['current_production_stage'].selection).get(order.current_production_stage) or 'Proses Berjalan'"/></strong></t>
+                                <t t-if="order.state == 'done'">Pesanan telah selesai diproduksi dan siap untuk diambil/dikirim.</t>
+                            </p>
+                        </div>
+                    </div>
+                </t>
+                <t t-elif="query">
+                    <div class="alert alert-warning text-center mt-4">
+                        Pesanan dengan nomor <strong><t t-esc="query"/></strong> tidak ditemukan. Pastikan nomor yang Anda masukkan benar.
                     </div>
                 </t>
             </div>

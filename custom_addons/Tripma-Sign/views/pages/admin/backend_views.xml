@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tripma Order Backend Views -->
+    <record id="view_tripma_order_tree" model="ir.ui.view">
+        <field name="name">tripma.order.tree</field>
+        <field name="model">tripma.order</field>
+        <field name="arch" type="xml">
+            <tree string="Pesanan Signage">
+                <field name="name"/>
+                <field name="order_date"/>
+                <field name="customer_id"/>
+                <field name="product_id"/>
+                <field name="billing_total"/>
+                <field name="state"/>
+                <field name="current_production_stage"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tripma_order_form" model="ir.ui.view">
+        <field name="name">tripma.order.form</field>
+        <field name="model">tripma.order</field>
+        <field name="arch" type="xml">
+            <form string="Pesanan Signage">
+                <header>
+                    <button name="action_issue_invoice" string="Terbitkan Invoice" type="object" invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_validate_payment" string="Validasi Pembayaran" type="object" invisible="state != 'waiting_payment'" class="oe_highlight"/>
+                    <button name="action_start_production" string="Mulai Produksi" type="object" invisible="state != 'in_queue'"/>
+                    <button name="action_complete" string="Selesai" type="object" invisible="state != 'in_production'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,waiting_payment,in_queue,in_production,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="order_date"/>
+                            <field name="product_id"/>
+                            <field name="source_channel"/>
+                        </group>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="width_cm"/>
+                            <field name="height_cm"/>
+                            <field name="billing_total"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Spesifikasi &amp; Desain">
+                            <group>
+                                <field name="product_specs"/>
+                                <field name="design_file" widget="image" style="max-width: 200px;"/>
+                            </group>
+                        </page>
+                        <page string="Internal">
+                            <group>
+                                <field name="managed_by"/>
+                                <field name="input_date"/>
+                                <field name="external_reference"/>
+                                <field name="external_notes"/>
+                            </group>
+                        </page>
+                        <page string="Riwayat Produksi">
+                            <field name="production_status_ids">
+                                <tree>
+                                    <field name="update_time"/>
+                                    <field name="stage_name"/>
+                                    <field name="updated_by"/>
+                                    <field name="note"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tripma_order_backend" model="ir.actions.act_window">
+        <field name="name">Semua Pesanan</field>
+        <field name="res_model">tripma.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Tripma Invoice Backend Views -->
+    <record id="view_tripma_invoice_tree" model="ir.ui.view">
+        <field name="name">tripma.invoice.tree</field>
+        <field name="model">tripma.invoice</field>
+        <field name="arch" type="xml">
+            <tree string="Invoices">
+                <field name="name"/>
+                <field name="order_id"/>
+                <field name="issue_date"/>
+                <field name="total_amount"/>
+                <field name="payment_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tripma_invoice_backend" model="ir.actions.act_window">
+        <field name="name">Invoice &amp; Tagihan</field>
+        <field name="res_model">tripma.invoice</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Partner/Customer View Action -->
+    <record id="action_tripma_customers_backend" model="ir.actions.act_window">
+        <field name="name">Data Pelanggan</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_tripma_customer', '=', True)]</field>
+        <field name="context">{'default_is_tripma_customer': True}</field>
+    </record>
+</odoo>

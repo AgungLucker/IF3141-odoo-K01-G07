@@ -27,7 +27,9 @@
 
                 <aside class="ts-sidebar admin-sidebar">
                     <div class="admin-brand">
-                        <div class="admin-brand-name">Tripma<span>Sign</span></div>
+                        <a href="/" style="display:block; margin-bottom: 5px;">
+                            <img src="/Tripma-Sign/static/img/tripmalogo.png" alt="Tripma Sign Logo" style="height: 35px; width: auto; object-fit: contain;" />
+                        </a>
                         <div class="admin-brand-sub">Panel Administrator</div>
                     </div>
 
@@ -42,7 +44,7 @@
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'external_order' else '')">
                                 <span class="icon">IN</span>Input Pesanan Eksternal
                             </a>
-                            <a href="/odoo"
+                            <a t-attf-href="/web#action=#{request.env.ref('Tripma-Sign.action_tripma_product_catalog').id}"
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'catalog' else '')">
                                 <span class="icon">KG</span>Kelola Katalog
                             </a>
@@ -62,11 +64,11 @@
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'semua_pesanan' else '')">
                                 <span class="icon">PO</span>Semua Pesanan
                             </a>
-                            <a href="/odoo"
+                            <a t-attf-href="/web#action=#{request.env.ref('Tripma-Sign.action_tripma_invoice_backend').id}"
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'invoices' else '')">
                                 <span class="icon">IV</span>Invoice &amp; Tagihan
                             </a>
-                            <a href="/odoo"
+                            <a t-attf-href="/web#action=#{request.env.ref('Tripma-Sign.action_tripma_customers_backend').id}"
                                t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'customers' else '')">
                                 <span class="icon">CS</span>Data Pelanggan
                             </a>

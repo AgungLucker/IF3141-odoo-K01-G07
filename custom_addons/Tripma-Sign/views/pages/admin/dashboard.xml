@@ -9,7 +9,7 @@
         <field name="key">Tripma-Sign.admin_dashboard</field>
         <field name="arch" type="xml">
             <t t-name="Tripma-Sign.admin_dashboard">
-                <t t-call="website.layout">
+                <t t-call="Tripma-Sign.tripma_layout">
                     <t t-set="no_header" t-value="True"/>
                     <t t-set="no_footer" t-value="True"/>
                     <t t-set="head">
@@ -41,7 +41,7 @@
                         ]]></style>
                     </t>
                     <t t-set="additional_title">Dashboard Admin - Tripma Sign</t>
-                    
+
                     <div class="admin-shell">
                         <t t-set="active_menu" t-value="'dashboard'"/>
                         <t t-call="Tripma-Sign.admin_sidebar"/>
@@ -122,17 +122,17 @@
                                             <div class="card-header"><div class="card-title">Aksi Cepat</div></div>
                                             <div class="quick-links">
                                                 <a href="/tripma/admin/external-order" class="quick-link"><div class="ql-icon">📥</div><div><div class="ql-text-title">Input Pesanan Eksternal</div><div class="ql-text-sub">WhatsApp / Walk-in</div></div></a>
-                                                <a href="#" class="quick-link"><div class="ql-icon">🏷️</div><div><div class="ql-text-title">Kelola Katalog</div><div class="ql-text-sub">Tambah / edit produk</div></div></a>
+                                                <a href="/tripma/admin/catalog" class="quick-link"><div class="ql-icon">🏷️</div><div><div class="ql-text-title">Kelola Katalog</div><div class="ql-text-sub">Tambah / edit produk</div></div></a>
                                                 <a href="/tripma/admin/semua-pesanan" class="quick-link"><div class="ql-icon">📋</div><div><div class="ql-text-title">Semua Pesanan</div><div class="ql-text-sub">Lihat daftar lengkap pesanan</div></div></a>
                                                 <!-- Opsi 3: Pintu ke backend untuk Admin -->
                                                 <a href="/web" class="quick-link" t-if="is_tripma_admin"><div class="ql-icon">⚙️</div><div><div class="ql-text-title">Konfigurasi Sistem Odoo</div><div class="ql-text-sub">Akses backend untuk pengaturan user/database</div></div></a>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="sidebar-card">
                                             <div class="card-header"><div class="card-title">Aktivitas Sistem</div></div>
                                             <div class="activity-item"><div class="act-dot act-green"></div><div><div class="act-text">Sistem Dashboard Admin diakses oleh <strong><t t-esc="user_name"/></strong></div><div class="act-time">Baru saja</div></div></div>
-                                            
+
                                             <t t-foreach="recent_activities" t-as="act">
                                                 <div class="activity-item">
                                                     <div class="act-dot act-blue"></div>

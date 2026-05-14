@@ -6,7 +6,7 @@
         <field name="key">Tripma-Sign.tripma_customer_layout</field>
         <field name="arch" type="xml">
             <t t-name="Tripma-Sign.tripma_customer_layout">
-                <t t-call="website.layout">
+                <t t-call="Tripma-Sign.tripma_layout">
                     <t t-set="no_header" t-value="True"/>
                     <t t-set="no_footer" t-value="True"/>
                     <div class="customer-shell" style="display : flex ; min-height : 100vh ; background : #f8fafc ;">

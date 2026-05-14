@@ -54,6 +54,13 @@
               action="action_tripma_admin_dashboard"
               groups="Tripma-Sign.group_tripma_admin"/>
 
+    <menuitem id="menu_tripma_product_catalog"
+              name="Kelola Katalog"
+              parent="menu_tripma_root"
+              sequence="15"
+              action="action_tripma_product_catalog"
+              groups="Tripma-Sign.group_tripma_admin"/>
+
     <!-- ===== Link ke QWeb Dashboard Produksi ===== -->
     <record id="action_tripma_production_dashboard" model="ir.actions.act_url">
         <field name="name">Buka Dashboard Produksi</field>

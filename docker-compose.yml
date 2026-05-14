@@ -1,10 +1,11 @@
-version: '3.8'
-
 services:
   web:
     image: odoo:17.0
     depends_on:
-      - db
+      init-db:
+        condition: service_completed_successfully
+      db:
+        condition: service_started
     ports:
       - "8069:8069"
     volumes:
@@ -17,7 +18,7 @@ services:
       --db_port=5432 
       --db_user=odoo 
       --db_password=password 
-      -i base
+      -i base -u Tripma-Sign
       --load-language=en_US
       --without-demo=all
 
@@ -30,11 +31,46 @@ services:
     volumes:
       - odoo-db-data:/var/lib/postgresql/data
 
+  init-db:
+    image: postgres:16-alpine
+    depends_on:
+      - db
+    environment:
+      - PGPASSWORD=password
+    volumes:
+      - ./dump:/backup
+      - odoo-web-data:/var/lib/odoo
+    command: >
+      sh -c '
+      if [ ! -f /var/lib/odoo/.initialized ]; then
+        echo "Waiting for postgres to be ready...";
+        until pg_isready -h db -U odoo -d postgres; do sleep 2; done;
+        
+        # Ensure we only pick valid dump files (skip size 0)
+        DUMP_FILE=$$(find /backup -name "odoo_backup_*.dump" -size +1c -type f | sort -r | head -n 1);
+        if [ -n "$$DUMP_FILE" ]; then
+          echo "Restoring database from $$DUMP_FILE...";
+          pg_restore -h db -U odoo -d postgres --no-owner --clean < "$$DUMP_FILE" || true;
+          
+          FS_FILE="$${DUMP_FILE%.dump}_filestore.tar.gz";
+          if [ -f "$$FS_FILE" ]; then
+            echo "Restoring filestore from $$FS_FILE...";
+            tar xzf "$$FS_FILE" -C /var/lib/odoo;
+          fi;
+          touch /var/lib/odoo/.initialized;
+          echo "Initialization done.";
+        else
+          echo "No valid dump found in /backup.";
+        fi;
+      else
+        echo "Data already initialized. Skipping import.";
+      fi
+      '
+
   alpine:
     image: alpine:latest
     depends_on:
       - db
-      - web
     command: ["sleep", "infinity"]
     volumes:
       - odoo-web-data:/var/lib/odoo
@@ -45,3 +81,4 @@ volumes:
     name: odoo-web-data
   odoo-db-data:
     name: odoo-db-data
+

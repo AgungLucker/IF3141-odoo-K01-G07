@@ -9,34 +9,43 @@
         <field name="key">Tripma-Sign.tripma_sidebar_layout</field>
         <field name="arch" type="xml">
             <t t-name="Tripma-Sign.tripma_sidebar_layout">
-                <t t-call="website.layout">
+                <t t-call="Tripma-Sign.tripma_layout">
                     <!-- Sembunyikan header dan footer bawaan Odoo -->
                     <t t-set="no_header" t-value="True"/>
                     <t t-set="no_footer" t-value="True"/>
-                    
+
+                    <style>
+                        .ts-sidebar-item.active {
+                            background: #e8eef5 !important;
+                            border-right: 3px solid var(--navy) !important;
+                        }
+                    </style>
+
                     <div style="display:flex; min-height:100vh;">
                         <!-- SIDEBAR -->
                         <aside class="ts-sidebar" style="width: 250px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column;">
                             <div style="padding:22px 20px; border-bottom:1px solid var(--border); margin-bottom:10px">
-                                <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+                                <a href="/" style="display:block; margin-bottom: 5px;">
+                                    <img src="/Tripma-Sign/static/img/tripmalogo.png" alt="Tripma Sign Logo" style="height: 35px; width: auto; object-fit: contain;" />
+                                </a>
                                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">Aplikasi Bisnis</div>
                             </div>
-                            
+
                             <div class="ts-sidebar-section" style="flex: 1;">
                                 <div class="ts-sidebar-label" style="padding: 0 20px; font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Utama</div>
-                                
+
                                 <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">
-                                    <a href="/tripma/admin/dashboard" class="ts-sidebar-item active" style="display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: var(--navy); background: #e8eef5; font-weight: 600; border-right: 3px solid var(--navy); font-size: 0.9rem;">
+                                    <a href="/tripma/admin/dashboard" t-attf-class="ts-sidebar-item #{'active' if request.httprequest.path.startswith('/tripma/admin') else ''}" style="display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: var(--navy); font-weight: 600; font-size: 0.9rem;">
                                         <span class="icon" style="margin-right: 12px;">📊</span> Panel Admin
                                     </a>
                                 </t>
                                 <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')">
-                                    <a href="/tripma/production" class="ts-sidebar-item active" style="display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: var(--navy); background: #e8eef5; font-weight: 600; border-right: 3px solid var(--navy); font-size: 0.9rem;">
+                                    <a href="/tripma/production" t-attf-class="ts-sidebar-item #{'active' if request.httprequest.path.startswith('/tripma/production') else ''}" style="display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: var(--navy); font-weight: 600; font-size: 0.9rem;">
                                         <span class="icon" style="margin-right: 12px;">🏷️</span> Dasbor Produksi
                                     </a>
                                 </t>
                             </div>
-                            
+
                             <!-- USER AREA DENGAN TOMBOL LOGOUT -->
                             <div class="ts-sidebar-user" style="padding: 20px; border-top: 1px solid var(--border); background: var(--bg);">
                                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
@@ -56,7 +65,7 @@
                                 </a>
                             </div>
                         </aside>
-                        
+
                         <!-- MAIN CONTENT -->
                         <main style="flex: 1; overflow-y: auto; background: var(--bg);">
                             <t t-out="0"/>

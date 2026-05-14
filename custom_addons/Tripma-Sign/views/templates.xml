@@ -7,7 +7,7 @@
         <field name="key">Tripma-Sign.test_page</field>
         <field name="arch" type="xml">
             <t t-name="Tripma-Sign.test_page">
-                <t t-call="website.layout">
+                <t t-call="Tripma-Sign.tripma_layout">
                     <div class="container mt-5">
                         <h1>Tripma Sign — OK</h1>
                     </div>
