@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         FR-04: HALAMAN REGISTRASI APLIKASI BISNIS
+    ============================================================ -->
+    <record id="tripma_register_page" model="ir.ui.view">
+        <field name="name">Tripma Register Page</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.tripma_register_page</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.tripma_register_page">
+                <t t-call="web.layout">
+                    <t t-set="head">
+                        <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                        <style><![CDATA[
+                            body { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; }
+                            .left-panel { background:var(--navy); padding:64px; display:flex; flex-direction:column; justify-content:center; }
+                            .left-logo { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:800; color:white; margin-bottom:36px; }
+                            .left-logo em { color:var(--gold-light); font-style:normal; }
+                            .left-headline { font-size:1.6rem; font-weight:800; color:white; line-height:1.25; margin-bottom:14px; }
+                            .left-sub { font-size:0.875rem; color:rgba(255,255,255,0.6); line-height:1.7; margin-bottom:40px; }
+                            .feat-list { display:flex; flex-direction:column; gap:14px; }
+                            .feat-item { display:flex; align-items:center; gap:12px; }
+                            .feat-check { width:24px; height:24px; border-radius:6px; background:rgba(200,148,10,0.25); border:1px solid rgba(200,148,10,0.4); display:flex; align-items:center; justify-content:center; color:var(--gold-light); font-size:0.72rem; flex-shrink:0; }
+                            .feat-text { font-size:0.85rem; color:rgba(255,255,255,0.7); }
+                            .right-panel { background:var(--bg); display:flex; align-items:center; justify-content:center; padding:48px; }
+                            .form-box { width:100%; max-width:420px; }
+                            .form-box h2 { font-size:1.4rem; font-weight:800; color:var(--navy); margin-bottom:4px; }
+                            .subtitle { font-size:0.85rem; color:var(--text-muted); margin-bottom:24px; }
+                            .subtitle a { color:var(--navy); font-weight:600; text-decoration:none; }
+                            .form-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow); }
+                            .strength-bar { height:3px; background:var(--border); border-radius:3px; margin-top:6px; overflow:hidden; }
+                            .strength-fill { height:100%; width:60%; background:var(--gold); border-radius:3px; }
+                            .input-hint { font-size:0.72rem; color:var(--text-muted); margin-top:3px; }
+                            .check-row { display:flex; align-items:flex-start; gap:9px; margin-bottom:20px; }
+                            .check-row input { margin-top:2px; accent-color:var(--navy); }
+                            .check-row label { font-size:0.8rem; color:var(--text-muted); }
+                            .check-row label a { color:var(--navy); }
+                            .divider-or { display:flex; align-items:center; gap:10px; color:var(--text-muted); font-size:0.78rem; margin:14px 0; }
+                            .divider-or::before,.divider-or::after { content:""; flex:1; height:1px; background:var(--border); }
+                            @media (max-width: 768px) {
+                                body { grid-template-columns: 1fr; }
+                                .left-panel { padding: 40px 24px; }
+                                .right-panel { padding: 40px 24px; }
+                            }
+                        ]]></style>
+                    </t>
+                    
+                    <div class="left-panel">
+                        <div class="left-logo">Tripma<em>Sign</em></div>
+                        <div class="left-headline">Mulai perjalanan signage Anda bersama kami</div>
+                        <div class="left-sub">Buat akun gratis dan nikmati kemudahan memesan signage custom langsung dari browser Anda.</div>
+                        <div class="feat-list">
+                            <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Pesan kapan saja, dari mana saja</div></div>
+                            <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Upload desain dan pantau produksi real-time</div></div>
+                            <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Invoice otomatis setiap pesanan dikonfirmasi</div></div>
+                            <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Riwayat pesanan tersimpan aman</div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-panel">
+                        <div class="form-box">
+                            <h2>Buat Akun Baru</h2>
+                            <p class="subtitle">Sudah punya akun? <a href="/tripma/login">Masuk di sini</a></p>
+                            
+                            <t t-if="error">
+                                <div class="alert alert-danger" role="alert" style="border-radius: 8px; font-size: 0.85rem;">
+                                    <t t-esc="error"/>
+                                </div>
+                            </t>
+
+                            <div class="form-card">
+                                <form action="/tripma/register/submit" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <div class="ts-form-group">
+                                        <label class="ts-label">Nama Lengkap <span class="req">*</span></label>
+                                        <input type="text" name="name" t-att-value="name" class="ts-input" placeholder="Budi Santoso" required="required"/>
+                                    </div>
+                                    <div class="ts-form-group">
+                                        <label class="ts-label">Alamat Email / Username <span class="req">*</span></label>
+                                        <input type="text" name="login" t-att-value="login" class="ts-input" placeholder="budi@contoh.com" required="required" autocapitalize="off"/>
+                                    </div>
+                                    <div class="ts-form-group">
+                                        <label class="ts-label">No. Telepon / WhatsApp</label>
+                                        <input type="tel" name="phone" t-att-value="phone" class="ts-input" placeholder="08xxxxxxxxxx"/>
+                                        <div class="input-hint">Untuk kemudahan komunikasi pesanan</div>
+                                    </div>
+                                    <div class="ts-form-group">
+                                        <label class="ts-label">Kata Sandi <span class="req">*</span></label>
+                                        <input type="password" name="password" class="ts-input" placeholder="Minimal 8 karakter" required="required"/>
+                                    </div>
+                                    <div class="ts-form-group">
+                                        <label class="ts-label">Konfirmasi Kata Sandi <span class="req">*</span></label>
+                                        <input type="password" name="confirm_password" class="ts-input" placeholder="Ulangi kata sandi" required="required"/>
+                                    </div>
+                                    <div class="check-row">
+                                        <input type="checkbox" id="agree" required="required"/>
+                                        <label for="agree">Saya menyetujui <a href="#">Syarat &amp; Ketentuan</a> Tripma Sign</label>
+                                    </div>
+                                    <button type="submit" class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" style="margin-bottom:14px; width:100%">Daftar Sekarang</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+</odoo>

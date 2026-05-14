@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         FR-04: Admin Dashboard (Simple Demo)
+    ============================================================ -->
+    <record id="admin_dashboard" model="ir.ui.view">
+        <field name="name">Admin Dashboard</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.admin_dashboard</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.admin_dashboard">
+                <t t-call="website.layout">
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    <t t-set="head">
+                        <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                        <style><![CDATA[
+                            .ts-main { padding: 40px; background: var(--bg); min-height: calc(100vh - 57px); }
+                            .ts-hero { background: var(--white); border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 24px; }
+                            .ts-hero h1 { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+                            .ts-hero p { color: var(--text-muted); font-size: 0.9rem; }
+                        ]]></style>
+                    </t>
+                    <t t-set="additional_title">Dashboard Admin - Tripma Sign</t>
+                    
+                    <div class="admin-shell">
+                        <t t-set="active_menu" t-value="'dashboard'"/>
+                        <t t-call="Tripma-Sign.admin_sidebar"/>
+
+                        <div class="admin-page">
+                            <div class="admin-page-head">
+                                <div class="admin-page-title">Dashboard Admin</div>
+                            </div>
+
+                            <div class="ts-main">
+                                <div class="ts-hero">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h1>Selamat Datang di Dasbor Admin!</h1>
+                                            <p>Anda mengakses sistem sebagai role: <strong><t t-esc="user_role"/></strong>.</p>
+                                            <p class="mt-2 text-success"><strong>FR-04 (Access Control &amp; Routing) berfungsi dengan baik.</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+</odoo>

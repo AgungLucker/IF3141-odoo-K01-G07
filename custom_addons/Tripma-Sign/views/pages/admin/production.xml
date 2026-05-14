@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-<!-- ============================================================
+    <!-- ============================================================
      1. PRODUCTION DASHBOARD  (UC-5)
      Route: GET /tripma/production
      ============================================================ -->
@@ -11,7 +10,9 @@
     <field name="key">Tripma-Sign.production_dashboard</field>
     <field name="arch" type="xml">
     <t t-name="Tripma-Sign.production_dashboard">
-    <t t-call="Tripma-Sign.tripma_sidebar_layout">
+    <t t-call="website.layout">
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
         <t t-set="head">
             <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
             <style><![CDATA[
@@ -227,7 +228,9 @@
     <field name="key">Tripma-Sign.update_status</field>
     <field name="arch" type="xml">
     <t t-name="Tripma-Sign.update_status">
-    <t t-call="Tripma-Sign.tripma_sidebar_layout">
+    <t t-call="website.layout">
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
         <t t-set="head">
             <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
             <style><![CDATA[

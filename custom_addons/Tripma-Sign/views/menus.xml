@@ -2,6 +2,7 @@
 <odoo>
 
     <!-- ============================================================
+    TODO: might delete
          MENU STRUCTURE — FR-04: Navigasi Berbasis Peran (Role-Based)
          Setiap menu hanya tampil untuk group yang berwenang.
     ============================================================ -->
@@ -25,12 +26,6 @@
         <field name="url">/tripma/admin/external-order</field>
         <field name="target">self</field>
     </record>
-
-    <!-- Menu Utama di Dashboard Admin Odoo -->
-    <menuitem id="menu_tripma_root" 
-              name="Tripma UI Mockups" 
-              sequence="10" 
-              action="action_tripma_mockups"/>
 
     <menuitem id="menu_tripma_external_order"
               name="Input Pesanan Eksternal"

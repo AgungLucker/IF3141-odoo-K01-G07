@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="external_order_form" model="ir.ui.view">
+    <field name="name">tripma.external.order.form</field>
+    <field name="type">qweb</field>
+    <field name="key">Tripma-Sign.external_order_form</field>
+    <field name="arch" type="xml">
+    <t t-name="Tripma-Sign.external_order_form">
+    <t t-call="website.layout">
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
+        <t t-set="head">
+            <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+            <style><![CDATA[
+                .external-main { padding: 28px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+                .external-form { min-width: 0; }
+                .form-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+                .form-section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+                .section-num { width: 24px; height: 24px; border-radius: 6px; background: var(--navy); color: var(--white); font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+                .section-title { font-size: .875rem; font-weight: 700; color: var(--navy); flex: 1; }
+                .channel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+                .channel-card { display: block; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; cursor: pointer; transition: all .15s; background: var(--white); margin: 0; }
+                .channel-card:hover { border-color: var(--navy); }
+                .channel-card input { position: absolute; opacity: 0; pointer-events: none; }
+                .channel-card.selected, .channel-card:has(input:checked) { border-color: var(--navy); background: #e8eef5; }
+                .channel-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--bg); color: var(--navy); display: flex; align-items: center; justify-content: center; margin: 0 auto 7px; font-size: .72rem; font-weight: 800; }
+                .channel-card.selected .channel-icon, .channel-card:has(input:checked) .channel-icon { background: var(--navy); color: var(--white); }
+                .channel-name { font-size: .78rem; font-weight: 600; color: var(--text); }
+                .channel-card.selected .channel-name, .channel-card:has(input:checked) .channel-name { color: var(--navy); }
+                .field-help { font-size: .72rem; color: var(--text-muted); margin-top: 3px; }
+                .sidebar-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm); position: sticky; top: 20px; }
+                .sidebar-card-title { font-size: .875rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+                .summary-row { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 10px; font-size: .82rem; }
+                .summary-row .lbl { color: var(--text-muted); }
+                .summary-row .val { color: var(--text); font-weight: 500; text-align: right; overflow-wrap: anywhere; }
+                .summary-total { display: flex; justify-content: space-between; gap: 14px; font-weight: 700; margin: 14px 0; padding-top: 12px; border-top: 1px solid var(--border); }
+                .summary-total .lbl { color: var(--text); }
+                .summary-total .val { color: var(--navy); font-size: 1rem; text-align: right; }
+                .disclaimer { font-size: .72rem; color: var(--text-muted); text-align: center; line-height: 1.5; margin-top: 10px; }
+                .recent-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+                .recent-header { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: .82rem; font-weight: 700; color: var(--navy); }
+                .recent-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); transition: background .15s; color: inherit; text-decoration: none; }
+                .recent-item:last-child { border-bottom: none; }
+                .recent-item:hover { background: var(--bg); }
+                .recent-icon { width: 32px; height: 32px; border-radius: 8px; background: #e8eef5; color: var(--navy); display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 800; flex-shrink: 0; }
+                .recent-name { font-size: .82rem; font-weight: 600; color: var(--text); }
+                .recent-detail { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+                .recent-price { margin-left: auto; font-size: .82rem; font-weight: 600; color: var(--navy); white-space: nowrap; }
+                .success-box { background: var(--green-bg); border: 1px solid rgba(22,163,74,.25); color: var(--green); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; }
+                .error-box { background: var(--red-bg); border: 1px solid rgba(220,38,38,.25); color: var(--red); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; }
+                @media (max-width: 1100px) {
+                }
+                @media (max-width: 900px) {
+                    .external-main { grid-template-columns: 1fr; padding: 20px; }
+                    .channel-grid, .ts-form-row, .ts-form-row.three-cols { grid-template-columns: 1fr !important; }
+                    .sidebar-card { position: static; }
+                }
+            ]]></style>
+        </t>
+        <t t-set="additional_title">Input Pesanan Eksternal - Tripma Sign</t>
+
+        <t t-set="channel_labels" t-value="{'whatsapp': 'WhatsApp', 'offline': 'Walk-in (Offline)', 'phone': 'Telepon'}"/>
+        <t t-set="channel_icons" t-value="{'whatsapp': 'WA', 'offline': 'WI', 'phone': 'TL'}"/>
+        <t t-set="selected_channel" t-value="values.get('source_channel', 'whatsapp')"/>
+
+        <div class="admin-shell">
+            <t t-set="active_menu" t-value="'external_order'"/>
+            <t t-call="Tripma-Sign.admin_sidebar"/>
+
+            <div class="admin-page">
+                <div class="admin-page-head">
+                    <div class="ts-breadcrumb">
+                        <a href="/tripma/admin/dashboard">Dashboard</a> / Input Pesanan Eksternal
+                    </div>
+                    <div class="admin-page-title">Input Pesanan Eksternal</div>
+                </div>
+
+                <div class="external-main">
+                    <form id="external-order-form" class="external-form" action="/tripma/admin/external-order/submit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                        <t t-if="created_order">
+                            <div class="success-box">
+                                Pesanan berhasil diterbitkan sebagai
+                                <strong t-esc="created_order.name"/>.
+                                Status awal: Antri Produksi.
+                                <a t-att-href="'/tripma/production/update/%d' % created_order.id" style="margin-left: 8px;">Lihat antrian</a>
+                            </div>
+                        </t>
+
+                        <t t-if="errors">
+                            <div class="error-box">
+                                <t t-foreach="errors" t-as="error">
+                                    <div t-esc="error"/>
+                                </t>
+                            </div>
+                        </t>
+
+                        <div class="form-section">
+                            <div class="form-section-header">
+                                <div class="section-num">1</div>
+                                <div class="section-title">Kanal Asal Pesanan</div>
+                                <span class="ts-badge ts-badge-navy">Wajib</span>
+                            </div>
+                            <div class="channel-grid">
+                                <t t-foreach="channels" t-as="channel">
+                                    <label t-att-class="'channel-card ' + ('selected' if selected_channel == channel[0] else '')">
+                                        <input type="radio" name="source_channel" t-att-value="channel[0]"
+                                               t-att-checked="'checked' if selected_channel == channel[0] else None"/>
+                                        <div class="channel-icon" t-esc="channel_icons.get(channel[0], 'EX')"/>
+                                        <div class="channel-name" t-esc="channel_labels.get(channel[0], channel[1])"/>
+                                    </label>
+                                </t>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Referensi eksternal</label>
+                                <input class="ts-input" name="external_reference" placeholder="Contoh: chat WA 0812... / nota manual"
+                                       t-att-value="values.get('external_reference', '')"/>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-header">
+                                <div class="section-num">2</div>
+                                <div class="section-title">Identitas Pelanggan</div>
+                                <span class="ts-badge ts-badge-navy">Wajib</span>
+                            </div>
+                            <div class="ts-form-row">
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Nama Pelanggan <span class="req">*</span></label>
+                                    <input class="ts-input" name="customer_name" required="required" placeholder="Nama lengkap / nama usaha"
+                                           t-att-value="values.get('customer_name', '')"/>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">No. WhatsApp / Telepon <span class="req">*</span></label>
+                                    <input class="ts-input" type="tel" name="customer_phone" required="required" placeholder="08xxxxxxxxxx"
+                                           t-att-value="values.get('customer_phone', '')"/>
+                                </div>
+                            </div>
+                            <div class="ts-form-row">
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Email</label>
+                                    <input class="ts-input" type="email" name="customer_email" placeholder="Opsional"
+                                           t-att-value="values.get('customer_email', '')"/>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Nama Usaha / Instansi</label>
+                                    <input class="ts-input" name="company_name" placeholder="Opsional" t-att-value="values.get('company_name', '')"/>
+                                </div>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Alamat Pengiriman <span class="req">*</span></label>
+                                <textarea class="ts-input ts-textarea" name="customer_address" required="required"
+                                          placeholder="Jalan, nomor, kelurahan, kecamatan, kota..." t-esc="values.get('customer_address', '')"/>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-header">
+                                <div class="section-num">3</div>
+                                <div class="section-title">Spesifikasi Pesanan</div>
+                                <span class="ts-badge ts-badge-navy">Wajib</span>
+                            </div>
+                            <div class="ts-form-row">
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Produk <span class="req">*</span></label>
+                                    <input class="ts-input" name="product_name" list="tripma-product-options" required="required"
+                                           placeholder="Neon sign, acrylic letter, banner, dll."
+                                           t-att-value="values.get('product_name', '')"/>
+                                    <datalist id="tripma-product-options">
+                                        <option value="Neon Sign Custom LED"/>
+                                        <option value="Acrylic 3D Letter"/>
+                                        <option value="Banner Flexi"/>
+                                        <option value="Stiker Cutting Vinyl"/>
+                                        <option value="Papan Nama ACP"/>
+                                    </datalist>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Bahan</label>
+                                    <input class="ts-input" name="material" list="tripma-material-options" placeholder="Contoh: LED Strip Flex Neon"
+                                           t-att-value="values.get('material', '')"/>
+                                    <datalist id="tripma-material-options">
+                                        <option value="LED Strip Flex Neon"/>
+                                        <option value="LED Strip Rigid"/>
+                                        <option value="Acrylic"/>
+                                        <option value="Flexi"/>
+                                        <option value="ACP"/>
+                                        <option value="Vinyl"/>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="ts-form-row three-cols" style="grid-template-columns: 1fr 1fr 1fr;">
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Lebar (cm)</label>
+                                    <input class="ts-input" type="number" name="width_cm" min="0" placeholder="60" t-att-value="values.get('width_cm', '')"/>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Tinggi (cm)</label>
+                                    <input class="ts-input" type="number" name="height_cm" min="0" placeholder="40" t-att-value="values.get('height_cm', '')"/>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Jumlah (unit)</label>
+                                    <input class="ts-input" type="number" name="quantity" min="1" t-att-value="values.get('quantity', '1')"/>
+                                </div>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">File desain</label>
+                                <input class="ts-input" type="file" name="design_file"/>
+                            </div>
+                            <div class="ts-form-group">
+                                <label class="ts-label">Catatan / Instruksi Khusus</label>
+                                <textarea class="ts-input ts-textarea" name="special_instructions"
+                                          placeholder="Warna, finishing, permintaan khusus dari pelanggan..." t-esc="values.get('special_instructions', '')"/>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-header">
+                                <div class="section-num">4</div>
+                                <div class="section-title">Harga &amp; Jadwal</div>
+                                <span class="ts-badge ts-badge-gray">Opsional</span>
+                            </div>
+                            <div class="ts-form-row">
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Harga Disepakati (Rp)</label>
+                                    <input class="ts-input" name="billing_total" inputmode="decimal" placeholder="450000"
+                                           t-att-value="values.get('billing_total', '')"/>
+                                    <div class="field-help">Kosongkan untuk menggunakan harga standar</div>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Tanggal Dipesan</label>
+                                    <input class="ts-input" type="date" name="order_date" t-att-value="values.get('order_date', '')"/>
+                                </div>
+                            </div>
+                            <div class="ts-form-row">
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Target Selesai</label>
+                                    <input class="ts-input" type="date" name="target_date" t-att-value="values.get('target_date', '')"/>
+                                </div>
+                                <div class="ts-form-group">
+                                    <label class="ts-label">Catatan kanal</label>
+                                    <input class="ts-input" name="external_notes" placeholder="Ringkasan percakapan / kesepakatan"
+                                           t-att-value="values.get('external_notes', '')"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <aside>
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-title">Ringkasan Pesanan</div>
+                            <div class="summary-row"><span class="lbl">Kanal</span><span class="val" data-summary="channel"><t t-esc="channel_labels.get(selected_channel, 'WhatsApp')"/></span></div>
+                            <div class="summary-row"><span class="lbl">Produk</span><span class="val" data-summary="product"><t t-esc="values.get('product_name') or '-'"/></span></div>
+                            <div class="summary-row"><span class="lbl">Ukuran</span><span class="val" data-summary="size">- x - cm</span></div>
+                            <div class="summary-row"><span class="lbl">Jumlah</span><span class="val" data-summary="quantity"><t t-esc="values.get('quantity', '1')"/> unit</span></div>
+                            <div class="summary-total"><span class="lbl">Total Pesanan</span><span class="val" data-summary="total">Rp 0</span></div>
+                            <button class="ts-btn ts-btn-primary ts-btn-block ts-btn-lg" type="submit" form="external-order-form" style="margin-bottom: 8px;">Simpan Pesanan</button>
+                            <a href="/tripma/admin/dashboard" class="ts-btn ts-btn-secondary ts-btn-block">Batal</a>
+                            <p class="disclaimer">Nomor order dan antrian produksi dibuat otomatis setelah disimpan.</p>
+                        </div>
+
+                        <div class="recent-card">
+                            <div class="recent-header">Input Eksternal Terbaru</div>
+                            <t t-foreach="recent_orders" t-as="order">
+                                <a t-att-href="'/tripma/production/update/%d' % order.id" class="recent-item">
+                                    <div class="recent-icon" t-esc="channel_icons.get(order.source_channel, 'EX')"/>
+                                    <div>
+                                        <div class="recent-name" t-esc="order.customer_id.name"/>
+                                        <div class="recent-detail">
+                                            <t t-esc="(order.product_specs or 'Pesanan').split('\n')[0].replace('Produk: ', '')[:26]"/>
+                                            <span> - </span>
+                                            <t t-esc="channel_labels.get(order.source_channel, order.source_channel)"/>
+                                            <span> - </span>
+                                            <t t-esc="order.order_date.strftime('%d %b') if order.order_date else '-'"/>
+                                        </div>
+                                    </div>
+                                    <div class="recent-price" t-esc="'Rp {:,.0f}'.format(order.billing_total).replace(',', '.') if order.billing_total else '-'"/>
+                                </a>
+                            </t>
+                            <t t-if="not recent_orders">
+                                <div style="padding: 14px 16px; font-size: .8rem; color: var(--text-muted);">Belum ada input eksternal.</div>
+                            </t>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+
+        <script><![CDATA[
+            (function () {
+                const form = document.getElementById('external-order-form');
+                if (!form) return;
+
+                const channelLabels = {
+                    whatsapp: 'WhatsApp',
+                    offline: 'Walk-in (Offline)',
+                    phone: 'Telepon'
+                };
+                const els = {
+                    channel: document.querySelector('[data-summary="channel"]'),
+                    product: document.querySelector('[data-summary="product"]'),
+                    size: document.querySelector('[data-summary="size"]'),
+                    quantity: document.querySelector('[data-summary="quantity"]'),
+                    total: document.querySelector('[data-summary="total"]')
+                };
+
+                function formatRupiah(value) {
+                    const number = Number(String(value || '').replace(/\./g, '').replace(',', '.'));
+                    if (!number) return 'Rp 0';
+                    return 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(number);
+                }
+
+                function updateSummary() {
+                    const channel = form.querySelector('input[name="source_channel"]:checked');
+                    const width = form.querySelector('[name="width_cm"]').value || '-';
+                    const height = form.querySelector('[name="height_cm"]').value || '-';
+                    const quantity = form.querySelector('[name="quantity"]').value || '1';
+                    els.channel.textContent = channelLabels[channel ? channel.value : 'whatsapp'] || 'WhatsApp';
+                    els.product.textContent = form.querySelector('[name="product_name"]').value || '-';
+                    els.size.textContent = width + ' x ' + height + ' cm';
+                    els.quantity.textContent = quantity + ' unit';
+                    els.total.textContent = formatRupiah(form.querySelector('[name="billing_total"]').value);
+                }
+
+                form.querySelectorAll('.channel-card input').forEach(function (input) {
+                    input.addEventListener('change', function () {
+                        form.querySelectorAll('.channel-card').forEach(function (card) {
+                            card.classList.toggle('selected', card.contains(input) && input.checked);
+                        });
+                        updateSummary();
+                    });
+                });
+                form.querySelectorAll('input, textarea').forEach(function (input) {
+                    input.addEventListener('input', updateSummary);
+                });
+                updateSummary();
+            })();
+        ]]></script>
+    </t>
+    </t>
+    </field>
+</record>
+</odoo>
