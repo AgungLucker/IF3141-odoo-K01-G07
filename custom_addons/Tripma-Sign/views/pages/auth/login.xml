@@ -65,9 +65,6 @@
                                 </form>
                             </div>
                             <div class="register-link">Belum punya akun? <a href="/tripma/register">Daftar sekarang</a></div>
-                            <div style="text-align:center; margin-top:20px;">
-                                <a href="/web/login" style="font-size: 0.85rem; color: #6c757d; text-decoration: underline;">Login Panel Konfigurasi Odoo (Admin IT)</a>
-                            </div>
                         </div>
                     </div>
                 </t>
