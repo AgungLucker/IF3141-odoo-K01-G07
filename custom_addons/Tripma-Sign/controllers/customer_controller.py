@@ -61,3 +61,33 @@ class TripmaCustomerController(TripmaBaseController) :
         else :
             orders = request.env['tripma.order'].search([('customer_id' , '=' , request.env.user.partner_id.id)])
             return request.render('Tripma-Sign.customer_dashboard_template' , {'orders': orders})
+    @http.route('/tripma/invoice/<int:invoice_id>', type='http', auth='user', website=True)
+    def customer_invoice(self, invoice_id, **kw):
+        """
+        FR-01 / UC-04: Menampilkan rincian invoice untuk dibayar.
+        """
+        if self._get_current_user_role() != 'customer':
+            return request.redirect('/tripma/akses-ditolak')
+            
+        invoice = request.env['tripma.invoice'].sudo().browse(invoice_id)
+        if not invoice.exists() or invoice.order_id.customer_id.id != request.env.user.partner_id.id:
+            return request.redirect('/tripma/customer/dashboard')
+            
+        return request.render('Tripma-Sign.tripma_invoice_page', {'invoice': invoice, 'order': invoice.order_id})
+
+    @http.route('/tripma/invoice/pay/<int:invoice_id>', type='http', auth='user', methods=['POST'], website=True, csrf=True)
+    def customer_pay_invoice(self, invoice_id, **kw):
+        """
+        Simulasi pembayaran invoice oleh pelanggan.
+        """
+        if self._get_current_user_role() != 'customer':
+            return request.redirect('/tripma/akses-ditolak')
+            
+        invoice = request.env['tripma.invoice'].sudo().browse(invoice_id)
+        if invoice.exists() and invoice.order_id.customer_id.id == request.env.user.partner_id.id:
+            # Simulasi pembayaran lunas dan update state order
+            invoice.sudo().write({'payment_status': 'paid'})
+            if invoice.order_id.state == 'waiting_payment':
+                invoice.order_id.sudo().action_validate_payment()
+                
+        return request.redirect(f'/tripma/invoice/{invoice_id}')

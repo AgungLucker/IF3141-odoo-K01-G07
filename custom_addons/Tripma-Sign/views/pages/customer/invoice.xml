@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="customer_invoice_page" name="Invoice Pelanggan">
+    <template id="tripma_invoice_page" name="Invoice Pelanggan">
         <t t-call="Tripma-Sign.tripma_layout">
             <div class="container mt-5">
                 <div class="card p-5 shadow">
@@ -41,6 +41,12 @@
                             </tr>
                         </tbody>
                     </table>
+                    <t t-if="invoice.payment_status == 'unpaid'">
+                        <form t-attf-action="/tripma/invoice/pay/#{invoice.id}" method="post" class="mt-4 text-end">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-success btn-lg">Simulasi Bayar Sekarang</button>
+                        </form>
+                    </t>
                     <div class="alert alert-info mt-4">
                         Silakan lakukan pembayaran ke Rekening Bank XYZ : <strong>1234567890</strong> a.n Tripma Sign.
                     </div>
