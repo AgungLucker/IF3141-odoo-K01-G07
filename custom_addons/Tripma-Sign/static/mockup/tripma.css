@@ -123,6 +123,22 @@ h1,h2,h3,h4,h5 { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; color: v
 /* === SIDEBAR LAYOUT === */
 .ts-sidebar-layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); }
 .ts-sidebar { background: var(--white); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
+
+/* === ADMIN SHELL LAYOUT === */
+.admin-shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; background: var(--bg); }
+.admin-sidebar { min-height: 100vh; }
+.admin-brand { padding: 18px 20px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.admin-brand-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--navy); }
+.admin-brand-name span { color: var(--gold); }
+.admin-brand-sub { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+.admin-page { display: flex; flex-direction: column; min-width: 0; }
+.admin-page-head { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px; }
+.admin-page-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px; }
+@media (max-width: 768px) {
+    .admin-shell { grid-template-columns: 1fr; }
+    .admin-sidebar { display: none; }
+    .admin-page-head { padding: 14px 20px; }
+}
 .ts-sidebar-section { padding: 0 12px; }
 .ts-sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); padding: 0 8px; margin-top: 20px; margin-bottom: 6px; }
 .ts-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); transition: all 0.15s; text-decoration: none; }

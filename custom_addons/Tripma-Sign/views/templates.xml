@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Template halaman test sederhana -->
+    <!-- Template halaman test sederhana | TODO: might delete -->
     <record id="test_page" model="ir.ui.view">
         <field name="name">Test Page</field>
         <field name="type">qweb</field>

@@ -22,11 +22,14 @@ class TripmaOrder(models.Model):
             ('website', 'Website'),
             ('whatsapp', 'WhatsApp'),
             ('offline', 'Offline / Walk-in'),
+            ('phone', 'Telepon'),
         ],
         string='Source Channel',
         required=True,
         default='website',
     )
+    external_reference = fields.Char(string='External Reference')
+    external_notes = fields.Text(string='External Channel Notes')
     state = fields.Selection(
         selection=[
             ('draft', 'Draft'),
@@ -103,6 +106,78 @@ class TripmaOrder(models.Model):
         for order in self:
             if order.state == 'in_production':
                 order.state = 'done'
+
+    @api.model
+    def create_external_order(self, vals):
+        """Create a centralized external order and put it in the production queue."""
+        partner = self._find_or_create_external_customer(vals)
+        order = self.create({
+            'customer_id': partner.id,
+            'order_date': vals.get('order_date') or fields.Date.today(),
+            'product_specs': self._build_external_product_specs(vals),
+            'design_file': vals.get('design_file') or False,
+            'billing_total': vals.get('billing_total') or 0.0,
+            'source_channel': vals.get('source_channel') or 'whatsapp',
+            'state': 'in_queue',
+            'managed_by': self.env.user.id,
+            'input_date': fields.Datetime.now(),
+            'external_reference': vals.get('external_reference') or False,
+            'external_notes': vals.get('external_notes') or False,
+        })
+        self.env['tripma.production.status'].create({
+            'order_id': order.id,
+            'stage_name': 'waiting',
+            'updated_by': self.env.user.id,
+            'note': 'Pesanan eksternal didaftarkan oleh admin dan masuk antrian produksi.',
+        })
+        return order
+
+    @api.model
+    def _find_or_create_external_customer(self, vals):
+        Partner = self.env['res.partner'].sudo()
+        phone = (vals.get('customer_phone') or '').strip()
+        email = (vals.get('customer_email') or '').strip()
+        name = (vals.get('customer_name') or vals.get('company_name') or '').strip()
+        domain = []
+        if phone:
+            domain = ['|', ('phone', '=', phone), ('mobile', '=', phone)]
+        elif email:
+            domain = [('email', '=', email)]
+        partner = Partner.search(domain, limit=1) if domain else Partner.browse()
+        if partner:
+            update_vals = {'is_tripma_customer': True}
+            if vals.get('customer_address') and not partner.street:
+                update_vals['street'] = vals['customer_address']
+            if email and not partner.email:
+                update_vals['email'] = email
+            partner.write(update_vals)
+            return partner
+        return Partner.create({
+            'name': name,
+            'phone': phone or False,
+            'mobile': phone or False,
+            'email': email or False,
+            'street': vals.get('customer_address') or False,
+            'is_tripma_customer': True,
+        })
+
+    @api.model
+    def _build_external_product_specs(self, vals):
+        parts = []
+        for label, key in [
+            ('Usaha/instansi', 'company_name'),
+            ('Produk', 'product_name'),
+            ('Bahan', 'material'),
+            ('Ukuran', 'size'),
+            ('Jumlah', 'quantity'),
+            ('Target selesai', 'target_date'),
+            ('Instruksi', 'special_instructions'),
+        ]:
+            value = vals.get(key)
+            if value:
+                suffix = ' unit' if key == 'quantity' else ''
+                parts.append('%s: %s%s' % (label, value, suffix))
+        return '\n'.join(parts)
 
     def get_order_summary(self):
         self.ensure_one()

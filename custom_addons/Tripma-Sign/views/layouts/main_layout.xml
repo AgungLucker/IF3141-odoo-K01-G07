@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         TRIPMA CUSTOM LAYOUT Menghilangkan navbar/footer Odoo dan menggantinya dengan milik kita.
+         TODO: pindahin navbar footer
+    ============================================================ -->
+    <record id="tripma_layout" model="ir.ui.view">
+        <field name="name">Tripma Layout</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.tripma_layout</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.tripma_layout">
+                <t t-call="website.layout">
+                    <!-- Sembunyikan header dan footer bawaan Odoo -->
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    
+                    <!-- NAVBAR CUSTOM TRIPMA SIGN -->
+                    <nav class="navbar navbar-expand-lg" style="background-color: #1E3A8A; padding: 15px 30px;">
+                        <div class="container-fluid">
+                            <a class="navbar-brand text-white fw-bold" href="/tripma">TRIPMA SIGN</a>
+                            <div class="d-flex align-items-center">
+                                <t t-if="user_role and user_role != 'unknown'">
+                                    <span class="text-white me-3">Halo, <t t-esc="user_name"/></span>
+                                    <a href="/web/session/logout?redirect=/tripma/login" class="btn btn-danger btn-sm">
+                                        Logout
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                    <a href="/tripma/login" class="btn btn-light btn-sm">Login</a>
+                                </t>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <!-- KONTEN HALAMAN -->
+                    <div>
+                        <t t-out="0"/>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>

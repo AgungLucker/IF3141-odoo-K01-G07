@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         TRIPMA SIDEBAR LAYOUT (Khusus Dashboard Backend)
+    ============================================================ -->
+    <record id="tripma_sidebar_layout" model="ir.ui.view">
+        <field name="name">Tripma Sidebar Layout</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.tripma_sidebar_layout</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.tripma_sidebar_layout">
+                <t t-call="website.layout">
+                    <!-- Sembunyikan header dan footer bawaan Odoo -->
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    
+                    <div style="display:flex; min-height:100vh;">
+                        <!-- SIDEBAR -->
+                        <aside class="ts-sidebar" style="width: 250px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column;">
+                            <div style="padding:22px 20px; border-bottom:1px solid var(--border); margin-bottom:10px">
+                                <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;color:var(--navy)">Tripma<span style="color:var(--gold)">Sign</span></div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">Aplikasi Bisnis</div>
+                            </div>
+                            
+                            <div class="ts-sidebar-section" style="flex: 1;">
+                                <div class="ts-sidebar-label" style="padding: 0 20px; font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Utama</div>
+                                
+                                <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">
+                                    <a href="/tripma/admin/dashboard" class="ts-sidebar-item active" style="display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: var(--navy); background: #e8eef5; font-weight: 600; border-right: 3px solid var(--navy); font-size: 0.9rem;">
+                                        <span class="icon" style="margin-right: 12px;">📊</span> Panel Admin
+                                    </a>
+                                </t>
+                                <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')">
+                                    <a href="/tripma/production" class="ts-sidebar-item active" style="display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: var(--navy); background: #e8eef5; font-weight: 600; border-right: 3px solid var(--navy); font-size: 0.9rem;">
+                                        <span class="icon" style="margin-right: 12px;">🏷️</span> Dasbor Produksi
+                                    </a>
+                                </t>
+                            </div>
+                            
+                            <!-- USER AREA DENGAN TOMBOL LOGOUT -->
+                            <div class="ts-sidebar-user" style="padding: 20px; border-top: 1px solid var(--border); background: var(--bg);">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                    <div class="ts-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--navy); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem;">
+                                        <t t-esc="(request.env.user.name or 'U')[0].upper()"/>
+                                    </div>
+                                    <div>
+                                        <div class="ts-user-name" style="font-size: 0.9rem; font-weight: 700; color: var(--navy);"><t t-esc="request.env.user.name"/></div>
+                                        <div class="ts-user-role" style="font-size: 0.75rem; color: var(--text-muted);">
+                                            <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">Administrator</t>
+                                            <t t-else="">Staf Produksi</t>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/web/session/logout?redirect=/tripma/login" class="btn btn-danger btn-sm" style="width: 100%; display: block; text-align: center;">
+                                    Logout
+                                </a>
+                            </div>
+                        </aside>
+                        
+                        <!-- MAIN CONTENT -->
+                        <main style="flex: 1; overflow-y: auto; background: var(--bg);">
+                            <t t-out="0"/>
+                        </main>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>
