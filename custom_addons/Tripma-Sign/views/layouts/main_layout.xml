@@ -24,7 +24,6 @@
                             animation: contact-pulse 3s ease-in-out;
                             border-radius: 8px;
                             padding: 10px;
-                            margin: -10px;
                         }
                         @keyframes contact-pulse {
                             0% { background-color: transparent; }
@@ -33,6 +32,8 @@
                             100% { background-color: transparent; }
                         }
                     </style>
+
+                    <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
 
                     <!-- 1. GLOBAL NAVBAR (Shared by all pages) -->
                     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--navy); padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1);">
