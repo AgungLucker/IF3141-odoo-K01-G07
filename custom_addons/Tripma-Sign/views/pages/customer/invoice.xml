@@ -1,4 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+    <template id="customer_invoice_page" name="Invoice Pelanggan">
+        <t t-call="Tripma-Sign.tripma_layout">
+            <div class="container mt-5">
+                <div class="card p-5 shadow">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h3>INVOICE</h3>
+                            <h5 class="text-primary"><t t-esc="invoice.name"/></h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <strong>Tripma Sign</strong><br/>
+                            Bandung, Indonesia
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h6>Ditagihkan kepada:</h6>
+                            <p><strong><t t-esc="invoice.order_id.customer_id.name"/></strong></p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h6>Status Pembayaran:</h6>
+                            <h4 t-attf-class="text-#{'success' if invoice.payment_status == 'paid' else 'warning'}">
+                                <t t-esc="dict(invoice._fields['payment_status'].selection).get(invoice.payment_status)"/>
+                            </h4>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Deskripsi Produk</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><t t-esc="invoice.order_id.product_specs"/></td>
+                                <td class="text-end">IDR <t t-esc="'{:,}'.format(invoice.order_id.billing_total)"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="alert alert-info mt-4">
+                        Silakan lakukan pembayaran ke Rekening Bank XYZ : <strong>1234567890</strong> a.n Tripma Sign.
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
 </odoo>

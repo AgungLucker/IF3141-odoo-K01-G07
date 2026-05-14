@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+    <record id="tripma_customer_layout" model="ir.ui.view">
+        <field name="name">Tripma Customer Layout</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.tripma_customer_layout</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.tripma_customer_layout">
+                <t t-call="website.layout">
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    <div class="customer-shell" style="display : flex ; min-height : 100vh ; background : #f8fafc ;">
+                        <main style="flex : 1 ; padding : 20px ;">
+                            <t t-if="kw and kw.get('error')">
+                                <div class="alert alert-danger">
+                                    <t t-esc="kw.get('error')"/>
+                                </div>
+                            </t>
+                            <t t-out="0"/>
+                        </main>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
 </odoo>
