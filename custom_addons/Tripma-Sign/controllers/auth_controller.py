@@ -6,7 +6,7 @@ from odoo import http
 class TripmaAuthController(TripmaBaseController):
 
     # FR-04: LOGIN CUSTOM & ROUTING
-    @http.route('/tripma/login', type='http', auth='public', website=True, csrf=True)
+    @http.route('/tripma/login', type='http', auth='public', website=True, csrf=False)
     def login_page(self, **kw):
         """
         Halaman Login khusus Aplikasi Bisnis Tripma Sign.
@@ -191,7 +191,11 @@ class TripmaAuthController(TripmaBaseController):
     #     return 'unknown'
 
     def _get_current_user_role(self):
-        user = request.env.user
+        uid = request.session.uid
+        if uid:
+            user = request.env['res.users'].sudo().browse(uid)
+        else:
+            user = request.env.user
 
         if (
             user.has_group('Tripma-Sign.group_tripma_admin')
@@ -214,7 +218,7 @@ class TripmaAuthController(TripmaBaseController):
         yang sesuai dengan perannya.
           Admin Penjualan → /tripma/admin/dashboard
           Staf Produksi   → /tripma/production  (milik FR-03 Nathan)
-          Pelanggan       → /tripma/pelanggan/pesanan
+          Pelanggan       → /tripma/customer/dashboard
         """
         role = self._get_current_user_role()
         if role == 'admin':
@@ -222,7 +226,7 @@ class TripmaAuthController(TripmaBaseController):
         if role == 'production_staff':
             return request.redirect('/tripma/production')
         if role == 'customer':
-            return request.redirect('/tripma/pelanggan/pesanan')
+            return request.redirect('/tripma/track')
         return request.redirect('/web/login')
     
     def _redirect_unauthorized(self):

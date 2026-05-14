@@ -6,14 +6,14 @@
             <field name="login">staf</field>
             <field name="password">123</field>
             <field name="tripma_role">production_staff</field>
-            <field name="groups_id" eval="[(6, 0, [ref('Tripma-Sign.group_tripma_production_staff')])]"/>
+            <field name="groups_id" eval="[(4, ref('Tripma-Sign.group_tripma_production_staff'))]"/>
         </record>
         <record id="user_customer_tripma" model="res.users">
             <field name="name">Customer Tripma</field>
             <field name="login">cust</field>
             <field name="password">123</field>
             <field name="tripma_role">customer</field>
-            <field name="groups_id" eval="[(6, 0, [ref('Tripma-Sign.group_tripma_customer')])]"/>
+            <field name="groups_id" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
         </record>
     </data>
 </odoo>
