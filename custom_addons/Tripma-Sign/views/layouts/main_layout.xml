@@ -10,33 +10,143 @@
         <field name="key">Tripma-Sign.tripma_layout</field>
         <field name="arch" type="xml">
             <t t-name="Tripma-Sign.tripma_layout">
-                <t t-call="website.layout">
+                <t t-call="web.frontend_layout">
                     <!-- Sembunyikan header dan footer bawaan Odoo -->
                     <t t-set="no_header" t-value="True"/>
                     <t t-set="no_footer" t-value="True"/>
-                    
-                    <!-- NAVBAR CUSTOM TRIPMA SIGN -->
-                    <nav class="navbar navbar-expand-lg" style="background-color: #1E3A8A; padding: 15px 30px;">
+
+                    <style>
+                        .navbar-nav .nav-link.active {
+                            font-weight: 700 !important;
+                            color: #fff !important;
+                        }
+                        #contact-info:target {
+                            animation: contact-pulse 3s ease-in-out;
+                            border-radius: 8px;
+                        }
+                        @keyframes contact-pulse {
+                            0% { background-color: transparent; }
+                            15% { background-color: rgba(200, 148, 10, 0.2); transform: scale(1.02); }
+                            30% { background-color: rgba(200, 148, 10, 0.2); transform: scale(1); }
+                            100% { background-color: transparent; }
+                        }
+                    </style>
+
+                    <!-- 1. GLOBAL NAVBAR (Shared by all pages) -->
+                    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--navy); padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1);">
                         <div class="container-fluid">
-                            <a class="navbar-brand text-white fw-bold" href="/">TRIPMA SIGN</a>
-                            <div class="d-flex align-items-center">
-                                <t t-if="user_role and user_role != 'unknown'">
-                                    <span class="text-white me-3">Halo, <t t-esc="user_name"/></span>
-                                    <a href="/web/session/logout?redirect=/tripma/login" class="btn btn-danger btn-sm">
-                                        Logout
-                                    </a>
-                                </t>
-                                <t t-else="">
-                                    <a href="/tripma/login" class="btn btn-light btn-sm">Login</a>
-                                </t>
+                            <a class="navbar-brand fw-bold" href="/">
+                                <img src="/Tripma-Sign/static/img/tripmalogo.png" alt="Tripma Sign Logo" style="height: 35px; width: auto; object-fit: contain; margin-top: -5px;" />
+                            </a>
+
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#tripmaNavbar">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse" id="tripmaNavbar">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                                    <li class="nav-item">
+                                        <a t-attf-class="nav-link #{'active' if request.httprequest.path == '/' else ''}" href="/">Beranda</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a t-attf-class="nav-link #{'active' if request.httprequest.path.startswith('/tripma/catalog') else ''}" href="/tripma/catalog">Katalog</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a t-attf-class="nav-link #{'active' if request.httprequest.path.startswith('/tripma/track') else ''}" href="/tripma/track">Lacak Pesanan</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#contact-info">Hubungi Kami</a>
+                                    </li>
+                                </ul>
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <t t-if="is_logged_in">
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-light dropdown-toggle border-0" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-user-circle me-1"></i> <t t-esc="user_name"/>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenu">
+                                                <li>
+                                                    <t t-if="user_role == 'admin'">
+                                                        <a t-attf-class="dropdown-item #{'active' if request.httprequest.path.startswith('/tripma/admin') else ''}" href="/tripma/admin/dashboard">Dasbor Admin</a>
+                                                    </t>
+                                                    <t t-elif="user_role == 'production_staff'">
+                                                        <a t-attf-class="dropdown-item #{'active' if request.httprequest.path.startswith('/tripma/production') else ''}" href="/tripma/production">Dasbor Produksi</a>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <a t-attf-class="dropdown-item #{'active' if request.httprequest.path.startswith('/tripma/customer') else ''}" href="/tripma/customer/dashboard">Dasbor Saya</a>
+                                                    </t>
+                                                </li>
+                                                <li><hr class="dropdown-divider"/></li>
+                                                <li><a class="dropdown-item text-danger" href="/web/session/logout?redirect=/tripma/login">Keluar</a></li>
+                                            </ul>
+                                        </div>
+                                    </t>
+                                    <t t-else="">
+                                        <a href="/tripma/login" class="btn btn-link text-white text-decoration-none">Masuk</a>
+                                        <a href="/tripma/register" class="btn btn-warning fw-bold px-4" style="background-color: var(--gold-light); color: var(--navy); border: none;">Daftar</a>
+                                    </t>
+                                </div>
                             </div>
                         </div>
                     </nav>
 
-                    <!-- KONTEN HALAMAN -->
-                    <div>
+                    <!-- 2. PAGE CONTENT -->
+                    <main style="min-height: 70vh;">
                         <t t-out="0"/>
-                    </div>
+                    </main>
+
+                    <!-- 3. GLOBAL FOOTER -->
+                    <footer id="footer" style="background-color: var(--navy-dark); color: rgba(255,255,255,0.6); padding: 60px 0 30px;">
+                        <div class="container">
+                            <div class="row g-4 mb-5">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <a class="navbar-brand fw-bold text-white fs-4" href="/">
+                                            <img src="/Tripma-Sign/static/img/tripmalogo.png" alt="Tripma Sign Logo" style="height: 40px; width: auto; object-fit: contain; filter: brightness(0) invert(1);" />
+                                        </a>
+                                    </div>
+                                    <p class="small pe-lg-5">Solusi signage profesional terpercaya. Kami melayani pembuatan neon sign, acrylic sign, banner, dan berbagai media promosi lainnya dengan kualitas terbaik.</p>
+                                </div>
+                                <div class="col-md-4 col-lg-2">
+                                    <h6 class="text-white fw-bold mb-4">Navigasi</h6>
+                                    <ul class="list-unstyled small">
+                                        <li class="mb-2"><a href="/" class="text-reset text-decoration-none">Beranda</a></li>
+                                        <li class="mb-2"><a href="/tripma/catalog" class="text-reset text-decoration-none">Katalog Produk</a></li>
+                                        <li class="mb-2"><a href="/tripma/track" class="text-reset text-decoration-none">Lacak Pesanan</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-lg-2">
+                                    <h6 class="text-white fw-bold mb-4">Layanan</h6>
+                                    <ul class="list-unstyled small">
+                                        <li class="mb-2">Neon Sign Custom</li>
+                                        <li class="mb-2">Lettering Acrylic</li>
+                                        <li class="mb-2">Banner &amp; Spanduk</li>
+                                        <li class="mb-2">Stiker &amp; Cutting</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-lg-4" id="contact-info" style="padding: 15px; transition: all 0.3s;">
+                                    <h6 class="text-white fw-bold mb-4">Hubungi Kami</h6>
+                                    <p class="small mb-2"><i class="fa fa-map-marker me-2"></i> Jl. Garpu Tala No.2, Turangga, Kec. Lengkong, Kota Bandung, Jawa Barat 40264</p>
+                                    <p class="small mb-2"><i class="fa fa-phone me-2"></i> <a href="https://wa.me/6281223000700" target="_blank" style="color: rgba(255,255,255,0.6); text-decoration: none;">0812-2300-0700</a></p>
+                                    <p class="small mb-2"><i class="fa fa-phone me-2"></i> <a href="https://wa.me/6285318866666" target="_blank" style="color: rgba(255,255,255,0.6); text-decoration: none;">0853-1886-6666</a></p>
+                                    <p class="small mb-2"><i class="fa fa-envelope me-2"></i> <a href="mailto:tripmasign@gmail.com" style="color: rgba(255,255,255,0.6); text-decoration: none;">tripmasign@gmail.com</a></p>
+                                </div>
+                            </div>
+                            <hr style="border-color: rgba(255,255,255,0.1);"/>
+                            <div class="row align-items-center pt-4">
+                                <div class="col-md-6 text-center text-md-start small">
+                                    © 2026 Tripma Sign. Seluruh hak cipta dilindungi.
+                                </div>
+                                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                                        <a href="https://www.instagram.com/tripmastore" target="_blank" class="text-white fs-5"><i class="fa fa-instagram"></i></a>
+                                        <a href="https://www.youtube.com/@tripmasign" target="_blank" class="text-white fs-5"><i class="fa fa-youtube-play"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
                 </t>
             </t>
         </field>
