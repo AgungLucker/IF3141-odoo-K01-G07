@@ -115,7 +115,8 @@
                 <field name="name"/>
                 <field name="email"/>
                 <field name="phone"/>
-                <field name="city"/>
+                <field name="street" string="Alamat"/>
+                <field name="city" invisible="1"/>
                 <field name="has_user_account" widget="boolean_toggle"/>
                 <field name="is_tripma_customer" invisible="1"/>
             </tree>

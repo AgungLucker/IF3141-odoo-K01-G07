@@ -81,7 +81,11 @@
                                         <div class="ts-form-group">
                                             <label class="ts-label">No. Telepon / WhatsApp</label>
                                             <input type="tel" name="phone" t-att-value="phone" class="ts-input" placeholder="08xxxxxxxxxx"/>
-                                            <div class="input-hint">Untuk kemudahan komunikasi pesanan</div>
+                                        </div>
+                                        <div class="ts-form-group">
+                                            <label class="ts-label">Alamat Lengkap <span class="req">*</span></label>
+                                            <textarea name="address" class="ts-input" rows="3" placeholder="Jl. Raya No. 123, Bandung..." required="required"><t t-esc="address"/></textarea>
+                                            <div class="input-hint">Untuk keperluan pengiriman signage</div>
                                         </div>
                                         <div class="ts-form-group">
                                             <label class="ts-label">Kata Sandi <span class="req">*</span></label>

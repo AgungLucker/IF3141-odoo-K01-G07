@@ -7,7 +7,7 @@ from .base_controller import TripmaBaseController
 
 class TripmaAuthController(TripmaBaseController):
     # FR-04: LOGIN CUSTOM & ROUTING
-    @http.route("/tripma/login", type="http", auth="public", website=True, csrf=True)
+    @http.route("/tripma/login", type="http", auth="public", website=True, csrf=False)
     def login_page(self, **kw):
         """
         Halaman Login khusus Aplikasi Bisnis Tripma Sign.
@@ -69,6 +69,7 @@ class TripmaAuthController(TripmaBaseController):
             "name": kw.get("name", ""),
             "login": kw.get("login", ""),
             "phone": kw.get("phone", ""),
+            "address": kw.get("address", ""),
         }
         return self._render_tripma("Tripma-Sign.tripma_register_page", values)
 
@@ -89,15 +90,16 @@ class TripmaAuthController(TripmaBaseController):
         password = kw.get("password")
         confirm_password = kw.get("confirm_password")
         phone = kw.get("phone")
+        address = kw.get("address")
 
-        if not name or not login or not password:
+        if not name or not login or not password or not address:
             return request.redirect(
-                f"/tripma/register?error=Semua kolom bertanda bintang wajib diisi&name={name}&login={login}&phone={phone}"
+                f"/tripma/register?error=Semua kolom bertanda bintang wajib diisi&name={name}&login={login}&phone={phone}&address={address}"
             )
 
         if password != confirm_password:
             return request.redirect(
-                f"/tripma/register?error=Konfirmasi kata sandi tidak cocok&name={name}&login={login}&phone={phone}"
+                f"/tripma/register?error=Konfirmasi kata sandi tidak cocok&name={name}&login={login}&phone={phone}&address={address}"
             )
 
         # Cek apakah username/email sudah dipakai
@@ -106,7 +108,7 @@ class TripmaAuthController(TripmaBaseController):
         )
         if existing:
             return request.redirect(
-                f"/tripma/register?error=Email/Username sudah terdaftar, silakan login&name={name}&login={login}&phone={phone}"
+                f"/tripma/register?error=Email/Username sudah terdaftar, silakan login&name={name}&login={login}&phone={phone}&address={address}"
             )
 
         try:
@@ -131,7 +133,11 @@ class TripmaAuthController(TripmaBaseController):
 
             # Explicitly write password and mark as Tripma customer
             user.sudo().write({"password": password})
-            partner_vals = {"is_tripma_customer": True}
+            partner_vals = {
+                "is_tripma_customer": True,
+                "email": login,
+                "street": address,
+            }
             if phone:
                 partner_vals["phone"] = phone
             user.partner_id.sudo().write(partner_vals)
