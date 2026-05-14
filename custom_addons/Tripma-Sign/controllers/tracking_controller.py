@@ -25,7 +25,7 @@ class TripmaTrackController(TripmaBaseController):
         if request.env.user and not request.env.user._is_public():
             orders = request.env['tripma.order'].search(
                 [('customer_id', '=', request.env.user.partner_id.id)])
-        return request.render('Tripma-Sign.track_order', {
+        return request.render('Tripma-Sign.track_order_page', {
             'order':        False,
             'orders':       orders,
             'query':        q,
@@ -39,7 +39,7 @@ class TripmaTrackController(TripmaBaseController):
         order = request.env['tripma.order'].sudo().search(
             [('name', '=', order_name)], limit=1)
         progress_pct, active_step = self._compute_progress(order) if order else (0, 0)
-        return request.render('Tripma-Sign.track_order', {
+        return request.render('Tripma-Sign.track_order_page', {
             'order':        order or False,
             'orders':       [],
             'query':        order_name,

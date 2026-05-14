@@ -18,7 +18,7 @@
                     <!-- NAVBAR CUSTOM TRIPMA SIGN -->
                     <nav class="navbar navbar-expand-lg" style="background-color: #1E3A8A; padding: 15px 30px;">
                         <div class="container-fluid">
-                            <a class="navbar-brand text-white fw-bold" href="/tripma">TRIPMA SIGN</a>
+                            <a class="navbar-brand text-white fw-bold" href="/">TRIPMA SIGN</a>
                             <div class="d-flex align-items-center">
                                 <t t-if="user_role and user_role != 'unknown'">
                                     <span class="text-white me-3">Halo, <t t-esc="user_name"/></span>
