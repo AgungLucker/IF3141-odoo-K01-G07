@@ -14,3 +14,7 @@ access_tripma_production_status_admin,tripma.production.status admin,model_tripm
 access_tripma_production_status_customer,tripma.production.status customer,model_tripma_production_status,group_tripma_customer,1,0,0,0
 access_tripma_production_status_staff,tripma.production.status staff,model_tripma_production_status,group_tripma_production_staff,1,1,1,0
 access_tripma_production_status_system,tripma.production.status system,model_tripma_production_status,base.group_system,1,1,1,1
+
+access_tripma_product_admin,tripma.product admin,model_tripma_product,group_tripma_admin,1,1,1,1
+access_tripma_product_customer,tripma.product customer,model_tripma_product,group_tripma_customer,1,0,0,0
+access_tripma_product_public,tripma.product public,model_tripma_product,base.group_public,1,0,0,0
