@@ -8,6 +8,7 @@ class TripmaUsers(models.Model):
         selection=[
             ('admin', 'Admin Penjualan'),
             ('production_staff', 'Staf Produksi'),
+            ('customer', 'Pelanggan'),
         ],
         string='Tripma Role',
         default=False,
