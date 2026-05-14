@@ -141,8 +141,15 @@ class TripmaAdminController(TripmaBaseController):
             "draft_count": Order.search_count([("state", "=", "draft")]),
             "waiting_count": Order.search_count([("state", "=", "waiting_payment")]),
             "queue_count": Order.search_count([("state", "=", "in_queue")]),
-            "prod_count": Order.search_count([("state", "=", "in_production")]),
-            "done_count": Order.search_count([("state", "=", "done")]),
+            "prod_count": Order.search_count(
+                [
+                    ("state", "=", "in_production"),
+                    ("current_production_stage", "!=", "ready"),
+                ]
+            ),
+            "done_count": Order.search_count(
+                ["|", ("state", "=", "done"), ("current_production_stage", "=", "ready")]
+            ),
             "recent_orders": Order.search([], order="create_date desc", limit=5),
             "recent_activities": Order.search(
                 [("source_channel", "in", ["whatsapp", "offline", "phone"])],
