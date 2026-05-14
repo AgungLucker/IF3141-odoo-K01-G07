@@ -27,6 +27,20 @@
         <field name="target">self</field>
     </record>
 
+    <!-- ===== Semua Pesanan: Custom QWeb Page ===== -->
+    <record id="action_tripma_all_orders_url" model="ir.actions.act_url">
+        <field name="name">Semua Pesanan</field>
+        <field name="url">/tripma/admin/semua-pesanan</field>
+        <field name="target">self</field>
+    </record>
+
+    <menuitem id="menu_tripma_all_orders"
+              name="Semua Pesanan"
+              parent="menu_tripma_root"
+              action="action_tripma_all_orders_url"
+              groups="Tripma-Sign.group_tripma_admin"
+              sequence="15"/>
+
     <menuitem id="menu_tripma_external_order"
               name="Input Pesanan Eksternal"
               parent="menu_tripma_root"

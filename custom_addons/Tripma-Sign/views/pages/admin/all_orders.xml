@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="admin_all_orders" model="ir.ui.view">
+        <field name="name">Admin All Orders</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.admin_all_orders</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.admin_all_orders">
+                <t t-call="website.layout">
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    <t t-set="head">
+                        <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                        <style><![CDATA[
+                            .main-content { padding:28px 32px; background:var(--bg); min-height: 100vh; }
+                            .section-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:18px; box-shadow:var(--shadow-sm); }
+                            .card-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+                            .card-title { font-size:1.1rem; font-weight:700; color:var(--navy); }
+                            .table-wrap { overflow-x:auto; padding: 0; }
+                        ]]></style>
+                    </t>
+                    <t t-set="additional_title">Semua Pesanan - Tripma Sign</t>
+                    
+                    <div class="admin-shell">
+                        <t t-set="active_menu" t-value="'semua_pesanan'"/>
+                        <t t-call="Tripma-Sign.admin_sidebar"/>
+
+                        <div class="admin-page">
+                            <div style="background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between">
+                                <div>
+                                    <div style="font-size:1.1rem;font-weight:700;color:var(--navy)">Semua Pesanan</div>
+                                    <div style="font-size:0.78rem;color:var(--text-muted)">Daftar lengkap riwayat pesanan</div>
+                                </div>
+                                <a href="/tripma/admin/semua-pesanan/export" class="ts-btn ts-btn-outline ts-btn-sm">
+                                    <span style="margin-right: 6px;">⬇️</span> Export ke CSV
+                                </a>
+                            </div>
+
+                            <div class="main-content">
+                                <div class="section-card">
+                                    <div class="table-wrap">
+                                        <table class="ts-table" style="width: 100%; border-collapse: collapse;">
+                                            <thead style="background: var(--bg); font-size: 0.8rem; color: var(--text-muted); text-align: left;">
+                                                <tr>
+                                                    <th style="padding: 14px 20px;">No. Order</th>
+                                                    <th style="padding: 14px 20px;">Tanggal</th>
+                                                    <th style="padding: 14px 20px;">Pelanggan</th>
+                                                    <th style="padding: 14px 20px;">Produk</th>
+                                                    <th style="padding: 14px 20px;">Channel</th>
+                                                    <th style="padding: 14px 20px;">Status</th>
+                                                    <th style="padding: 14px 20px;">Total</th>
+                                                    <th style="padding: 14px 20px;">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-if="not all_orders">
+                                                    <tr>
+                                                        <td colspan="8" style="padding: 24px; text-align: center; color: var(--text-muted);">Belum ada data pesanan</td>
+                                                    </tr>
+                                                </t>
+                                                <t t-foreach="all_orders" t-as="order">
+                                                    <tr style="border-bottom: 1px solid var(--border);">
+                                                        <td style="padding: 14px 20px; font-weight: 600; color: var(--navy);"><t t-esc="order.name"/></td>
+                                                        <td style="padding: 14px 20px;"><t t-esc="order.order_date.strftime('%d %b %Y') if order.order_date else '-'"/></td>
+                                                        <td style="padding: 14px 20px;"><t t-esc="order.customer_id.name or '-'"/></td>
+                                                        <td style="padding: 14px 20px;">
+                                                            <t t-if="order.product_specs">
+                                                                <t t-esc="order.product_specs.split('\n')[0] if '\n' in order.product_specs else order.product_specs"/>
+                                                            </t>
+                                                            <t t-else="">-</t>
+                                                        </td>
+                                                        <td style="padding: 14px 20px; text-transform: capitalize;"><t t-esc="order.source_channel"/></td>
+                                                        <td style="padding: 14px 20px;">
+                                                            <t t-if="order.state == 'draft'"><span class="ts-badge ts-badge-blue">Draft</span></t>
+                                                            <t t-elif="order.state == 'waiting_payment'"><span class="ts-badge ts-badge-blue">Menunggu Pembayaran</span></t>
+                                                            <t t-elif="order.state == 'in_queue'"><span class="ts-badge ts-badge-gold">Antrian</span></t>
+                                                            <t t-elif="order.state == 'in_production'"><span class="ts-badge ts-badge-gold">Produksi</span></t>
+                                                            <t t-elif="order.state == 'done'"><span class="ts-badge ts-badge-green">Selesai</span></t>
+                                                            <t t-else=""><span class="ts-badge ts-badge-navy"><t t-esc="order.state"/></span></t>
+                                                        </td>
+                                                        <td style="padding: 14px 20px;">
+                                                            <t t-esc="order.currency_id.symbol or 'Rp'"/> <t t-esc="'{0:,.0f}'.format(order.billing_total).replace(',', '.')"/>
+                                                        </td>
+                                                        <td style="padding: 14px 20px;">
+                                                            <a t-attf-href="/tripma/production/update/{{order.id}}" style="font-size:0.8rem;color:var(--blue);text-decoration:none;">Detail / Update</a>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>

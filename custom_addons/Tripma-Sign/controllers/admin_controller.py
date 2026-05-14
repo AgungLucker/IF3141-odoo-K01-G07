@@ -1,4 +1,6 @@
 import base64
+import csv
+import io
 
 from odoo import fields, http
 from odoo.http import request
@@ -135,31 +137,89 @@ class TripmaAdminController(TripmaBaseController):
 
         Order = request.env["tripma.order"]
         values = {
-            "user_role": "admin",
-            "user_name": request.env.user.name,
-            "is_tripma_admin": True,  # already checked above via _check_sales_admin()
-            "is_production_staff": request.env.user.has_group(
-                "Tripma-Sign.group_tripma_production_staff"
-            ),
-            "total_orders": Order.search_count([]),
             "total_orders": Order.search_count([]),
             "draft_count": Order.search_count([("state", "=", "draft")]),
             "waiting_count": Order.search_count([("state", "=", "waiting_payment")]),
             "queue_count": Order.search_count([("state", "=", "in_queue")]),
             "prod_count": Order.search_count([("state", "=", "in_production")]),
             "done_count": Order.search_count([("state", "=", "done")]),
+            "recent_orders": Order.search([], order="create_date desc", limit=5),
+            "recent_activities": Order.search(
+                [("source_channel", "in", ["whatsapp", "offline", "phone"])],
+                order="create_date desc",
+                limit=3,
+            ),
         }
         # Render ke QWeb template admin_dashboard
         return self._render_tripma("Tripma-Sign.admin_dashboard", values)
 
-    @http.route("/tripma/admin/pesanan", auth="user", website=True)
-    def admin_pesanan(self, **kw):
+    @http.route("/tripma/admin/semua-pesanan", auth="user", website=True)
+    def admin_semua_pesanan(self, **kw):
+        """Halaman Semua Pesanan Kustom (Frontend)"""
         if not self._check_sales_admin():
             return self._redirect_unauthorized()
-        orders = request.env["tripma.order"].search([], order="order_date desc")
-        return self._render_tripma(
-            "Tripma-Sign.admin_pesanan_page",
-            {
-                "orders": orders,
-            },
+
+        Order = request.env["tripma.order"]
+        all_orders = Order.search([], order="order_date desc, create_date desc")
+
+        values = {
+            "all_orders": all_orders,
+        }
+        return self._render_tripma("Tripma-Sign.admin_all_orders", values)
+
+    @http.route("/tripma/admin/semua-pesanan/export", auth="user", website=True)
+    def admin_export_pesanan(self, **kw):
+        """Fungsi Export CSV untuk Semua Pesanan"""
+        if not self._check_sales_admin():
+            return self._redirect_unauthorized()
+
+        Order = request.env["tripma.order"]
+        orders = Order.search([], order="order_date desc, create_date desc")
+
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        # Header
+        writer.writerow(
+            [
+                "No. Order",
+                "Tanggal",
+                "Pelanggan",
+                "Produk",
+                "Channel",
+                "Status",
+                "Total",
+            ]
         )
+
+        # Rows
+        for order in orders:
+            product_str = (
+                order.product_specs.split("\n")[0]
+                if order.product_specs and "\n" in order.product_specs
+                else (order.product_specs or "-")
+            )
+            writer.writerow(
+                [
+                    order.name,
+                    order.order_date.strftime("%Y-%m-%d") if order.order_date else "-",
+                    order.customer_id.name or "-",
+                    product_str,
+                    order.source_channel,
+                    order.state,
+                    order.billing_total,
+                ]
+            )
+
+        # Prepare Response
+        response = request.make_response(
+            output.getvalue(),
+            headers=[
+                ("Content-Type", "text/csv"),
+                (
+                    "Content-Disposition",
+                    'attachment; filename="Semua_Pesanan_Tripma.csv"',
+                ),
+            ],
+        )
+        return response
