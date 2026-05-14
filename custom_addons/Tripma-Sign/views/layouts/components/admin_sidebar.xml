@@ -58,8 +58,8 @@
                             </a>
                         </t>
                         <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">
-                            <a href="/odoo"
-                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'orders' else '')">
+                            <a href="/tripma/admin/semua-pesanan"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'semua_pesanan' else '')">
                                 <span class="icon">PO</span>Semua Pesanan
                             </a>
                             <a href="/odoo"
