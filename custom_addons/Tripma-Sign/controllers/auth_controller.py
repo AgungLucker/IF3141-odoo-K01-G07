@@ -129,11 +129,12 @@ class TripmaAuthController(TripmaBaseController):
                 )
             )
 
-            # Explicitly write password to ensure it gets hashed and saved
+            # Explicitly write password and mark as Tripma customer
             user.sudo().write({"password": password})
-
+            partner_vals = {"is_tripma_customer": True}
             if phone:
-                user.partner_id.sudo().write({"phone": phone})
+                partner_vals["phone"] = phone
+            user.partner_id.sudo().write(partner_vals)
 
             # Commit the transaction so the new user is visible to the authenticate cursor
             request.env.cr.commit()

@@ -107,10 +107,26 @@
     </record>
 
     <!-- Partner/Customer View Action -->
+    <record id="view_tripma_partner_tree" model="ir.ui.view">
+        <field name="name">tripma.partner.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Data Pelanggan">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="city"/>
+                <field name="has_user_account" widget="boolean_toggle"/>
+                <field name="is_tripma_customer" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="action_tripma_customers_backend" model="ir.actions.act_window">
         <field name="name">Data Pelanggan</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_tripma_partner_tree"/>
         <field name="domain">[('is_tripma_customer', '=', True)]</field>
         <field name="context">{'default_is_tripma_customer': True}</field>
     </record>
