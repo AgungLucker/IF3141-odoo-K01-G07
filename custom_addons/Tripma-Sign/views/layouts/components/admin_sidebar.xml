@@ -16,6 +16,8 @@
                     .admin-page { display: flex; flex-direction: column; min-width: 0; }
                     .admin-page-head { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px; }
                     .admin-page-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px; }
+                    .ts-logout-btn { display: block; width: 100%; padding: 8px 12px; border-radius: 8px; background: #fee2e2; color: #b91c1c; font-size: .82rem; font-weight: 600; text-decoration: none; text-align: center; transition: background .15s; }
+                    .ts-logout-btn:hover { background: #fca5a5; color: #7f1d1d; }
                     @media (max-width: 768px) {
                         .admin-shell { grid-template-columns: 1fr; }
                         .admin-sidebar { display: none; }
@@ -72,15 +74,20 @@
                     </div>
 
                     <div class="ts-sidebar-user">
-                        <div class="ts-avatar" t-esc="(request.env.user.name or 'AD')[:2].upper()"/>
-                        <div>
-                            <div class="ts-user-name" t-esc="request.env.user.name"/>
-                            <div class="ts-user-role">
-                                <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">Admin</t>
-                                <t t-elif="request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')">Staf Produksi</t>
-                                <t t-else="">Pengguna</t>
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                            <div class="ts-avatar" t-esc="(request.env.user.name or 'AD')[:2].upper()"/>
+                            <div>
+                                <div class="ts-user-name" t-esc="request.env.user.name"/>
+                                <div class="ts-user-role">
+                                    <t t-if="request.env.user.has_group('Tripma-Sign.group_tripma_admin')">Admin</t>
+                                    <t t-elif="request.env.user.has_group('Tripma-Sign.group_tripma_production_staff')">Staf Produksi</t>
+                                    <t t-else="">Pengguna</t>
+                                </div>
                             </div>
                         </div>
+                        <a href="/web/session/logout?redirect=/tripma/login" class="ts-logout-btn">
+                            Keluar
+                        </a>
                     </div>
                 </aside>
             </t>
