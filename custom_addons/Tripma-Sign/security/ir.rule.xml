@@ -17,9 +17,9 @@
             <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
             <field name="domain_force">[('customer_id.user_ids', 'in', [user.id])]</field>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
+            <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
         <!-- Admin: akses penuh ke semua pesanan -->
@@ -55,9 +55,9 @@
             <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
             <field name="domain_force">[('order_id.customer_id.user_ids', 'in', [user.id])]</field>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
+            <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
         <!-- Admin: akses penuh ke semua invoice -->
@@ -93,9 +93,9 @@
             <field name="groups" eval="[(4, ref('Tripma-Sign.group_tripma_customer'))]"/>
             <field name="domain_force">[('order_id.customer_id.user_ids', 'in', [user.id])]</field>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
+            <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
         <!-- Admin: akses penuh ke semua status produksi -->
