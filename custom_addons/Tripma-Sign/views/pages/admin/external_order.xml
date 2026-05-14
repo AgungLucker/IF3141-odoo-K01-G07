@@ -28,7 +28,8 @@
                 .channel-name { font-size: .78rem; font-weight: 600; color: var(--text); }
                 .channel-card.selected .channel-name, .channel-card:has(input:checked) .channel-name { color: var(--navy); }
                 .field-help { font-size: .72rem; color: var(--text-muted); margin-top: 3px; }
-                .sidebar-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm); position: sticky; top: 20px; }
+                .sidebar-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+                .external-main aside { position: sticky; top: 28px; }
                 .sidebar-card-title { font-size: .875rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
                 .summary-row { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 10px; font-size: .82rem; }
                 .summary-row .lbl { color: var(--text-muted); }
@@ -53,7 +54,7 @@
                 @media (max-width: 900px) {
                     .external-main { grid-template-columns: 1fr; padding: 20px; }
                     .channel-grid, .ts-form-row, .ts-form-row.three-cols { grid-template-columns: 1fr !important; }
-                    .sidebar-card { position: static; }
+                    .external-main aside { position: static; }
                 }
             ]]></style>
         </t>
