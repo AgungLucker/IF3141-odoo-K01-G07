@@ -50,6 +50,9 @@
                     <div class="alert alert-info mt-4">
                         Silakan lakukan pembayaran ke Rekening Bank XYZ : <strong>1234567890</strong> a.n Tripma Sign.
                     </div>
+                    <div class="mt-4">
+                        <a href="/tripma/customer/dashboard" class="btn btn-outline-secondary">← Kembali ke Dasbor Saya</a>
+                    </div>
                 </div>
             </div>
         </t>

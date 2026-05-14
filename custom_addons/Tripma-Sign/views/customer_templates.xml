@@ -106,8 +106,13 @@
                         <p>ID Invoice: <t t-esc="invoice.name"/></p>
                         <p>Status Pembayaran: <span class="badge bg-warning text-dark"><t t-esc="invoice.payment_status"/></span></p>
                         <hr/>
-                        <a t-attf-href="/tripma/track/#{order.name}" class="btn btn-primary">Lacak Status Produksi</a>
-                        <a href="/tripma/customer/dashboard" class="btn btn-outline-secondary">Kembali ke Daftar Pesanan</a>
+                        <div class="d-flex justify-content-center gap-2">
+                            <t t-if="invoice">
+                                <a t-attf-href="/tripma/invoice/#{invoice.id}" class="btn btn-success">Bayar Sekarang (Invoice)</a>
+                            </t>
+                            <a t-attf-href="/tripma/track/#{order.name}" class="btn btn-primary">Lacak Status Produksi</a>
+                            <a href="/tripma/customer/dashboard" class="btn btn-outline-secondary">Kembali ke Daftar Pesanan</a>
+                        </div>
                     </div>
                 </div>
             </t>
