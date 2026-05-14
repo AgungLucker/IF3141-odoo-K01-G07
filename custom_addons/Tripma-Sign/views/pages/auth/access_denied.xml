@@ -50,7 +50,7 @@
                                 </a>
                             </t>
                             <t t-elif="user_role == 'customer'">
-                                <a href="/tripma/pelanggan/pesanan" class="btn btn-primary btn-lg">
+                                <a href="/tripma/customer/dashboard" class="btn btn-primary btn-lg">
                                     Ke Pesanan Saya
                                 </a>
                             </t>

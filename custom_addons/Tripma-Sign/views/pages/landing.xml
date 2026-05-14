@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="tripma_landing_page" name="Tripma Sign - Home">
+        <t t-call="Tripma-Sign.tripma_layout">
+            <t t-set="head">
+                <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                <style>
+                    /* Hero */
+                    .hero { background: var(--navy); color: white; padding: 100px 48px; position: relative; overflow: hidden; }
+                    .hero::before { content:''; position:absolute; right:-100px; top:-100px; width:500px; height:500px; background:radial-gradient(circle, rgba(200,148,10,0.15) 0%, transparent 70%); }
+                    .hero-inner { max-width: 680px; position: relative; }
+                    .hero-tag { display:inline-flex; align-items:center; gap:8px; background:rgba(200,148,10,0.15); border:1px solid rgba(200,148,10,0.3); border-radius:20px; padding:5px 14px; font-size:0.78rem; font-weight:600; color:var(--gold-light); margin-bottom:24px; }
+                    .hero h1 { font-size: clamp(2.5rem,5vw,3.5rem); font-weight:800; color:white; line-height:1.1; letter-spacing:-1px; margin-bottom:20px; }
+                    .hero h1 em { color:var(--gold-light); font-style:normal; }
+                    .hero p { font-size:1.15rem; color:rgba(255,255,255,0.7); line-height:1.6; margin-bottom:40px; max-width:540px; }
+                    .hero-actions { display:flex; gap:16px; flex-wrap:wrap; }
+
+                    /* Features */
+                    .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; max-width:1100px; margin:0 auto; }
+                    .feature-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px; transition:all 0.3s; }
+                    .feature-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-5px); border-color:var(--navy); }
+                    .feature-icon { width:56px; height:56px; border-radius:14px; background:#e8eef5; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:20px; }
+
+                    /* Steps */
+                    .steps-section { background:var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+                    .steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:32px; max-width:1000px; margin:0 auto; position:relative; padding-top: 40px; }
+                    .step { text-align:center; position:relative; z-index:1; }
+                    .step-num { width:48px; height:48px; border-radius:50%; background:var(--navy); color:white; font-size:1.1rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow: 0 4px 10px rgba(30,58,95,0.2); }
+                </style>
+            </t>
+
+            <!-- HERO -->
+            <section class="hero">
+                <div class="hero-inner container">
+                    <div class="hero-tag">✨ Platform Pemesanan Signage Online</div>
+                    <h1>Signage Profesional,<br/><em>Mudah Dipesan Online</em></h1>
+                    <p>Pesan neon sign, acrylic sign, banner, dan berbagai signage berkualitas tinggi. Upload desain Anda — kami kerjakan sesuai spesifikasi dan jadwalkan bersama.</p>
+                    <div class="hero-actions">
+                        <a href="/tripma/order/form" class="btn btn-warning btn-lg fw-bold px-5" style="background-color: var(--gold-light); color: var(--navy); border: none; padding: 15px 30px;">Pesan Sekarang</a>
+                        <a href="/tripma/catalog" class="btn btn-outline-light btn-lg px-5" style="padding: 15px 30px;">Lihat Katalog</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FEATURES -->
+            <section class="ts-section py-5" style="background: var(--white)">
+                <div class="container">
+                    <div style="text-align:center; margin-bottom:60px">
+                        <div class="badge bg-primary-light text-primary mb-2 px-3 py-2 rounded-pill fw-bold" style="background: rgba(30,58,138,0.1);">MENGAPA TRIPMA SIGN?</div>
+                        <h2 class="fw-bold fs-1" style="color: var(--navy);">Satu Platform, Semua Kebutuhan Signage</h2>
+                        <p class="text-muted fs-5 mt-3" style="max-width: 700px; margin: 0 auto;">Dari pemesanan hingga pengiriman, semua proses terpantau secara real-time</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-card"><div class="feature-icon">🎨</div><h5 class="fw-bold">Upload File Desain</h5><p class="text-muted small mb-0">Upload file AI, PSD, atau PDF desain Anda. Tim produksi langsung memproses tanpa bolak-balik revisi.</p></div>
+                        <div class="feature-card"><div class="feature-icon">📡</div><h5 class="fw-bold">Pantau Progres Real-Time</h5><p class="text-muted small mb-0">Lacak setiap tahapan produksi pesanan Anda — dari antrian hingga siap dikirim.</p></div>
+                        <div class="feature-card"><div class="feature-icon">📄</div><h5 class="fw-bold">Invoice Otomatis</h5><p class="text-muted small mb-0">Sistem menerbitkan nomor order resmi dan invoice secara otomatis setiap pesanan dikonfirmasi.</p></div>
+                        <div class="feature-card"><div class="feature-icon">🔒</div><h5 class="fw-bold">Akses Terproteksi</h5><p class="text-muted small mb-0">Role-based access untuk Admin, Staf Produksi, dan pelanggan agar data pesanan tetap aman.</p></div>
+                        <div class="feature-card"><div class="feature-icon">📦</div><h5 class="fw-bold">Semua Channel Terpusat</h5><p class="text-muted small mb-0">Pesanan dari website, WhatsApp, maupun walk-in dikelola dalam satu sistem yang terintegrasi.</p></div>
+                        <div class="feature-card"><div class="feature-icon">⚡</div><h5 class="fw-bold">Proses Cepat &amp; Efisien</h5><p class="text-muted small mb-0">Antrian produksi terorganisir otomatis, meminimalkan waktu tunggu dan meningkatkan kapasitas.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOW IT WORKS -->
+            <section class="ts-section steps-section py-5">
+                <div class="container">
+                    <div style="text-align:center; margin-bottom:60px">
+                        <div class="badge bg-primary-light text-primary mb-2 px-3 py-2 rounded-pill fw-bold" style="background: rgba(30,58,138,0.1);">CARA PEMESANAN</div>
+                        <h2 class="fw-bold fs-1" style="color: var(--navy);">Pesan dalam 4 Langkah Mudah</h2>
+                    </div>
+                    <div class="steps-grid">
+                        <div class="step"><div class="step-num">1</div><h6 class="fw-bold">Pilih Produk</h6><p class="text-muted small">Browse katalog atau ajukan permintaan signage custom yang tidak ada di katalog</p></div>
+                        <div class="step"><div class="step-num">2</div><h6 class="fw-bold">Input Spesifikasi</h6><p class="text-muted small">Masukkan ukuran, bahan, dan unggah file desain — spesifikasi dapat didiskusikan bersama Admin</p></div>
+                        <div class="step"><div class="step-num">3</div><h6 class="fw-bold">Konfirmasi &amp; Bayar</h6><p class="text-muted small">Admin mengkonfirmasi harga dan detail pesanan, kemudian invoice diterbitkan otomatis</p></div>
+                        <div class="step"><div class="step-num">4</div><h6 class="fw-bold">Pantau Produksi</h6><p class="text-muted small">Lacak setiap tahapan produksi secara real-time hingga pesanan siap dikirim</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA -->
+            <section class="py-5 text-center text-white" style="background-color: var(--navy);">
+                <div class="container py-4">
+                    <h2 class="fw-bold fs-1 mb-3 text-white">Siap Memesan Signage Anda?</h2>
+                    <p class="fs-5 opacity-75 mb-5 text-white">Bergabung dengan ratusan pelanggan yang telah mempercayai Tripma Sign</p>
+                    <a href="/tripma/register" class="btn btn-warning btn-lg fw-bold px-5 py-3" style="background-color: var(--gold-light); color: var(--navy); border: none;">Mulai Sekarang — Gratis</a>
+                </div>
+            </section>
+        </t>
+    </template>
+
+</odoo>

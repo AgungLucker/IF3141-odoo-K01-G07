@@ -3,25 +3,91 @@
     <data>
 
         <template id="tripma_order_form_template" name="Form Order">
-            <t t-call="website.layout">
-                <div class="container mt-4">
-                    <h2>Buat Pesanan Baru</h2>
+            <t t-call="Tripma-Sign.tripma_layout">
+                <t t-set="head">
+                    <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                </t>
+                <div class="container mt-4 mb-5">
+                    <h2 class="mb-4">Form Pemesanan Mandiri</h2>
+
+                    <t t-if="selected_product">
+                        <div class="alert alert-light border d-flex align-items-center mb-4">
+                            <div style="font-size: 2rem; margin-right: 15px;">
+                                <t t-esc="selected_product.icon or '📦'"/>
+                            </div>
+                            <div>
+                                <h5 class="mb-0"><t t-esc="selected_product.name"/></h5>
+                                <small class="text-muted"><t t-esc="dict(selected_product._fields['category'].selection).get(selected_product.category)"/></small>
+                            </div>
+                            <div class="ms-auto">
+                                <a href="/tripma/catalog" class="btn btn-sm btn-outline-primary">Ganti Produk</a>
+                            </div>
+                        </div>
+                    </t>
+
                     <form action="/tripma/order/submit" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                        <div class="card p-4">
-                            <div class="mb-3">
-                                <label>Nama Pemesan</label>
-                                <input type="text" class="form-control" t-att-value="customer.name" readonly="1"/>
+                        <input type="hidden" name="product_id" t-att-value="selected_product.id if selected_product else ''"/>
+
+                        <div class="row">
+                            <!-- Left: Form -->
+                            <div class="col-md-8">
+                                <div class="card p-4 shadow-sm mb-4">
+                                    <h5 class="border-bottom pb-2 mb-3">1. Spesifikasi Produk</h5>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Lebar (cm) <span class="text-danger">*</span></label>
+                                            <input type="number" name="width_cm" class="form-control" value="60" required="1"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Tinggi (cm) <span class="text-danger">*</span></label>
+                                            <input type="number" name="height_cm" class="form-control" value="40" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Jumlah (unit) <span class="text-danger">*</span></label>
+                                            <input type="number" name="quantity" class="form-control" value="1" min="1" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Catatan Spesifikasi (Bahan, Warna, dll) <span class="text-danger">*</span></label>
+                                        <textarea name="product_specs" class="form-control" rows="4" placeholder="Contoh: Acrylic Signage 30x40cm, warna biru laut..." required="1"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="card p-4 shadow-sm">
+                                    <h5 class="border-bottom pb-2 mb-3">2. Desain &amp; File</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Referensi Desain (.jpg, .png, .pdf)</label>
+                                        <input type="file" name="design_file" class="form-control"/>
+                                        <small class="text-muted">Format: AI, PSD, PDF, PNG, JPG — Maks. 50MB</small>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label>Spesifikasi Produk (Ukuran, Bahan, Warna) *</label>
-                                <textarea name="product_specs" class="form-control" rows="4" placeholder="Contoh: Acrylic Signage 30x40cm, warna biru laut..." required="1"></textarea>
+
+                            <!-- Right: Summary -->
+                            <div class="col-md-4">
+                                <div class="card p-4 shadow-sm sticky-top" style="top: 100px;">
+                                    <h5 class="border-bottom pb-2 mb-3">Ringkasan Pesanan</h5>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Produk:</span>
+                                        <strong><t t-esc="selected_product.name if selected_product else 'Custom'"/></strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Harga Dasar:</span>
+                                        <strong>
+                                            <t t-if="selected_product">
+                                                <t t-esc="'Rp {:,.0f}'.format(selected_product.base_price)"/> / <t t-esc="'unit' if selected_product.price_type == 'unit' else 'm²'"/>
+                                            </t>
+                                            <t t-else="">-</t>
+                                        </strong>
+                                    </div>
+                                    <hr/>
+                                    <p class="small text-muted mb-4">Total tagihan akhir akan dihitung secara otomatis saat Anda menekan tombol di bawah ini berdasarkan spesifikasi yang Anda masukkan.</p>
+                                    <button type="submit" class="btn btn-success btn-lg w-100">Buat Pesanan Sekarang</button>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label>Upload Referensi Desain (.jpg, .png, .pdf)</label>
-                                <input type="file" name="design_file" class="form-control"/>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-lg">Kirim Pesanan &amp; Terbitkan Tagihan</button>
                         </div>
                     </form>
                 </div>
@@ -29,7 +95,7 @@
         </template>
 
         <template id="tripma_order_success_template" name="Order Berhasil">
-            <t t-call="website.layout">
+            <t t-call="Tripma-Sign.tripma_layout">
                 <div class="container mt-5 text-center">
                     <div class="alert alert-success">
                         <h4>Pesanan Berhasil Dibuat!</h4>
@@ -41,43 +107,85 @@
                         <p>Status Pembayaran: <span class="badge bg-warning text-dark"><t t-esc="invoice.payment_status"/></span></p>
                         <hr/>
                         <a t-attf-href="/tripma/track/#{order.name}" class="btn btn-primary">Lacak Status Produksi</a>
-                        <a href="/tripma/pelanggan/pesanan" class="btn btn-outline-secondary">Kembali ke Daftar Pesanan</a>
+                        <a href="/tripma/customer/dashboard" class="btn btn-outline-secondary">Kembali ke Daftar Pesanan</a>
                     </div>
                 </div>
             </t>
         </template>
-    
+
 
         <template id="customer_dashboard_template" name="Dashboard Pelanggan">
-            <t t-call="website.layout">
-                <div class="container mt-5">
-                    <h2>Pesanan Saya</h2>
-                    <div t-if="not orders" class="alert alert-info">
-                        Anda belum memiliki pesanan.
+            <t t-call="Tripma-Sign.tripma_layout">
+                <div class="container mt-5 mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold" style="color: var(--navy);">Pesanan Saya</h2>
+                        <a href="/tripma/catalog" class="btn btn-primary">+ Buat Pesanan Baru</a>
                     </div>
-                    <div t-if="orders" class="row">
-                        <t t-foreach="orders" t-as="order">
-                            <div class="col-md-4 mb-4">
-                                <div class="card shadow-sm">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><t t-esc="order.name"/></h5>
-                                        <p class="card-text">
-                                            Status: <span class="badge bg-primary"><t t-esc="order.state"/></span><br/>
-                                            Tanggal: <t t-esc="order.order_date"/>
-                                        </p>
-                                        <a t-attf-href="/tripma/track/#{order.name}" class="btn btn-outline-primary btn-sm">Lacak</a>
-                                        <t t-if="order.invoice_ids">
-                                            <a t-attf-href="/tripma/invoice/#{order.invoice_ids[0].id}" class="btn btn-outline-success btn-sm ms-1">Lihat Invoice</a>
-                                        </t>
-                                    </div>
-                                </div>
-                            </div>
-                        </t>
+
+                    <div t-if="not orders" class="card p-5 text-center shadow-sm">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">📦</div>
+                        <h5>Belum Ada Pesanan</h5>
+                        <p class="text-muted">Anda belum memiliki riwayat pesanan signage. Mulai pesanan pertama Anda sekarang!</p>
+                        <div class="mt-3">
+                            <a href="/tripma/catalog" class="btn btn-outline-primary">Lihat Katalog Produk</a>
+                        </div>
+                    </div>
+
+                    <div t-if="orders" class="card shadow-sm border-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #f8fafc;">
+                                    <tr>
+                                        <th class="ps-4">No. Order</th>
+                                        <th>Tanggal</th>
+                                        <th>Produk</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th class="text-end pe-4">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="orders" t-as="order">
+                                        <tr>
+                                            <td class="ps-4 fw-bold"><t t-esc="order.name"/></td>
+                                            <td><t t-esc="order.order_date"/></td>
+                                            <td><t t-esc="order.product_id.name or 'Custom'"/></td>
+                                            <td><t t-esc="'Rp {:,.0f}'.format(order.billing_total)"/></td>
+                                            <td>
+                                                <t t-if="order.state == 'draft'">
+                                                    <span class="badge bg-secondary">Draft</span>
+                                                </t>
+                                                <t t-elif="order.state == 'waiting_payment'">
+                                                    <span class="badge bg-warning text-dark">Menunggu Bayar</span>
+                                                </t>
+                                                <t t-elif="order.state == 'in_queue'">
+                                                    <span class="badge bg-info text-white">Antri Produksi</span>
+                                                </t>
+                                                <t t-elif="order.state == 'in_production'">
+                                                    <span class="badge bg-primary">Sedang Diproduksi</span>
+                                                </t>
+                                                <t t-elif="order.state == 'done'">
+                                                    <span class="badge bg-success">Selesai</span>
+                                                </t>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <div class="btn-group">
+                                                    <a t-attf-href="/tripma/track/#{order.name}" class="btn btn-sm btn-outline-primary">Lacak</a>
+                                                    <t t-if="order.invoice_ids">
+                                                        <a t-attf-href="/tripma/invoice/#{order.invoice_ids[0].id}" class="btn btn-sm btn-outline-success">Invoice</a>
+                                                    </t>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </t>
         </template>
-    
+
 
     </data>
 </odoo>

@@ -6,7 +6,7 @@
     <field name="key">Tripma-Sign.external_order_form</field>
     <field name="arch" type="xml">
     <t t-name="Tripma-Sign.external_order_form">
-    <t t-call="website.layout">
+    <t t-call="Tripma-Sign.tripma_layout">
         <t t-set="no_header" t-value="True"/>
         <t t-set="no_footer" t-value="True"/>
         <t t-set="head">

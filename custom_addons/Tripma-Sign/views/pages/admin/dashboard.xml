@@ -9,7 +9,7 @@
         <field name="key">Tripma-Sign.admin_dashboard</field>
         <field name="arch" type="xml">
             <t t-name="Tripma-Sign.admin_dashboard">
-                <t t-call="website.layout">
+                <t t-call="Tripma-Sign.tripma_layout">
                     <t t-set="no_header" t-value="True"/>
                     <t t-set="no_footer" t-value="True"/>
                     <t t-set="head">
@@ -22,7 +22,7 @@
                         ]]></style>
                     </t>
                     <t t-set="additional_title">Dashboard Admin - Tripma Sign</t>
-                    
+
                     <div class="admin-shell">
                         <t t-set="active_menu" t-value="'dashboard'"/>
                         <t t-call="Tripma-Sign.admin_sidebar"/>
@@ -33,13 +33,75 @@
                             </div>
 
                             <div class="ts-main">
-                                <div class="ts-hero">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h1>Selamat Datang di Dasbor Admin!</h1>
-                                            <p>Anda mengakses sistem sebagai role: <strong><t t-esc="user_role"/></strong>.</p>
-                                            <p class="mt-2 text-success"><strong>FR-04 (Access Control &amp; Routing) berfungsi dengan baik.</strong></p>
+                                <!-- Stat cards -->
+                                <div class="ts-stat-grid" style="margin-bottom: 24px;">
+                                    <div class="ts-stat-card">
+                                        <div class="ts-stat-header">
+                                            <div>
+                                                <div class="ts-stat-value" t-esc="total_orders"/>
+                                                <div class="ts-stat-label">Total Pesanan</div>
+                                            </div>
+                                            <div class="ts-stat-icon ts-stat-icon-blue">📦</div>
                                         </div>
+                                    </div>
+                                    <div class="ts-stat-card">
+                                        <div class="ts-stat-header">
+                                            <div>
+                                                <div class="ts-stat-value" t-esc="waiting_count"/>
+                                                <div class="ts-stat-label">Menunggu Bayar</div>
+                                            </div>
+                                            <div class="ts-stat-icon ts-stat-icon-red">💳</div>
+                                        </div>
+                                    </div>
+                                    <div class="ts-stat-card">
+                                        <div class="ts-stat-header">
+                                            <div>
+                                                <div class="ts-stat-value" t-esc="queue_count"/>
+                                                <div class="ts-stat-label">Antri Produksi</div>
+                                            </div>
+                                            <div class="ts-stat-icon ts-stat-icon-gold">⏳</div>
+                                        </div>
+                                    </div>
+                                    <div class="ts-stat-card">
+                                        <div class="ts-stat-header">
+                                            <div>
+                                                <div class="ts-stat-value" t-esc="prod_count"/>
+                                                <div class="ts-stat-label">Sedang Diproduksi</div>
+                                            </div>
+                                            <div class="ts-stat-icon ts-stat-icon-blue">⚙️</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card p-4 shadow-sm border-0">
+                                    <h5 class="fw-bold mb-4" style="color: var(--navy);">Navigasi Cepat</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <a href="/tripma/admin/external-order" class="btn btn-outline-primary w-100 p-3 text-start">
+                                                <div class="fw-bold">📥 Input Pesanan Eksternal</div>
+                                                <small class="text-muted">Input dari WA / Offline</small>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a t-attf-href="/web#action=#{request.env.ref('Tripma-Sign.action_tripma_product_catalog').id}" class="btn btn-outline-primary w-100 p-3 text-start">
+                                                <div class="fw-bold">🏷️ Kelola Katalog</div>
+                                                <small class="text-muted">Update produk &amp; harga</small>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a href="/tripma/production" class="btn btn-outline-primary w-100 p-3 text-start">
+                                                <div class="fw-bold">🏭 Dashboard Produksi</div>
+                                                <small class="text-muted">Lihat antrian bengkel</small>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 alert alert-success d-flex align-items-center">
+                                    <div class="me-3" style="font-size: 1.5rem;">🛡️</div>
+                                    <div>
+                                        <div class="fw-bold">Sistem Otoritas Berfungsi</div>
+                                        <small>Data yang Anda lihat di atas dibatasi secara otomatis oleh <strong>ir.rule (Record Rules)</strong> berdasarkan role Anda sebagai <t t-esc="user_role"/>.</small>
                                     </div>
                                 </div>
                             </div>
