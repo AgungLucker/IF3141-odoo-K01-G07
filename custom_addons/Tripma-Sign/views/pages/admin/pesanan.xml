@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="admin_pesanan_page" model="ir.ui.view">
+        <field name="name">Admin Daftar Pesanan</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.admin_pesanan_page</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.admin_pesanan_page">
+                <t t-call="website.layout">
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    <t t-set="head">
+                        <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+                    </t>
+                    <t t-set="additional_title">Daftar Semua Pesanan - Tripma Sign</t>
+
+                    <div class="admin-shell">
+                        <t t-set="active_menu" t-value="'pesanan'"/>
+                        <t t-call="Tripma-Sign.admin_sidebar"/>
+
+                        <div class="admin-page">
+                            <div class="admin-page-head">
+                                <div class="admin-page-title">Daftar Semua Pesanan</div>
+                            </div>
+                            <div style="padding: 20px;">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <table class="table table-hover table-striped">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>No. Order</th>
+                                                    <th>Pelanggan</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="orders" t-as="order">
+                                                    <tr>
+                                                        <td><strong><t t-esc="order.name"/></strong></td>
+                                                        <td><t t-esc="order.customer_id.name"/></td>
+                                                        <td><t t-esc="order.order_date"/></td>
+                                                        <td><span class="badge bg-secondary"><t t-esc="order.state"/></span></td>
+                                                        <td>
+                                                            <a t-attf-href="/tripma/track/#{order.name}" class="btn btn-sm btn-info text-white">Lacak</a>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>

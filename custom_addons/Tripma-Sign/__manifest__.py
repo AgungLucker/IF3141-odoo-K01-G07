@@ -29,12 +29,14 @@
 
         # Admin Pages
         'views/pages/admin/dashboard.xml',
+        'views/pages/admin/pesanan.xml',
         'views/pages/admin/external_order.xml',
         'views/pages/admin/production.xml',
 
         # Customer Pages
         'views/pages/customer/tracking.xml',
         'views/pages/customer/invoice.xml',
+        'views/customer_templates.xml',
     ],
     'application': True,
 }

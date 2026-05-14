@@ -130,12 +130,13 @@ class TripmaAdminController(TripmaBaseController):
 
     @http.route('/tripma/admin/pesanan', auth='user', website=True)
     def admin_pesanan(self, **kw):
-        """FR-04: Halaman input pesanan eksternal — Admin only."""
-        if not request.env.user.has_group('Tripma-Sign.group_tripma_admin'):
+        if not self._check_sales_admin():
             return self._redirect_unauthorized()
-        # (Template QWeb sebenarnya akan dikerjakan di FR-02)
-        return request.render('Tripma-Sign.admin_dashboard', {
-            'user_role': 'admin', 'user_name': request.env.user.name, 
-            'total_orders': 0, 'draft_count': 0, 'waiting_count': 0, 
-            'queue_count': 0, 'prod_count': 0, 'done_count': 0
+        orders = request.env['tripma.order'].search([], order='order_date desc')
+        return request.render('Tripma-Sign.admin_pesanan_page', {
+            'user_role': 'admin',
+            'user_name': request.env.user.name,
+            'is_tripma_admin': True,
+            'is_production_staff': request.env.user.has_group('Tripma-Sign.group_tripma_production_staff'),
+            'orders': orders,
         })
