@@ -2,48 +2,93 @@
 <odoo>
     <template id="customer_invoice_page" name="Invoice Pelanggan">
         <t t-call="Tripma-Sign.tripma_layout">
-            <div class="container mt-5">
-                <div class="card p-5 shadow">
-                    <div class="row mb-4">
-                        <div class="col-6">
-                            <h3>INVOICE</h3>
-                            <h5 class="text-primary"><t t-esc="invoice.name"/></h5>
+            <t t-set="head">
+                <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
+            </t>
+            <div class="container mt-5 mb-5" style="max-width: 800px; margin: 40px auto;">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 style="color: var(--navy); font-weight: 800; margin: 0;">INVOICE</h2>
+                    <a href="/tripma/track" class="ts-btn ts-btn-secondary ts-btn-sm">← Kembali ke Track</a>
+                </div>
+
+                <div class="card shadow-sm border-0 rounded-3" style="background: var(--white); border: 1px solid var(--border); overflow: hidden;">
+                    
+                    <!-- Invoice Header Banner -->
+                    <div style="background: var(--navy); padding: 32px 40px; color: var(--white); display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;">TRIPMA<em style="color: var(--gold); font-style: normal;">SIGN</em></div>
+                            <p style="font-size: .875rem; color: rgba(255,255,255,0.7); margin-top: 4px; margin-bottom: 0;">
+                                Jl. Telekomunikasi No. 1, Bandung<br/>
+                                Jawa Barat, Indonesia
+                            </p>
                         </div>
-                        <div class="col-6 text-end">
-                            <strong>Tripma Sign</strong><br/>
-                            Bandung, Indonesia
+                        <div style="text-align: right;">
+                            <div style="font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--gold);">No. Tagihan</div>
+                            <div style="font-size: 1.25rem; font-weight: 700;"><t t-esc="invoice.name"/></div>
+                            <div style="font-size: .875rem; color: rgba(255,255,255,0.7); margin-top: 4px;">Tgl: <t t-esc="invoice.issue_date.strftime('%d %b %Y') if invoice.issue_date else '—'"/></div>
                         </div>
                     </div>
-                    <hr/>
-                    <div class="row mb-4">
-                        <div class="col-6">
-                            <h6>Ditagihkan kepada:</h6>
-                            <p><strong><t t-esc="invoice.order_id.customer_id.name"/></strong></p>
+
+                    <!-- Invoice Body -->
+                    <div style="padding: 40px;">
+                        <!-- Status Bar -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 24px;">
+                            <div>
+                                <div style="font-size: .75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Status Pembayaran</div>
+                                <t t-if="invoice.payment_status == 'paid'">
+                                    <span class="ts-badge ts-badge-green" style="font-size: .875rem; padding: 6px 12px;">✅ Lunas</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="ts-badge ts-badge-red" style="font-size: .875rem; padding: 6px 12px;">⏳ Belum Dibayar</span>
+                                </t>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: .75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Total Tagihan</div>
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--navy);"><t t-esc="'Rp {:,.0f}'.format(invoice.order_id.billing_total)"/></div>
+                            </div>
                         </div>
-                        <div class="col-6 text-end">
-                            <h6>Status Pembayaran:</h6>
-                            <h4 t-attf-class="text-#{'success' if invoice.payment_status == 'paid' else 'warning'}">
-                                <t t-esc="dict(invoice._fields['payment_status'].selection).get(invoice.payment_status)"/>
-                            </h4>
+
+                        <!-- Customer Info -->
+                        <div style="margin-bottom: 32px;">
+                            <h5 style="font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; border-left: 4px solid var(--gold); padding-left: 8px;">Ditagihkan Kepada:</h5>
+                            <div style="background: var(--bg); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 8px;"><t t-esc="invoice.order_id.customer_id.name"/></div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: .875rem; color: var(--text-muted);">
+                                    <div><strong>Email:</strong> <t t-esc="invoice.order_id.customer_id.email or '—'"/></div>
+                                    <div><strong>Telepon:</strong> <t t-esc="invoice.order_id.customer_id.phone or invoice.order_id.customer_id.mobile or '—'"/></div>
+                                    <div style="grid-column: 1 / -1;"><strong>Alamat:</strong> <t t-esc="invoice.order_id.customer_id.street or '—'"/></div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Order Specs -->
+                        <div style="margin-bottom: 32px;">
+                            <h5 style="font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; border-left: 4px solid var(--gold); padding-left: 8px;">Detail Pesanan:</h5>
+                            <div style="background: var(--white); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <div style="font-weight: 600; color: var(--text); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+                                    Order ID: <span style="color: var(--navy);"><t t-esc="invoice.order_id.name"/></span>
+                                </div>
+                                <div style="font-size: .875rem; color: var(--text); white-space: pre-wrap; line-height: 1.8;"><t t-esc="invoice.order_id.product_specs"/></div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Instructions -->
+                        <t t-if="invoice.payment_status != 'paid'">
+                            <div style="background: var(--amber-bg); border: 1px solid var(--amber); border-radius: var(--radius); padding: 20px;">
+                                <h5 style="font-size: .95rem; font-weight: 700; color: var(--amber); margin-bottom: 8px;">Instruksi Pembayaran</h5>
+                                <p style="font-size: .875rem; color: var(--text); margin-bottom: 0;">
+                                    Silakan transfer tepat sebesar <strong><t t-esc="'Rp {:,.0f}'.format(invoice.order_id.billing_total)"/></strong> ke rekening berikut untuk memproses pesanan Anda:<br/>
+                                    <strong style="font-size: 1.1rem; color: var(--navy); display: inline-block; margin-top: 8px;">BCA 1234567890 a.n. PT Tripma Sign</strong>
+                                </p>
+                            </div>
+                        </t>
+
                     </div>
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Deskripsi Produk</th>
-                                <th class="text-end">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><t t-esc="invoice.order_id.product_specs"/></td>
-                                <td class="text-end">IDR <t t-esc="'{:,}'.format(invoice.order_id.billing_total)"/></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="alert alert-info mt-4">
-                        Silakan lakukan pembayaran ke Rekening Bank XYZ : <strong>1234567890</strong> a.n Tripma Sign.
-                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button class="ts-btn ts-btn-secondary" onclick="window.print()">🖨️ Cetak Invoice</button>
                 </div>
             </div>
         </t>

@@ -487,7 +487,7 @@
     <field name="key">Tripma-Sign.track_order</field>
     <field name="arch" type="xml">
     <t t-name="Tripma-Sign.track_order">
-    <t t-call="website.layout">
+    <t t-call="Tripma-Sign.tripma_layout">
         <t t-set="head">
             <link rel="stylesheet" href="/Tripma-Sign/static/mockup/tripma.css"/>
             <style><![CDATA[
@@ -655,6 +655,22 @@
                         </div>
                     </div>
 
+                    <!-- Payment Confirmation Section -->
+                    <t t-if="v_order.state == 'waiting_payment'">
+                        <div style="margin-top: 24px; padding: 20px; background: var(--amber-bg); border: 1px solid var(--amber); border-radius: var(--radius);">
+                            <h4 style="color: var(--amber); font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Informasi Pembayaran</h4>
+                            <p style="font-size: .875rem; color: var(--text); margin-bottom: 12px;">
+                                Silakan lakukan pembayaran sebesar <strong style="font-size: 1.1rem; color: var(--navy);"><t t-esc="'Rp {:,.0f}'.format(v_order.billing_total)"/></strong> ke rekening berikut:<br/>
+                                <strong style="display: inline-block; margin-top: 8px; font-size: 1rem;">BCA 1234567890 a.n. PT Tripma Sign</strong>
+                            </p>
+                            <form action="/tripma/order/confirm_payment" method="post" style="margin-top: 16px;">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="order_id" t-att-value="v_order.id"/>
+                                <button type="submit" class="ts-btn ts-btn-gold">Konfirmasi Bayar</button>
+                            </form>
+                        </div>
+                    </t>
+
                     <!-- Order specs -->
                     <div class="order-specs-4">
                         <div class="spec-cell">
@@ -678,10 +694,19 @@
             </t>
 
             <!-- Customer order list (from /tripma/track when logged in) -->
-            <t t-if="v_orders">
+            <t t-if="not request.env.user._is_public() and not v_order_name">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                     <div style="font-size: .875rem; font-weight: 700; color: var(--navy);">Riwayat Pesanan Anda</div>
+                    <a href="/tripma/order/form" class="ts-btn ts-btn-primary ts-btn-sm" style="font-size: .75rem; padding: 6px 12px;">+ Buat Pesanan Baru</a>
                 </div>
+                <t t-if="not v_orders">
+                    <div class="order-card" style="text-align: center; padding: 40px;">
+                        <div style="font-size: 2rem; margin-bottom: 12px;">📦</div>
+                        <div style="font-size: 1rem; font-weight: 600; color: var(--navy);">Belum Ada Pesanan</div>
+                        <p style="color: var(--text-muted); font-size: .875rem; margin-top: 8px;">Anda belum melakukan pemesanan apapun. Silakan buat pesanan baru!</p>
+                        <a href="/tripma/order/form" class="ts-btn ts-btn-primary" style="margin-top: 16px; display: inline-block;">Buat Pesanan Sekarang</a>
+                    </div>
+                </t>
                 <t t-foreach="v_orders" t-as="o">
                     <t t-set="o_pct" t-value="100 if o.state == 'done' else (80 if o.current_production_stage == 'ready' else (55 if o.state in ('in_queue', 'in_production') else (25 if o.state == 'waiting_payment' else 0)))"/>
                     <t t-set="o_done" t-value="o.state == 'done'"/>
@@ -731,7 +756,10 @@
                                 </t>
                             </div>
                         </div>
-                        <div style="text-align: right; margin-top: 12px;">
+                        <div style="text-align: right; margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+                            <a t-attf-href="/tripma/order/invoice/{{o.id}}" class="ts-btn ts-btn-secondary ts-btn-sm">
+                                📄 Lihat Invoice
+                            </a>
                             <a t-att-href="'/tripma/track/' + o.name" class="ts-btn ts-btn-secondary ts-btn-sm">
                                 Lihat Detail →
                             </a>
