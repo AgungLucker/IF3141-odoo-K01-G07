@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <template id="track_order_page" name="Lacak Pesanan">
+        <t t-call="Tripma-Sign.tripma_layout">
+            <div class="container mt-5">
+                <div class="search-hero text-center mb-5">
+                    <h1>Lacak Pesanan Anda</h1>
+                    <p>Masukkan nomor order (Contoh: TS-2026-0001) untuk melihat status produksi.</p>
+                    <form action="/tripma/track" method="get" class="d-flex justify-content-center">
+                        <input type="text" name="q" class="form-control w-50 me-2" placeholder="Nomor Order..." t-att-value="query"/>
+                        <button type="submit" class="btn btn-primary">Cari</button>
+                    </form>
+                </div>
 
+                <t t-if="order">
+                    <div class="card shadow-sm p-4">
+                        <div class="d-flex justify-content-between border-bottom pb-3 mb-4">
+                            <div>
+                                <h4 class="mb-0">Order <t t-esc="order.name"/></h4>
+                                <span class="text-muted">Dipesan pada: <t t-esc="order.order_date"/></span>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-info text-dark"><t t-esc="order.state"/></span>
+                            </div>
+                        </div>
+
+                        <div class="progress mb-4" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 t-attf-style="width: #{progress_pct}%" 
+                                 t-att-aria-valuenow="progress_pct" aria-valuemin="0" aria-valuemax="100">
+                                <t t-esc="progress_pct"/>%
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
 </odoo>
