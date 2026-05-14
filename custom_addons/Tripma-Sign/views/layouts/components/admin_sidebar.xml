@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="admin_sidebar" model="ir.ui.view">
+        <field name="name">Tripma Admin Sidebar</field>
+        <field name="type">qweb</field>
+        <field name="key">Tripma-Sign.admin_sidebar</field>
+        <field name="arch" type="xml">
+            <t t-name="Tripma-Sign.admin_sidebar">
+                <style>
+                    .admin-shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; background: var(--bg); }
+                    .admin-sidebar { min-height: 100vh; }
+                    .admin-brand { padding: 18px 20px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+                    .admin-brand-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--navy); }
+                    .admin-brand-name span { color: var(--gold); }
+                    .admin-brand-sub { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+                    .admin-page { display: flex; flex-direction: column; min-width: 0; }
+                    .admin-page-head { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 32px; }
+                    .admin-page-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-top: 3px; }
+                    @media (max-width: 768px) {
+                        .admin-shell { grid-template-columns: 1fr; }
+                        .admin-sidebar { display: none; }
+                        .admin-page-head { padding: 14px 20px; }
+                    }
+                </style>
+
+                <aside class="ts-sidebar admin-sidebar">
+                    <div class="admin-brand">
+                        <div class="admin-brand-name">Tripma<span>Sign</span></div>
+                        <div class="admin-brand-sub">Panel Administrator</div>
+                    </div>
+
+                    <div class="ts-sidebar-section">
+                        <div class="ts-sidebar-label">Utama</div>
+                        <t t-if="is_tripma_admin">
+                            <a href="/tripma/admin/dashboard"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'dashboard' else '')">
+                                <span class="icon">DB</span>Dashboard
+                            </a>
+                            <a href="/tripma/admin/external-order"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'external_order' else '')">
+                                <span class="icon">IN</span>Input Pesanan Eksternal
+                            </a>
+                            <a href="/odoo"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'catalog' else '')">
+                                <span class="icon">KG</span>Kelola Katalog
+                            </a>
+                        </t>
+                    </div>
+
+                    <div class="ts-sidebar-section">
+                        <div class="ts-sidebar-label">Manajemen</div>
+                        <t t-if="is_tripma_admin or is_production_staff">
+                            <a href="/tripma/production"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'production' else '')">
+                                <span class="icon">PR</span>Produksi
+                            </a>
+                        </t>
+                        <t t-if="is_tripma_admin">
+                            <a href="/odoo"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'orders' else '')">
+                                <span class="icon">PO</span>Semua Pesanan
+                            </a>
+                            <a href="/odoo"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'invoices' else '')">
+                                <span class="icon">IV</span>Invoice &amp; Tagihan
+                            </a>
+                            <a href="/odoo"
+                               t-att-class="'ts-sidebar-item ' + ('active' if active_menu == 'customers' else '')">
+                                <span class="icon">CS</span>Data Pelanggan
+                            </a>
+                        </t>
+                    </div>
+
+                    <div class="ts-sidebar-user">
+                        <div class="ts-avatar" t-esc="(request.env.user.name or 'AD')[:2].upper()"/>
+                        <div>
+                            <div class="ts-user-name" t-esc="request.env.user.name"/>
+                            <div class="ts-user-role">
+                                <t t-if="is_tripma_admin">Admin</t>
+                                <t t-elif="is_production_staff">Staf Produksi</t>
+                                <t t-else="">Pengguna</t>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </t>
+        </field>
+    </record>
+</odoo>
