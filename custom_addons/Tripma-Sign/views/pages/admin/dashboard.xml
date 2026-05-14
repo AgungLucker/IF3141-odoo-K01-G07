@@ -122,7 +122,7 @@
                                             <div class="card-header"><div class="card-title">Aksi Cepat</div></div>
                                             <div class="quick-links">
                                                 <a href="/tripma/admin/external-order" class="quick-link"><div class="ql-icon">📥</div><div><div class="ql-text-title">Input Pesanan Eksternal</div><div class="ql-text-sub">WhatsApp / Walk-in</div></div></a>
-                                                <a href="/tripma/admin/catalog" class="quick-link"><div class="ql-icon">🏷️</div><div><div class="ql-text-title">Kelola Katalog</div><div class="ql-text-sub">Tambah / edit produk</div></div></a>
+                                                <a t-attf-href="/web#action=#{request.env.ref('Tripma-Sign.action_tripma_product_catalog').id}" class="quick-link"><div class="ql-icon">🏷️</div><div><div class="ql-text-title">Kelola Katalog</div><div class="ql-text-sub">Tambah / edit produk</div></div></a>
                                                 <a href="/tripma/admin/semua-pesanan" class="quick-link"><div class="ql-icon">📋</div><div><div class="ql-text-title">Semua Pesanan</div><div class="ql-text-sub">Lihat daftar lengkap pesanan</div></div></a>
                                                 <!-- Opsi 3: Pintu ke backend untuk Admin -->
                                                 <a href="/web" class="quick-link" t-if="is_tripma_admin"><div class="ql-icon">⚙️</div><div><div class="ql-text-title">Konfigurasi Sistem Odoo</div><div class="ql-text-sub">Akses backend untuk pengaturan user/database</div></div></a>
