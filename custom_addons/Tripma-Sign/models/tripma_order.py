@@ -96,7 +96,8 @@ class TripmaOrder(models.Model):
     )
     def _compute_current_production_stage(self):
         for order in self:
-            latest = order.production_status_ids.sorted("update_time", reverse=True)
+            # Sort by update_time then id to ensure deterministic result
+            latest = order.production_status_ids.sorted(lambda r: (r.update_time, r.id), reverse=True)
             order.current_production_stage = latest[0].stage_name if latest else False
 
     def action_issue_invoice(self):

@@ -142,9 +142,6 @@ class TripmaAuthController(TripmaBaseController):
                 partner_vals["phone"] = phone
             user.partner_id.sudo().write(partner_vals)
 
-            # Commit the transaction so the new user is visible to the authenticate cursor
-            request.env.cr.commit()
-
             # Autentikasi dengan database yang tepat
             db = request.session.db or request.env.cr.dbname
             request.session.authenticate(db, login, password)

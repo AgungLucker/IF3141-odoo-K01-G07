@@ -19,7 +19,20 @@ ALL_STAGES = [
 def parse_money(value):
     if not value:
         return 0.0
-    normalized = str(value).replace('.', '').replace(',', '.').strip()
+    # Jika ada titik dan koma, asumsikan titik adalah ribuan dan koma adalah desimal (format ID/EU)
+    # Jika hanya ada koma, ganti jadi titik
+    # Jika hanya ada titik, biarkan (format US/Standard)
+    val_str = str(value).strip()
+    if '.' in val_str and ',' in val_str:
+        # Format 1.000,50 -> 1000.50
+        normalized = val_str.replace('.', '').replace(',', '.')
+    elif ',' in val_str:
+        # Format 1000,50 -> 1000.50
+        normalized = val_str.replace(',', '.')
+    else:
+        # Format 1000.50 -> 1000.50
+        normalized = val_str
+    
     try:
         return float(normalized)
     except ValueError:

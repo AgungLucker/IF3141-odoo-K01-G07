@@ -28,11 +28,14 @@ class TripmaCustomerController(TripmaBaseController):
             return request.redirect("/tripma/akses-ditolak")
 
         product_id = kw.get("product_id")
-        product = (
-            request.env["tripma.product"].sudo().browse(int(product_id))
-            if product_id
-            else False
-        )
+        try:
+            product = (
+                request.env["tripma.product"].sudo().browse(int(product_id))
+                if product_id and product_id.isdigit()
+                else False
+            )
+        except (ValueError, TypeError):
+            product = False
 
         return self._render_tripma(
             "Tripma-Sign.tripma_order_form_template",
@@ -57,9 +60,15 @@ class TripmaCustomerController(TripmaBaseController):
 
         product_specs = post.get("product_specs")
         product_id = post.get("product_id")
-        quantity = int(post.get("quantity", 1))
-        width = float(post.get("width_cm", 0))
-        height = float(post.get("height_cm", 0))
+        try:
+            quantity = int(post.get("quantity", 1))
+            width = float(post.get("width_cm", 0))
+            height = float(post.get("height_cm", 0))
+        except (ValueError, TypeError):
+            return request.redirect(
+                "/tripma/order/form?error=Jumlah dan ukuran harus berupa angka"
+            )
+
         shipping_address = post.get("shipping_address")
         design_file = request.httprequest.files.get("design_file")
 
