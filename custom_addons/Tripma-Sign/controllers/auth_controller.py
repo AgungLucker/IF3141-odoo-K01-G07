@@ -107,19 +107,25 @@ class TripmaAuthController(TripmaBaseController):
                 groups_to_add.append(portal_group.id)
                 
             # Buat akun baru secara aman menggunakan sudo
-            user = request.env['res.users'].sudo().create({
+            user = request.env['res.users'].sudo().with_context(no_reset_password=True).create({
                 'name': name,
                 'login': login,
-                'password': password,
                 'groups_id': [(6, 0, groups_to_add)]
             })
             
+            # Explicitly write password to ensure it gets hashed and saved
+            user.sudo().write({'password': password})
+
             if phone:
                 user.partner_id.sudo().write({'phone': phone})
-            
-            # Otomatis login menggunakan sesi yang baru dibuat
-            request.session.authenticate(request.session.db, login, password)
-            return request.redirect('/tripma/pelanggan/pesanan')
+
+            # Commit the transaction so the new user is visible to the authenticate cursor
+            request.env.cr.commit()
+
+            # Autentikasi dengan database yang tepat
+            db = request.session.db or request.env.cr.dbname
+            request.session.authenticate(db, login, password)
+            return request.redirect('/tripma/customer/dashboard')
             
         except Exception as e:
             return request.redirect(f'/tripma/register?error=Gagal mendaftar: {str(e)}&name={name}&login={login}&phone={phone}')
@@ -214,7 +220,7 @@ class TripmaAuthController(TripmaBaseController):
         yang sesuai dengan perannya.
           Admin Penjualan → /tripma/admin/dashboard
           Staf Produksi   → /tripma/production  (milik FR-03 Nathan)
-          Pelanggan       → /tripma/pelanggan/pesanan
+          Pelanggan       → /tripma/customer/dashboard
         """
         role = self._get_current_user_role()
         if role == 'admin':
@@ -222,7 +228,7 @@ class TripmaAuthController(TripmaBaseController):
         if role == 'production_staff':
             return request.redirect('/tripma/production')
         if role == 'customer':
-            return request.redirect('/tripma/pelanggan/pesanan')
+            return request.redirect('/tripma/customer/dashboard')
         return request.redirect('/web/login')
     
     def _redirect_unauthorized(self):
