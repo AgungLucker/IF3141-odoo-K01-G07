@@ -14,6 +14,9 @@
         'data/tripma_sequences.xml',
         'data/demo_users.xml',
 
+        # Menus
+        'views/menus.xml',
+
         # Layouts
         'views/layouts/main_layout.xml',
         'views/layouts/components/navbar.xml',
@@ -30,6 +33,7 @@
         # Admin Pages
         'views/pages/admin/dashboard.xml',
         'views/pages/admin/external_order.xml',
+        'views/pages/admin/all_orders.xml',
         'views/pages/admin/production.xml',
 
         # Customer Pages
