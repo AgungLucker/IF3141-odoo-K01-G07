@@ -18,6 +18,8 @@
             <style><![CDATA[
                 .ts-main { padding: 28px 32px; background: var(--bg); min-height: calc(100vh - 57px); }
                 .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+                @media (max-width: 1200px) { .kanban-board { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 768px) { .kanban-board { grid-template-columns: 1fr; } }
                 .kanban-col { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
                 .kanban-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
                 .kanban-title { display: flex; align-items: center; gap: 8px; font-size: .82rem; font-weight: 700; color: var(--navy); }

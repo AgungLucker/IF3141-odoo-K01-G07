@@ -509,6 +509,16 @@ h5 {
     gap: 16px;
     margin-bottom: 24px;
 }
+@media (max-width: 1200px) {
+    .ts-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .ts-stat-grid {
+        grid-template-columns: 1fr;
+    }
+}
 .ts-stat-card {
     background: var(--white);
     border: 1px solid var(--border);

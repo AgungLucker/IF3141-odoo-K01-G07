@@ -17,6 +17,7 @@
                         <style><![CDATA[
                             .main-content { padding:28px 32px; background:var(--bg); }
                             .content-grid { display:grid; grid-template-columns:1fr 320px; gap:20px; }
+                            @media (max-width: 1024px) { .content-grid { grid-template-columns: 1fr; } }
                             .section-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:18px; box-shadow:var(--shadow-sm); }
                             .card-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
                             .card-title { font-size:0.875rem; font-weight:700; color:var(--navy); }
