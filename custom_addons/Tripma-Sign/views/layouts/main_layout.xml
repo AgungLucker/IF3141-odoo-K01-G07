@@ -23,6 +23,8 @@
                         #contact-info:target {
                             animation: contact-pulse 3s ease-in-out;
                             border-radius: 8px;
+                            padding: 10px;
+                            margin: -10px;
                         }
                         @keyframes contact-pulse {
                             0% { background-color: transparent; }
@@ -125,7 +127,7 @@
                                         <li class="mb-2">Stiker &amp; Cutting</li>
                                     </ul>
                                 </div>
-                                <div class="col-md-4 col-lg-4" id="contact-info" style="padding: 15px; transition: all 0.3s;">
+                                <div class="col-md-4 col-lg-4" id="contact-info">
                                     <h6 class="text-white fw-bold mb-4">Hubungi Kami</h6>
                                     <p class="small mb-2"><i class="fa fa-map-marker me-2"></i> Jl. Garpu Tala No.2, Turangga, Kec. Lengkong, Kota Bandung, Jawa Barat 40264</p>
                                     <p class="small mb-2"><i class="fa fa-phone me-2"></i> <a href="https://wa.me/6281223000700" target="_blank" style="color: rgba(255,255,255,0.6); text-decoration: none;">0812-2300-0700</a></p>
