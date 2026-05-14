@@ -141,6 +141,11 @@
                                 <div class="oc-no" t-esc="o.name"/>
                                 <div class="oc-name" t-esc="o.customer_id.name"/>
                                 <div class="oc-product" t-esc="(o.product_specs or '—')[:50]"/>
+                                <div style="margin-bottom: 8px;">
+                                    <span style="font-size: .68rem; background: var(--amber-bg); color: var(--amber); border-radius: 4px; padding: 2px 7px; font-weight: 600;">
+                                        <t t-esc="STAGE_LABELS.get(o.current_production_stage, 'Dalam Produksi') if o.current_production_stage else 'Dalam Produksi'"/>
+                                    </span>
+                                </div>
                                 <div class="oc-footer">
                                     <span class="oc-due">📅 <t t-esc="o.order_date.strftime('%d %b') if o.order_date else '—'"/></span>
                                     <a t-att-href="'/tripma/production/update/%d' % o.id" class="oc-btn oc-btn-update">Update</a>

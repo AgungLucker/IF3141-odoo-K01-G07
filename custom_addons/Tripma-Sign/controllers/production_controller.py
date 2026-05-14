@@ -15,15 +15,18 @@ class TripmaProductionController(TripmaBaseController):
         antrian_orders = Order.search([('state', '=', 'in_queue')])
         in_progress_orders = Order.search([
             ('state', '=', 'in_production'),
-            ('current_production_stage', 'in', ('cutting', 'printing', 'assembly')),
+            '|',
+            ('current_production_stage', '=', False),
+            ('current_production_stage', 'in', ['waiting', 'cutting', 'printing', 'assembly']),
         ])
         finishing_orders = Order.search([
             ('state', '=', 'in_production'),
             ('current_production_stage', '=', 'finishing'),
         ])
         siap_kirim_orders = Order.search([
-            ('state', '=', 'in_production'),
+            '|',
             ('current_production_stage', '=', 'ready'),
+            ('state', '=', 'done'),
         ])
         deadline_threshold = today + datetime.timedelta(days=2)
         near_deadline = Order.search([
@@ -77,16 +80,13 @@ class TripmaProductionController(TripmaBaseController):
         order = request.env['tripma.order'].browse(order_id)
         if not order.exists():
             return request.redirect('/tripma/production')
-        request.env['tripma.production.status'].create({
+        request.env['tripma.production.status'].sudo().create({
             'order_id':   order_id,
             'stage_name': stage_name,
             'note':       note or False,
             'updated_by': request.env.user.id,
         })
-        if stage_name in ('cutting', 'printing', 'assembly', 'finishing'):
+        if stage_name in ('cutting', 'printing', 'assembly', 'finishing', 'ready'):
             if order.state == 'in_queue':
                 order.sudo().action_start_production()
-        elif stage_name == 'ready':
-            if order.state == 'in_production':
-                order.sudo().action_complete()
         return request.redirect('/tripma/production/update/%d' % order_id)
