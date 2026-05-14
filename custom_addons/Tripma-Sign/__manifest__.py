@@ -40,5 +40,6 @@
         "views/pages/customer/catalog.xml",
         "views/customer_templates.xml",
     ],
+    "post_init_hook": "post_init_hook",
     "application": True,
 }
