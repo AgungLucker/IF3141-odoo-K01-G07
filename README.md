@@ -1,132 +1,77 @@
-# IF3141 Sistem Informasi - Odoo Setup
+# Tripma Sign - Sistem Informasi Odoo
 
-## Introduction
+## Identitas Kelompok
+- Nama Kelompok: G07
+- Nomor Kelas: K01
+- Anggota Kelompok:
+  - Anggota 1: 13523013	 Nathaniel Jonathan Rusli
+  - Anggota 2: 13523021  Muhammad Raihan Nazhim Oktana
+  - Anggota 3: 13523023  Muhammad Aufa Farabi
+  - Anggota 4: 13523043  Najwa Kahani Fatima
+  - Anggota 5: 13523061  Darrel Adinarya Sunanda
 
-Odoo merupakan *Enterprise Resource Planning System* yang mampu melakukan implementasi modul modul kustom untuk menyelesaikan permasalahan proses bisnis pada suatu perusahaan.
 
-Odoo memberikan opsi *on-premise solution* sehingga developer dapat melakukan implementasi kustom modul pada local environment.
+## Nama Sistem dan Perusahaan
+- Nama Sistem: E-Commerce Mandiri Tripma Sign
+- Nama Perusahaan: Tripma Sign
 
-Repository ini diperuntukkan untuk Tugas Besar IF3141 Sistem Informasi. Untuk memulai silakan melakukan fork dan membuat repository private untuk workspace setiap kelompok.
+## Deskripsi Sistem
+E-Commerce Mandiri Tripma Sign adalah sistem informasi berbasis Odoo yang dirancang untuk mendukung proses pemesanan, produksi, dan pelacakan produk signagea. Sistem ini mengintegrasikan fungsi front-end untuk pelanggan, kontrol pesanan internal untuk admin penjualan, dan dashboard produksi untuk staf produksi sehingga proses bisnis menjadi lebih terstruktur dan mudah dilacak.
 
+Sistem ini menyediakan modul kustom Odoo yang memungkinkan pembuatan pesanan eksternal dari admin, pengelolaan katalog produk, pembaruan status produksi, serta pelacakan nomor order. Dengan memanfaatkan modul kustom `Tripma-Sign`, perusahaan dapat mengelola antrian produksi dan komunikasi internal tanpa harus menggunakan sistem manual berbasis spreadsheet.
 
-## Pre-requisites
-Odoo diimplementasikan dengan Python environment dan database PostgreSQL. Repository ini sudah membungkus service aplikasi dan database melalui Docker.
+## Cara Menjalankan Sistem
+1. Pastikan Docker dan Docker Compose terpasang di mesin.
+2. Buka terminal pada folder proyek `IF3141-odoo-K01-G07`.
+3. Jalankan layanan Odoo dan PostgreSQL:
 
-Sebelum memulai, pastikan dependency berikut sudah terpasang:
+   ```bash
+   docker compose up -d
+   ```
 
-1. Docker Desktop
-	- Download: https://www.docker.com/products/docker-desktop/
-2. Python 3.11
-	- Digunakan untuk virtual environment (venv) pada proses development modul
+   *Expected result:* layanan Odoo aktif dan dapat diakses di `http://localhost:8069`.
+   *Screenshot placeholder:* `screenshots/01-docker-up.png`
 
-## Struktur Direktori
+4. Akses aplikasi Odoo melalui browser:
+   - `http://localhost:8069`
 
-- `/config`
-	- Untuk menyimpan konfigurasi Odoo
-- `/custom_addons`
-	- Tempat pengerjaan modul kustom
-- `/dump`
-	- Database dump yang dapat diakses scripts untuk proses import/export
-- `/scripts`
-	- Untuk melakukan database migration
-- `docker-compose.yml`
-	- Orchestration service Odoo dan PostgreSQL
+   *Expected result:* halaman login Odoo tampil.
+   *Screenshot placeholder:* `screenshots/02-login-page.png`
 
-## Step-by-step Installation
+5. Untuk akses admin, login dengan akun admin default:
+   - Username: `admin`
+   - Password: `admin`
 
-1. Jalankan service Odoo dan PostgreSQL:
+   *Expected result:* masuk ke dashboard backend Odoo.
+   *Screenshot placeholder:* `screenshots/03-admin-dashboard.png`
 
-	```bash
-	docker compose up -d
-	```
+6. Untuk menjalankan ulang atau mematikan layanan setelah selesai:
 
-2. Buka aplikasi pada browser:
-	- http://localhost:8069
+   ```bash
+   docker compose down
+   ```
 
-3. Login menggunakan kredensial default:
-	- Username: `admin`
-	- Password: `admin`
+   *Expected result:* layanan Odoo dan PostgreSQL berhenti.
+   *Screenshot placeholder:* `screenshots/06-docker-down.png`
 
-4. Aktifkan mode developer:
-	- Masuk ke **Settings**
-	- Nyalakan **Developer Mode / Developer Access**
+## Credensial Role
+- Admin Odoo (Superuser):
+  - Username: `admin`
+  - Password: `admin`
 
-5. Buat Python virtual environment pada workspace:
+- Admin Penjualan / Tripma Sign Admin:
+  - Username: `admin` (atau akun Odoo yang terdaftar dengan grup `Tripma Sign / Admin Penjualan`)
+  - Password: `admin`
 
-	```bash
-	python3.11 -m venv .venv
-	source .venv/bin/activate
-	pip install --upgrade pip
-	pip install -r requirements.txt
-	```
+- Staf Produksi:
+  - Username: `staf` (akun Odoo dengan grup `Tripma Sign / Staf Produksi`)
+  - Password: `123`
 
-6. Implementasikan modul pada folder:
-	- `custom_addons/`
+- Pelanggan / User Publik:
+  - Register akun sebagai customer, lalu logi.
+  - Untuk akun pelanggan terdaftar, gunakan akun Odoo dengan grup pelanggan di instalasi Odoo.
 
-7. Setelah implementasi modul selesai, lakukan update daftar aplikasi:
-	- Masuk ke menu **Apps**
-	- Pilih **Update Apps List**
+## Kesimpulan dan Saran
+Sistem Tripma Sign memberikan solusi manajemen pemesanan dan produksi untuk usaha signage dengan menghadirkan alur kerja yang lebih terstruktur. Penggunaan platform Odoo memungkinkan integrasi antara penginputan pesanan, pengelolaan katalog, dan pelacakan produksi dalam satu ekosistem.
 
-8. Jika melakukan perubahan terhadap isi modul (modifying database), jangan lupa lakukan langkah database migration dengan mengikuti step di heading bawah ini.
-
-## Routes Aplikasi Tripma Sign
-
-Base URL lokal:
-
-```text
-http://localhost:8069
-```
-
-| Method | Route | Auth | Keterangan |
-| --- | --- | --- | --- |
-| `GET` | `/tripma/order` | Public | Redirect ke mockup form order statis |
-| `GET` | `/tripma/admin/external-order` | Admin Penjualan | Form input pesanan eksternal dari WhatsApp/langsung/telepon |
-| `POST` | `/tripma/admin/external-order/submit` | Admin Penjualan | Registrasi pesanan eksternal ke database utama dan antrian produksi |
-| `GET` | `/tripma/admin/external-order/success/<order_id>` | Admin Penjualan | Halaman sukses setelah nomor order resmi diterbitkan |
-| `GET` | `/tripma/production` | User, Admin Penjualan atau Staf Produksi | Dashboard antrian dan status produksi |
-| `GET` | `/tripma/production/update/<order_id>` | User, Admin Penjualan atau Staf Produksi | Form update status produksi untuk order tertentu |
-| `POST` | `/tripma/production/update/submit` | User, Admin Penjualan atau Staf Produksi | Submit perubahan status produksi |
-| `GET` | `/tripma/track` | Public | Halaman pencarian tracking order |
-| `GET` | `/tripma/track/<order_name>` | Public | Detail tracking berdasarkan nomor order |
-
-Catatan akses:
-
-- Fitur input pesanan eksternal membutuhkan grup Odoo **Tripma Sign / Admin Penjualan**.
-- Dashboard produksi dapat diakses oleh **Admin Penjualan** atau **Staf Produksi**.
-- Setelah perubahan modul, lakukan **Apps > Update Apps List > Upgrade TripmaStore** agar route, field, dan view baru aktif.
-
-## Database Migration
-
-Odoo menggunakan local database pada implementasinya. Maka dari itu dibutuhkan migration system yang dapat dilakukan melakukan **dump db** atau **import db**. Sebelum melakukan migration jangan lupa untuk selalu mematikan service odoo & databasenya dengan menjalankan :
-
-```bash 
-docker compose down
-```
-
-Apabila terdapat perubahan pada database dan perubahan tersebut ingin diteruskan ke anggota tim lain, lakukan export database terlebih dahulu menggunakan script pada folder `scripts`.
-
-- macOS/Linux:
-
-  ```bash
-  ./scripts/export_db.sh
-  ```
-
-- Windows:
-
-  ```bat
-  scripts\export_db.cmd
-  ```
-
-Untuk melanjutkan pengerjaan dari hasil perubahan database rekan tim, lakukan import database terlebih dahulu :
-
-- macOS/Linux:
-
-  ```bash
-  ./scripts/import_db.sh
-  ```
-
-- Windows:
-
-  ```bat
-  scripts\import_db.cmd
-  ```
+Saran: lengkapi modul dengan fungsi notifikasi pelanggan dan laporan produksi otomatis agar admin penjualan dan staf produksi dapat memantau status order secara real time dan mengurangi risiko keterlambatan pengiriman. Jika memungkinkan, tambahkan integrasi dengan WhatsApp API untuk penerimaan pesanan eksternal yang lebih efektif.
