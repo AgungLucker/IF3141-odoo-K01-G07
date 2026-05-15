@@ -30,29 +30,41 @@ Sistem ini menyediakan modul kustom Odoo yang memungkinkan pembuatan pesanan eks
    ```
 
    *Expected result:* layanan Odoo aktif dan dapat diakses di `http://localhost:8069`.
-   *Screenshot placeholder:* `screenshots/01-docker-up.png`
+   
+   *Screenshot placeholder:*
+   <img width="593" height="111" alt="image" src="https://github.com/user-attachments/assets/52e31474-c637-4632-b358-48675cad1e3f" />
 
-4. Akses aplikasi Odoo melalui browser:
+
+5. Akses aplikasi Odoo melalui browser:
    - `http://localhost:8069`
 
    *Expected result:* halaman login Odoo tampil.
-   *Screenshot placeholder:* `screenshots/02-login-page.png`
+   
+   *Screenshot placeholder:*
+   <img width="500" height="205" alt="image" src="https://github.com/user-attachments/assets/c26a0ee5-7764-4e50-a919-f8facfb59bbe" />
 
-5. Untuk akses admin, login dengan akun admin default:
+
+7. Untuk akses admin, login dengan akun admin default:
    - Username: `admin`
    - Password: `admin`
 
    *Expected result:* masuk ke dashboard backend Odoo.
-   *Screenshot placeholder:* `screenshots/03-admin-dashboard.png`
+   
+   *Screenshot placeholder:*
+   <img width="540" height="202" alt="image" src="https://github.com/user-attachments/assets/887bdf69-6282-4a52-b66d-205f517c3edb" />
 
-6. Untuk menjalankan ulang atau mematikan layanan setelah selesai:
+
+9. Untuk menjalankan ulang atau mematikan layanan setelah selesai:
 
    ```bash
    docker compose down
    ```
 
    *Expected result:* layanan Odoo dan PostgreSQL berhenti.
-   *Screenshot placeholder:* `screenshots/06-docker-down.png`
+   
+   *Screenshot placeholder:* <img width="596" height="89" alt="image" src="https://github.com/user-attachments/assets/d1f1ee4e-cf5d-4503-9ad3-814756963429" />
+
+   
 
 ## Credensial Role
 - Admin Odoo (Superuser):
